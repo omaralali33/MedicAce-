@@ -32,6 +32,7 @@ const MODULES = [
   { id: "intubation",   icon: "🫁", label: "Intubation",        color: "#00cec9", desc: "Airway management mastery" },
   { id: "anatomy",      icon: "🫀", label: "Anatomy",           color: "#fd79a8", desc: "Body systems flashcards" },
   { id: "quicktips",   icon: "📝", label: "Quick Tips",        color: "#f9ca24", desc: "EMS daily tips & notes" },
+  { id: "exams",       icon: "🎓", label: "Exam Prep",         color: "#a8e063", desc: "HEM 3106 practice exams" },
 ];
 
 const SCENARIOS = [
@@ -1780,6 +1781,7 @@ function App() {
                 <div className="stat-box"><div className="stat-num">{PROTOCOLS.length}</div><div className="stat-label">Protocols</div></div>
                 <div className="stat-box"><div className="stat-num">{INTUBATION_STEPS.length}</div><div className="stat-label">RSI Steps</div></div>
                 <div className="stat-box"><div className="stat-num">{QUICK_TIPS.length}</div><div className="stat-label">Quick Tips</div></div>
+                <div className="stat-box"><div className="stat-num">{HEM_QUESTIONS.length}</div><div className="stat-label">Exam Qs</div></div>
               </div>
             </div>
             <div style={{padding:"0 4px"}}>
@@ -1829,11 +1831,352 @@ function App() {
           {tab==="intubation"  &&<IntubationModule/>}
           {tab==="anatomy"     &&<AnatomyModule/>}
           {tab==="quicktips"  &&<QuickTipsModule/>}
+          {tab==="exams"      &&<ExamPrepModule/>}
         </div>
 
         <Watermark />
       </div>
     </>
+  );
+}
+
+// ─── HEM 3106 EXAM PREP ───────────────────────────────────────────────────────
+
+const HEM_STUDY = [
+  {
+    id:"pain1", category:"Pain Management", emoji:"💊", color:"#ffa502",
+    title:"Multimodal Analgesia",
+    keyPoints:[
+      "Definition: Two or more analgesic agents acting by DIFFERENT mechanisms",
+      "Goal: Superior pain relief while MINIMISING opioid use and side effects",
+      "Combine drugs to lower individual doses → fewer side effects",
+      "Addresses nociceptive, neuropathic AND inflammatory pain pathways",
+      "Pain ladder: Non-pharm → NSAIDs/Paracetamol → Opioids → Adjuvants",
+    ],
+    pearl:"CASE: 58yo knee dislocation → Paracetamol + NSAIDs + Femoral nerve block + Low-dose opioid PRN + Gabapentin at night = 4 different drug classes/techniques",
+  },
+  {
+    id:"pain2", category:"Pain Management", emoji:"😴", color:"#a29bfe",
+    title:"Procedural Sedation",
+    keyPoints:[
+      "Also known as: Conscious Sedation or Moderate Sedation",
+      "Goals: Comfort, airway reflexes preserved, cardiovascular function maintained",
+      "Provides: Analgesia + Anxiolysis + Amnesia (sometimes)",
+      "Indications: Fracture reduction, cardioversion, wound debridement",
+      "KETAMINE: NMDA antagonist — preserves airway, dissociative, 1mg/kg IV",
+      "PROPOFOL: Hypnotic only — NO analgesia, causes hypotension",
+      "ETOMIDATE: Haemodynamically stable — NO analgesia, adrenal suppression risk",
+      "MIDAZOLAM: Benzodiazepine — anxiolysis + amnesia",
+    ],
+    pearl:"CASE: Shoulder dislocation reduction & femur fracture traction → BOTH used Ketamine 1mg/kg IV → Rapid sedation, preserved airway, no recall",
+  },
+  {
+    id:"tox1", category:"Toxidromes", emoji:"🧪", color:"#ff4757",
+    title:"Toxidrome Recognition",
+    keyPoints:[
+      "STIMULANT: ↑HR, ↑BP, ↑Temp, agitation, DILATED pupils → Cocaine, MDMA, Amphetamines",
+      "DEPRESSANT/OPIOID: ↓HR, ↓BP, ↓RR, ↓GCS, PINPOINT pupils → Opioids, Benzos, Alcohol",
+      "CHOLINERGIC (DUMBELS): Diarrhoea, Urination, Miosis, Bradycardia, Emesis, Lacrimation, Salivation → Organophosphates",
+      "ANTICHOLINERGIC: Dry as bone, Red as beet, Blind as bat, Mad as hatter, Hot as hare → Atropine, Antihistamines",
+      "HALLUCINOGENIC: Hallucinations, agitation, hyperthermia → LSD, Ketamine, Psilocybin",
+      "SEDATIVE: ↓CNS, slurred speech, hypotension → Benzos, Z-drugs",
+    ],
+    pearl:"Memory trick — DUMBELS = Cholinergic (wet patient). 'Dry as bone, Red as beet' = Anticholinergic (dry patient). Opposite presentations!",
+  },
+  {
+    id:"tox2", category:"Toxidromes", emoji:"💉", color:"#e17055",
+    title:"Toxidrome Management",
+    keyPoints:[
+      "STIMULANT: Midazolam IV/IM + cooling + IV fluids. AVOID β-blockers (causes unopposed α = worse HTN)",
+      "OPIOID: Airway first! BVM + O₂ THEN naloxone 0.4mg IV/IM/IN — titrate to effect, repeat up to 2mg",
+      "CHOLINERGIC: Atropine 1–2mg IV + Pralidoxime 1–2g IV slow (if available)",
+      "ANTICHOLINERGIC: Supportive + Midazolam + IV fluids",
+      "HALLUCINOGENIC: Calm environment + Midazolam + fluids + ECG/temp monitoring",
+      "SEDATIVE: Airway protection + O₂ + monitoring (no specific antidote for benzos prehospital)",
+    ],
+    pearl:"Benzodiazepines (Midazolam) treat STIMULANT and HALLUCINOGENIC toxidromes. Naloxone ONLY reverses opioids. Never give β-blockers in stimulant toxicity!",
+  },
+  {
+    id:"tox3", category:"Toxidromes", emoji:"🔍", color:"#00cec9",
+    title:"ABCDE in Toxicology",
+    keyPoints:[
+      "A – Airway: patent? Vomit/burns/obstruction? → adjuncts, suction, advanced airway if ↓GCS",
+      "B – Breathing: rate, pattern, SpO₂ → O₂ titrated, assist ventilation, consider antidote (naloxone)",
+      "C – Circulation: pulse, BP, rhythm, perfusion → IV/IO, fluids if hypotensive, ECG",
+      "D – Disability: GCS, pupils, seizures, agitation → benzos for seizures, CHECK BLOOD GLUCOSE",
+      "E – Exposure/Environment: temp, rash, evidence of ingestion → control temp, inspect for trauma",
+      "REASSESS ABCDE CONTINUOUSLY — toxidromes evolve rapidly!",
+    ],
+    pearl:"'D – Disability' is where you check blood glucose. Hypoglycaemia mimics or complicates ANY toxidrome. Always check BGL in a tox patient.",
+  },
+  {
+    id:"scen1", category:"Nightclub Scenario", emoji:"🌙", color:"#6c5ce7",
+    title:"Patient 1 — Opioid Overdose",
+    keyPoints:[
+      "Found in bathroom: cyanotic lips, shallow breathing, syringe nearby",
+      "Vitals: RR 6, SpO₂ 78%, HR 52, BP 88/54, PINPOINT pupils, Temp 35.8°C",
+      "Step 1: OPA + BVM with 100% O₂ (airway FIRST, not naloxone first!)",
+      "Step 2: IV access + ECG monitor",
+      "Step 3: Naloxone 0.4mg IV — improved: RR 14, SpO₂ 96%",
+      "THEN deteriorates again: RR 4, SpO₂ 70% → RE-NARCOTISATION",
+      "Step 4: REPEAT naloxone (up to 2mg total) — naloxone shorter than fentanyl!",
+    ],
+    pearl:"Re-narcotisation = naloxone wears off BEFORE the opioid. Fentanyl analogues last longer than naloxone. Always monitor and repeat if needed.",
+  },
+  {
+    id:"scen2", category:"Nightclub Scenario", emoji:"⚡", color:"#fdcb6e",
+    title:"Patient 2 — Stimulant Toxicity",
+    keyPoints:[
+      "Male pacing, sweating, chest pain, agitated. Suspected cocaine/MDMA",
+      "Vitals: RR 28, HR 148, BP 178/110, DILATED pupils, Temp 38.6°C",
+      "Toxidrome: STIMULANT — sympathetic overdrive",
+      "Step 1: Calm environment + ECG monitor",
+      "Step 2: Midazolam 2.5–5mg IV (benzos = mainstay treatment)",
+      "Step 3: Nitroglycerin if SBP > 100 + IV fluids",
+      "NEVER give β-blockers — leaves α-stimulation unopposed → worse hypertension",
+      "Deteriorates: HR 180 wide-complex VT, BP 80/60 → give more benzodiazepines",
+    ],
+    pearl:"VT in stimulant toxicity = cardiotoxicity from cocaine/amphetamines. Treat with benzodiazepines. β-blockers are CONTRAINDICATED — this is a common exam trap!",
+  },
+  {
+    id:"scen3", category:"Nightclub Scenario", emoji:"😴", color:"#74b9ff",
+    title:"Patient 3 — Benzodiazepine Overdose",
+    keyPoints:[
+      "Female semi-conscious, vomiting, alcohol co-ingestion",
+      "Vitals: RR 10, SpO₂ 90%, HR 60, BP 95/60, NORMAL pupils",
+      "Toxidrome: SEDATIVE/DEPRESSANT — CNS depression",
+      "PRIORITY: Recovery position + ACTIVE SUCTION (vomiting + semi-conscious = aspiration risk!)",
+      "Step 2: O₂ 10–15L/min via NRB",
+      "Step 3: IV access + ECG monitoring",
+      "Patient 3 REMAINS STABLE after initial management — no deterioration",
+      "No specific prehospital antidote for benzodiazepines (flumazenil not routinely used)",
+    ],
+    pearl:"Patient 3 is the STABLE one in the scenario. Airway management and positioning are the priority. Aspiration is the main risk with vomiting + sedation.",
+  },
+];
+
+const HEM_QUESTIONS = [
+  {topic:"Pain Management",q:"What is multimodal analgesia?",opts:["Using one strong opioid for all pain types","Using two or more analgesic agents acting by different mechanisms","Giving maximum doses of a single drug","Only using regional anaesthesia techniques"],ans:1,exp:"Multimodal analgesia combines drugs from different classes with different mechanisms to achieve better pain relief with lower doses and fewer side effects."},
+  {topic:"Pain Management",q:"A patient rates their pain 8/10. Which agent is most appropriate to ADD to their current non-pharmacological and NSAID therapy?",opts:["Paracetamol PO only","Opioids","Entonox only","Increase NSAID dose"],ans:1,exp:"For severe pain (7–10), opioids are indicated in the multimodal ladder, alongside other agents already in use."},
+  {topic:"Pain Management",q:"Which of the following is an adjuvant analgesic?",opts:["Morphine","Ibuprofen","Ketamine","Bupivacaine"],ans:2,exp:"Ketamine (NMDA antagonist) is classified as an adjuvant analgesic. Gabapentin and pregabalin are also adjuvants. Morphine is an opioid, ibuprofen is an NSAID."},
+  {topic:"Pain Management",q:"What is the primary GOAL of multimodal analgesia?",opts:["Eliminate all opioid use","Provide superior pain relief while minimising opioid use and side effects","Use the maximum number of drugs possible","Only treat neuropathic pain"],ans:1,exp:"The goal is superior pain relief while minimising opioid use and side effects by combining agents from different drug classes."},
+  {topic:"Pain Management",q:"Procedural sedation is also known as:",opts:["General anaesthesia","Deep sedation","Conscious or moderate sedation","Rapid sequence induction"],ans:2,exp:"Procedural sedation is also called Conscious Sedation or Moderate Sedation. The patient maintains airway reflexes and spontaneous ventilation."},
+  {topic:"Pain Management",q:"Which sedation agent is an NMDA antagonist that PRESERVES airway reflexes?",opts:["Propofol","Midazolam","Etomidate","Ketamine"],ans:3,exp:"Ketamine is an NMDA antagonist with dissociative properties. It preserves airway reflexes and spontaneous ventilation — ideal for prehospital procedural sedation."},
+  {topic:"Pain Management",q:"A 32-year-old requires shoulder dislocation reduction in the field. What is the recommended drug and dose?",opts:["Midazolam 5mg IV","Propofol 2mg/kg IV","Ketamine 1mg/kg IV","Fentanyl 2mcg/kg IV"],ans:2,exp:"Ketamine 1mg/kg IV is the recommended agent for procedural sedation in trauma — rapid dissociation, analgesia, preserves airway. Confirmed in lecture case examples."},
+  {topic:"Pain Management",q:"Which procedural sedation agent provides NO analgesia?",opts:["Ketamine","Fentanyl","Propofol","Nitrous oxide"],ans:2,exp:"Propofol is a hypnotic agent with rapid onset and recovery but provides NO analgesia. Must be combined with an analgesic for painful procedures."},
+  {topic:"Pain Management",q:"Which procedural sedation agent is described as 'haemodynamically stable'?",opts:["Propofol","Midazolam","Etomidate","Ketamine"],ans:2,exp:"Etomidate is characterised by haemodynamic stability — suitable for patients with cardiovascular compromise. No analgesic properties."},
+  {topic:"Pain Management",q:"For a 58-year-old with a knee dislocation, which combination best reflects the multimodal approach?",opts:["High-dose morphine alone","Paracetamol + NSAIDs + regional nerve block + low-dose opioid PRN + gabapentin","IV ketamine + propofol","NSAIDs + entonox only"],ans:1,exp:"The case uses Paracetamol + NSAIDs, a femoral nerve block, low-dose opioid PRN, and gabapentin at night — combining four different drug classes/techniques."},
+  {topic:"Toxidromes",q:"A patient presents with ↑HR, ↑BP, ↑Temp, agitation, and dilated pupils after suspected MDMA use. Which toxidrome is this?",opts:["Depressant","Anticholinergic","Stimulant","Cholinergic"],ans:2,exp:"Stimulant toxidrome: sympathetic overdrive causing tachycardia, hypertension, hyperthermia, agitation, and mydriasis. MDMA, cocaine, and amphetamines are common causes."},
+  {topic:"Toxidromes",q:"DUMBELS is a mnemonic for which toxidrome?",opts:["Anticholinergic","Stimulant","Hallucinogenic","Cholinergic"],ans:3,exp:"DUMBELS = Cholinergic toxidrome: Diarrhoea, Urination, Miosis, Bradycardia, Emesis, Lacrimation, Salivation. Caused by organophosphates and nerve agents."},
+  {topic:"Toxidromes",q:"'Dry as a bone, red as a beet, blind as a bat, mad as a hatter, hot as a hare' describes which toxidrome?",opts:["Cholinergic","Sedative","Anticholinergic","Hallucinogenic"],ans:2,exp:"Anticholinergic toxidrome: dry skin, flushed skin, mydriasis, delirium, and hyperthermia. Caused by atropine, antihistamines, etc."},
+  {topic:"Toxidromes",q:"What is the recommended dose of naloxone for opioid toxidrome?",opts:["0.1mg IV once only","0.4mg IV/IM/IN, repeat to effect","2mg IV bolus, single dose","1mg IV every 5 minutes"],ans:1,exp:"Naloxone 0.4mg IV/IM/IN is given and titrated to effect. Can be repeated — up to 2mg total in acute overdose settings."},
+  {topic:"Toxidromes",q:"A patient with organophosphate poisoning has excessive secretions and bradycardia. What is the specific antidote?",opts:["Naloxone 0.4mg IV","Midazolam 5mg IV","Atropine 1–2mg IV + Pralidoxime","Flumazenil IV"],ans:2,exp:"Atropine 1–2mg IV is the antidote for cholinergic toxidrome. Pralidoxime 1–2g IV slow can also be given if available. Goal: dry secretions and restore heart rate."},
+  {topic:"Toxidromes",q:"Which letter of ABCDE specifically prompts you to check blood glucose in a toxicology patient?",opts:["A – Airway","B – Breathing","C – Circulation","D – Disability"],ans:3,exp:"D – Disability covers GCS, pupils, seizures, and agitation — and includes checking blood glucose, as hypoglycaemia can mimic or complicate toxicological presentations."},
+  {topic:"Toxidromes",q:"Why must you reassess ABCDE continuously in toxicology patients?",opts:["It's a legal requirement","Toxidromes can evolve rapidly","Vital signs never change in toxicology","To document for handover only"],ans:1,exp:"Toxidromes can evolve rapidly — a patient may deteriorate or improve quickly as drugs are absorbed, redistributed, or metabolised."},
+  {topic:"Toxidromes",q:"Benzodiazepines (e.g. midazolam) are the mainstay treatment for which TWO toxidromes?",opts:["Opioid and cholinergic","Stimulant and hallucinogenic","Anticholinergic and sedative","Cholinergic and sedative"],ans:1,exp:"Stimulant and Hallucinogenic toxidromes are both managed with benzodiazepines to control agitation, reduce cardiovascular stress, and prevent seizures."},
+  {topic:"Nightclub Scenario",q:"Patient 1 is found in a nightclub bathroom — cyanotic, shallow respirations, syringe nearby. What is the FIRST airway intervention?",opts:["Intubate immediately","OPA insertion + BVM with 100% O₂","Naloxone only, no airway needed","Recovery position only"],ans:1,exp:"First priority is OPA + BVM with 100% O₂ to correct hypoxia (SpO₂ 78%). Naloxone is given after IV access, but airway and oxygenation come FIRST."},
+  {topic:"Nightclub Scenario",q:"Patient 1 improves after naloxone then deteriorates again — RR 4, SpO₂ 70%. What do you do?",opts:["Give flumazenil","Repeat naloxone dose (up to 2mg total)","Start IV fluids only","Give midazolam"],ans:1,exp:"Re-narcotisation occurs when naloxone wears off before the opioid. Repeat naloxone up to 2mg total. Key concept — fentanyl analogues outlast naloxone."},
+  {topic:"Nightclub Scenario",q:"Patient 2 has HR 148, BP 178/110, dilated pupils, agitation after suspected cocaine. Which drug is CONTRAINDICATED?",opts:["Midazolam","Nitroglycerin","β-blockers (e.g. metoprolol)","IV fluids"],ans:2,exp:"β-blockers are contraindicated in stimulant toxicity. Blocking β-receptors leaves α-adrenergic stimulation unopposed, causing severe vasoconstriction and worsening hypertension."},
+  {topic:"Nightclub Scenario",q:"What is the correct sedation drug and dose for Patient 2 (stimulant toxicity, agitated, BP 178/110)?",opts:["Morphine 5mg IV","Naloxone 0.4mg IV","Midazolam 2.5–5mg IV","Propofol 1mg/kg IV"],ans:2,exp:"Midazolam 2.5–5mg IV is correct. Benzodiazepines reduce agitation and CNS stimulation, decrease cardiovascular stress, and lower seizure risk in stimulant toxicity."},
+  {topic:"Nightclub Scenario",q:"Patient 2 deteriorates with HR 180 in a wide-complex rhythm and BP 80/60. What rhythm should you suspect?",opts:["Sinus tachycardia","Atrial fibrillation","Ventricular tachycardia (VT)","AV block"],ans:2,exp:"Ventricular Tachycardia (VT) — HR 180 with haemodynamic instability in stimulant toxicity. Cocaine and amphetamines cause direct cardiotoxicity."},
+  {topic:"Nightclub Scenario",q:"Patient 3 is semi-conscious, vomiting, with suspected benzodiazepine overdose. SpO₂ is 90%. What is the PRIORITY airway position?",opts:["Supine, flat","Trendelenburg (head-down)","Recovery position with suction","Upright sitting"],ans:2,exp:"Recovery position + active suctioning is the priority. Vomiting + semi-conscious = greatest risk is airway obstruction and aspiration."},
+  {topic:"Nightclub Scenario",q:"Which patient in the nightclub scenario remains STABLE throughout?",opts:["Patient 1 (opioid overdose)","Patient 2 (stimulant toxicity)","Patient 3 (benzodiazepine overdose)","All three deteriorated"],ans:2,exp:"Patient 3 remains stable after initial airway management and O₂. Patient 1 re-narcotises. Patient 2 develops VT. Patient 3 is the stable one."},
+];
+
+function ExamPrepModule() {
+  const [view, setView] = useState("home"); // home | study | exam
+  const [studyCat, setStudyCat] = useState(null);
+  const [studyIdx, setStudyIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [examState, setExamState] = useState({ current:0, answers:[], done:false });
+
+  const cats = [...new Set(HEM_STUDY.map(s => s.category))];
+  const filtered = studyCat ? HEM_STUDY.filter(s => s.category === studyCat) : HEM_STUDY;
+
+  const startExam = () => setExamState({ current:0, answers:new Array(HEM_QUESTIONS.length).fill(null), done:false });
+
+  const topicColor = { "Pain Management":"#ffa502", "Toxidromes":"#ff4757", "Nightclub Scenario":"#6c5ce7" };
+
+  // STUDY CARD VIEW
+  if (view === "study") {
+    const card = filtered[studyIdx % filtered.length];
+    return (
+      <div>
+        <button className="back-btn" onClick={() => { setView("home"); setFlipped(false); setStudyIdx(0); }}>← Back</button>
+        <div className="panel-title">📚 Study Cards</div>
+        <div style={{ display:"flex", gap:7, marginBottom:14, flexWrap:"wrap" }}>
+          {["All", ...cats].map(c => (
+            <button key={c} className={`mode-tab ${(studyCat||"All")===c?"active":""}`}
+              onClick={() => { setStudyCat(c==="All"?null:c); setStudyIdx(0); setFlipped(false); }}>
+              {c}
+            </button>
+          ))}
+        </div>
+        <div onClick={() => setFlipped(f => !f)}
+          style={{ background: flipped ? `${card.color}11` : "var(--surface2)", border:`2px solid ${flipped?card.color:"rgba(255,255,255,0.08)"}`, borderRadius:16, padding:22, cursor:"pointer", minHeight:220, transition:"all 0.3s", marginBottom:12 }}>
+          {!flipped ? (
+            <div style={{ textAlign:"center" }}>
+              <div style={{ fontSize:44, marginBottom:10 }}>{card.emoji}</div>
+              <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:card.color, letterSpacing:2, textTransform:"uppercase", marginBottom:6 }}>{card.category}</div>
+              <div style={{ fontFamily:"Oxanium,monospace", fontSize:18, fontWeight:800, marginBottom:16 }}>{card.title}</div>
+              <div style={{ fontSize:11, color:"var(--muted)" }}>👆 Tap to see key points</div>
+            </div>
+          ) : (
+            <div>
+              <div style={{ fontFamily:"Oxanium,monospace", fontSize:12, fontWeight:800, color:card.color, marginBottom:10, textTransform:"uppercase", letterSpacing:1 }}>Key Points — {card.title}</div>
+              {card.keyPoints.map((pt, i) => (
+                <div key={i} style={{ display:"flex", gap:9, padding:"7px 0", borderBottom:"1px solid rgba(255,255,255,0.05)", alignItems:"flex-start" }}>
+                  <span style={{ color:card.color, fontFamily:"Oxanium,monospace", fontWeight:800, fontSize:12, flexShrink:0 }}>{i+1}.</span>
+                  <span style={{ fontSize:12, lineHeight:1.6 }}>{pt}</span>
+                </div>
+              ))}
+              <div style={{ marginTop:12, background:"rgba(255,165,2,0.1)", border:"1px solid rgba(255,165,2,0.25)", borderRadius:9, padding:"9px 12px", fontSize:12, color:"var(--warning)", lineHeight:1.6 }}>
+                ⭐ <strong>PEARL:</strong> {card.pearl}
+              </div>
+              <div style={{ textAlign:"center", marginTop:10, fontSize:11, color:"var(--muted)" }}>👆 Tap to flip back</div>
+            </div>
+          )}
+        </div>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <button className="term-btn" onClick={() => { setStudyIdx(i => (i-1+filtered.length)%filtered.length); setFlipped(false); }}>← Prev</button>
+          <span style={{ fontFamily:"Oxanium,monospace", color:"var(--muted)", fontSize:12 }}>{(studyIdx%filtered.length)+1} / {filtered.length}</span>
+          <button className="term-btn" onClick={() => { setStudyIdx(i => (i+1)%filtered.length); setFlipped(false); }}>Next →</button>
+        </div>
+      </div>
+    );
+  }
+
+  // EXAM VIEW
+  if (view === "exam") {
+    const { current, answers, done } = examState;
+
+    if (done) {
+      const correct = answers.filter((a, i) => a === HEM_QUESTIONS[i].ans).length;
+      const pct = Math.round(correct / HEM_QUESTIONS.length * 100);
+      return (
+        <div>
+          <button className="back-btn" onClick={() => setView("home")}>← Back to Exam Prep</button>
+          <div style={{ textAlign:"center", padding:"20px 0" }}>
+            <div style={{ fontSize:52 }}>{pct>=80?"🏆":pct>=65?"🎯":"📚"}</div>
+            <div style={{ fontFamily:"Oxanium,monospace", fontSize:42, fontWeight:800, color:pct>=80?"var(--success)":pct>=65?"var(--accent)":pct>=50?"var(--warning)":"var(--danger)", marginTop:8 }}>{pct}%</div>
+            <div style={{ color:"var(--muted)", fontSize:13, marginTop:6 }}>{pct>=80?"🏆 Excellent — you're exam ready!":pct>=65?"👍 Good — review the ones you missed":pct>=50?"📚 Passing — keep studying":"⚠️ More revision needed"}</div>
+            <div style={{ display:"flex", justifyContent:"center", gap:12, marginTop:16, flexWrap:"wrap" }}>
+              {[{label:"Correct", val:correct, color:"var(--success)"},{label:"Wrong", val:HEM_QUESTIONS.length-correct, color:"var(--danger)"},{label:"Total", val:HEM_QUESTIONS.length, color:"var(--muted)"}].map(s => (
+                <div key={s.label} style={{ background:"var(--surface2)", border:"1px solid rgba(255,255,255,0.08)", borderRadius:12, padding:"12px 20px", textAlign:"center", minWidth:90 }}>
+                  <div style={{ fontFamily:"Oxanium,monospace", fontSize:24, fontWeight:800, color:s.color }}>{s.val}</div>
+                  <div style={{ fontSize:10, color:"var(--muted)", textTransform:"uppercase", letterSpacing:1 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+            <button className="next-btn" style={{ maxWidth:300, marginTop:20 }} onClick={startExam}>🔁 Retake Exam</button>
+          </div>
+          <div style={{ marginTop:20 }}>
+            <div style={{ fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, marginBottom:12 }}>Review All Questions</div>
+            {HEM_QUESTIONS.map((q, i) => {
+              const isCorrect = answers[i] === q.ans;
+              return (
+                <div key={i} style={{ background:"var(--surface2)", borderRadius:10, padding:"13px 15px", marginBottom:9, border:`1px solid ${isCorrect?"rgba(46,213,115,0.2)":"rgba(255,71,87,0.2)"}` }}>
+                  <div style={{ display:"flex", gap:9, marginBottom:7, alignItems:"flex-start" }}>
+                    <span style={{ fontSize:14 }}>{isCorrect?"✅":"❌"}</span>
+                    <span style={{ fontSize:12, fontWeight:700, lineHeight:1.5 }}>Q{i+1}: {q.q}</span>
+                  </div>
+                  <div style={{ fontSize:11, color:"var(--muted)", marginLeft:23 }}>
+                    Your answer: <span style={{ color:isCorrect?"var(--success)":"var(--danger)", fontWeight:700 }}>{["A","B","C","D"][answers[i]]}. {q.opts[answers[i]]}</span>
+                    {!isCorrect && <><br/>Correct: <span style={{ color:"var(--success)", fontWeight:700 }}>{["A","B","C","D"][q.ans]}. {q.opts[q.ans]}</span></>}
+                  </div>
+                  <div style={{ fontSize:11, color:"var(--muted)", marginTop:6, marginLeft:23, lineHeight:1.5 }}>💡 {q.exp}</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+
+    const q = HEM_QUESTIONS[current];
+    const answered = answers[current] !== null;
+    const LT = ["A","B","C","D"];
+    return (
+      <div>
+        <button className="back-btn" onClick={() => setView("home")}>← Back to Exam Prep</button>
+        <div style={{ background:"var(--surface2)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:12, padding:"11px 14px", marginBottom:14, display:"flex", alignItems:"center", gap:12 }}>
+          <div style={{ flex:1, height:5, background:"var(--surface)", borderRadius:99, overflow:"hidden" }}>
+            <div style={{ height:"100%", width:`${((current+1)/HEM_QUESTIONS.length)*100}%`, background:"var(--accent)", borderRadius:99, transition:"width 0.4s" }} />
+          </div>
+          <span style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:"var(--muted)", flexShrink:0 }}>{current+1} / {HEM_QUESTIONS.length}</span>
+        </div>
+        <div style={{ background:"var(--surface2)", borderRadius:12, padding:18, marginBottom:12 }}>
+          <div style={{ display:"inline-block", background:`${topicColor[q.topic]}22`, color:topicColor[q.topic], border:`1px solid ${topicColor[q.topic]}44`, borderRadius:99, padding:"3px 11px", fontSize:10, fontFamily:"Oxanium,monospace", fontWeight:700, marginBottom:10, letterSpacing:1 }}>{q.topic}</div>
+          <div style={{ fontSize:15, fontWeight:700, lineHeight:1.55, marginBottom:18 }}>{q.q}</div>
+          <div className="options">
+            {q.opts.map((opt, i) => {
+              let cls = "option-btn";
+              if (answered) { if(i===q.ans) cls+=" correct"; else if(i===answers[current]) cls+=" wrong"; }
+              return (
+                <button key={i} className={cls} disabled={answered}
+                  onClick={() => { const na = [...answers]; na[current]=i; setExamState(s=>({...s,answers:na})); }}>
+                  <span className="option-letter">{LT[i]}</span>{opt}
+                </button>
+              );
+            })}
+          </div>
+          {answered && <div className="explain-box">💡 <strong>Explanation:</strong> {q.exp}</div>}
+        </div>
+        <div style={{ display:"flex", justifyContent:"space-between", gap:9 }}>
+          <button className="back-btn" style={{ margin:0 }} onClick={() => setExamState(s=>({...s,current:Math.max(0,s.current-1)}))} disabled={current===0}>← Back</button>
+          <button className="next-btn" style={{ margin:0, maxWidth:200, opacity:answered?1:0.3 }} disabled={!answered}
+            onClick={() => { if(current+1>=HEM_QUESTIONS.length) setExamState(s=>({...s,done:true})); else setExamState(s=>({...s,current:s.current+1})); }}>
+            {current+1>=HEM_QUESTIONS.length?"Finish Exam →":"Next →"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // HOME VIEW
+  return (
+    <div>
+      <div className="panel-title">🎓 HEM 3106 Exam Prep</div>
+      <p style={{ color:"var(--muted)", fontSize:12, marginBottom:18 }}>Study notes + practice exam covering Pain Management, Toxidromes, and Nightclub Scenario.</p>
+
+      {/* Two action cards */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom:22 }}>
+        <div onClick={() => { setView("study"); setStudyIdx(0); setFlipped(false); }}
+          style={{ background:"linear-gradient(135deg,rgba(255,165,2,0.15),rgba(255,165,2,0.05))", border:"1px solid rgba(255,165,2,0.3)", borderRadius:14, padding:18, cursor:"pointer", textAlign:"center", transition:"all 0.2s" }}
+          onMouseEnter={e=>e.currentTarget.style.transform="translateY(-3px)"} onMouseLeave={e=>e.currentTarget.style.transform=""}>
+          <div style={{ fontSize:36, marginBottom:8 }}>📚</div>
+          <div style={{ fontFamily:"Oxanium,monospace", fontSize:14, fontWeight:800, color:"var(--warning)" }}>Study Cards</div>
+          <div style={{ fontSize:11, color:"var(--muted)", marginTop:4 }}>{HEM_STUDY.length} topic cards</div>
+        </div>
+        <div onClick={() => { setView("exam"); startExam(); }}
+          style={{ background:"linear-gradient(135deg,rgba(0,210,255,0.15),rgba(0,210,255,0.05))", border:"1px solid rgba(0,210,255,0.3)", borderRadius:14, padding:18, cursor:"pointer", textAlign:"center", transition:"all 0.2s" }}
+          onMouseEnter={e=>e.currentTarget.style.transform="translateY(-3px)"} onMouseLeave={e=>e.currentTarget.style.transform=""}>
+          <div style={{ fontSize:36, marginBottom:8 }}>📝</div>
+          <div style={{ fontFamily:"Oxanium,monospace", fontSize:14, fontWeight:800, color:"var(--accent)" }}>Practice Exam</div>
+          <div style={{ fontSize:11, color:"var(--muted)", marginTop:4 }}>{HEM_QUESTIONS.length} questions</div>
+        </div>
+      </div>
+
+      {/* Topic overview */}
+      <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:"var(--muted)", marginBottom:10, textTransform:"uppercase", letterSpacing:1 }}>Topics Covered</div>
+      {[
+        { cat:"Pain Management", emoji:"💊", color:"#ffa502", items:["Multimodal analgesia definition & goals","Drug classes & mechanisms","Procedural sedation agents","Case examples"] },
+        { cat:"Toxidromes", emoji:"🧪", color:"#ff4757", items:["6 toxidrome types & signs","DUMBELS mnemonic","ABCDE in toxicology","Specific antidotes & management"] },
+        { cat:"Nightclub Scenario", emoji:"🌙", color:"#6c5ce7", items:["Patient 1: Opioid OD & re-narcotisation","Patient 2: Stimulant toxicity & VT","Patient 3: Benzodiazepine OD","β-blocker contraindication"] },
+      ].map(t => (
+        <div key={t.cat} style={{ background:"var(--surface2)", borderRadius:12, padding:"13px 15px", marginBottom:10, borderLeft:`3px solid ${t.color}` }}>
+          <div style={{ display:"flex", alignItems:"center", gap:9, marginBottom:8 }}>
+            <span style={{ fontSize:20 }}>{t.emoji}</span>
+            <div style={{ fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, color:t.color }}>{t.cat}</div>
+          </div>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:6 }}>
+            {t.items.map((item, i) => (
+              <span key={i} style={{ background:`${t.color}15`, border:`1px solid ${t.color}33`, color:t.color, borderRadius:99, padding:"3px 10px", fontSize:10, fontFamily:"Oxanium,monospace" }}>{item}</span>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 
