@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedicAce — Paramedic Training Platform</title>
+  <meta name="description" content="MedicAce — Interactive paramedic training platform. Scenarios, terminology, pharmacology, intubation and more." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚑</text></svg>" />
+  <!-- React -->
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <!-- Babel for JSX -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.2/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #0a0e1a; color: #e8eaf6; font-family: 'Nunito', sans-serif; }
+    #root { min-height: 100vh; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+
+const MODULES = [
+  { id: "scenarios",    icon: "🚑", label: "Live Scenarios",    color: "#ff4757", desc: "Real-world emergency calls" },
+  { id: "terminology",  icon: "📖", label: "Med Terminology",   color: "#ffa502", desc: "Master the language of medicine" },
+  { id: "vitals",       icon: "❤️", label: "Vitals Check",      color: "#2ed573", desc: "Normal vs danger ranges" },
+  { id: "protocols",    icon: "📋", label: "Protocols",         color: "#1e90ff", desc: "Step-by-step treatment guides" },
+  { id: "pharmacology", icon: "💊", label: "Pharmacology",      color: "#a29bfe", desc: "Drugs, doses & indications" },
+  { id: "intubation",   icon: "🫁", label: "Intubation",        color: "#00cec9", desc: "Airway management mastery" },
+  { id: "anatomy",      icon: "🫀", label: "Anatomy",           color: "#fd79a8", desc: "Body systems flashcards" },
+  { id: "quicktips",   icon: "📝", label: "Quick Tips",        color: "#f9ca24", desc: "EMS daily tips & notes" },
+];
+
+const SCENARIOS = [
+  {
+    id:1,title:"Chest Pain — STEMI",emoji:"💔",difficulty:"Easy",xp:50,
+    age:58,gender:"Male",chief:"Crushing chest pain radiating to left arm, onset 20 min ago",
+    vitals:{bp:"160/95",hr:"102",rr:"22",spo2:"94%",temp:"37.1°C",gcs:"15"},
+    history:"HTN, Hyperlipidemia, smoker 30 years. Takes lisinopril & atorvastatin.",
+    steps:[
+      {q:"What is your FIRST priority on scene?",options:["Check scene safety","Start IV line","Give aspirin","Call for backup"],correct:0,explain:"Scene safety ALWAYS comes first — never approach until the scene is confirmed safe for you and your crew."},
+      {q:"Best assessment tool for this presentation?",options:["SAMPLE history","AVPU scale","Cincinnati Stroke Scale","START triage"],correct:0,explain:"SAMPLE (Signs, Allergies, Medications, Pertinent history, Last meal, Events) is ideal for medical emergencies."},
+      {q:"What medication do you give FIRST?",options:["Nitroglycerin","Aspirin 324mg chewed","Morphine IV","Oxygen by NRB mask"],correct:1,explain:"Aspirin 324mg chewed is first-line for suspected ACS — irreversibly inhibits platelet aggregation immediately."},
+      {q:"SpO2 is 94%. Which oxygen delivery device?",options:["Nasal cannula 2L/min","Simple face mask 6L/min","Non-rebreather mask 15L/min","No oxygen needed"],correct:2,explain:"SpO2 < 95% with respiratory distress = high-flow O2 via NRB mask at 15L/min."},
+      {q:"Which ECG finding would MOST concern you?",options:["Sinus tachycardia","ST elevation in II, III, aVF","PACs","Sinus bradycardia"],correct:1,explain:"ST elevation in II, III, aVF = inferior STEMI — time-critical, requires immediate cath lab activation."},
+    ],
+  },
+  {
+    id:2,title:"Pediatric Seizure",emoji:"⚡",difficulty:"Medium",xp:80,
+    age:4,gender:"Female",chief:"Child seizing 5 minutes, now post-ictal",
+    vitals:{bp:"90/60",hr:"140",rr:"28",spo2:"96%",temp:"39.2°C",gcs:"10"},
+    history:"No prior seizures. No medications. Fever since yesterday.",
+    steps:[
+      {q:"Most likely seizure type given age + fever?",options:["Epileptic seizure","Febrile seizure","Psychogenic seizure","Hypoglycemic seizure"],correct:1,explain:"Febrile seizures are common in children 6mo–6yrs. High fever lowers seizure threshold in susceptible kids."},
+      {q:"FIRST intervention?",options:["Give diazepam","Ensure airway & oxygenation","Start IV access","Check blood glucose"],correct:1,explain:"Airway ALWAYS first. Post-ictal patients have compromised tone — reposition and suction as needed."},
+      {q:"Blood glucose: 3.1 mmol/L. What now?",options:["Recheck in 5 min","Oral glucose gel","IV dextrose 25%","Withhold treatment"],correct:2,explain:"BGL < 4 mmol/L in seizing child = IV dextrose immediately. Oral route is unsafe with altered LOC."},
+      {q:"How do you calculate pediatric drug doses?",options:["Adult dose × 0.5","Weight (kg) × dose/kg","Age-based chart only","Estimate by size"],correct:1,explain:"Pediatric dosing is ALWAYS weight-based (mg/kg). Use Broselow tape or actual scale weight."},
+      {q:"Child seizes again. No IV. Fastest benzo route?",options:["Oral midazolam","IM midazolam","Rectal diazepam","Intranasal midazolam"],correct:3,explain:"Intranasal midazolam absorbs as rapidly as IV and is the preferred route when no IV access exists."},
+    ],
+  },
+  {
+    id:3,title:"Trauma — MVA",emoji:"🚗",difficulty:"Hard",xp:120,
+    age:24,gender:"Male",chief:"Unrestrained driver, high-speed collision, unresponsive",
+    vitals:{bp:"88/60",hr:"128",rr:"30",spo2:"90%",temp:"36.8°C",gcs:"8"},
+    history:"Unknown. Scene: severe front-end damage, airbag deployed.",
+    steps:[
+      {q:"GCS is 8 — what does this indicate?",options:["Minor head injury","Severe — consider definitive airway (RSI)","Surgery only","Normal for trauma"],correct:1,explain:"GCS ≤ 8 = severe injury, airway at risk. Prepare for RSI and definitive airway management."},
+      {q:"BP 88/60, HR 128 in trauma = ?",options:["Neurogenic shock","Class III Hemorrhagic Shock","Anaphylactic shock","Septic shock"],correct:1,explain:"Hypotension + tachycardia + trauma = hemorrhagic shock Class III (30–40% blood volume lost)."},
+      {q:"Permissive hypotension target in penetrating trauma?",options:["SBP > 120","SBP 70–90 mmHg","SBP > 100","MAP > 80"],correct:1,explain:"SBP 70–90 prevents clot disruption while maintaining minimal perfusion until surgical hemorrhage control."},
+      {q:"Tracheal deviation RIGHT, absent left breath sounds. Dx?",options:["Hemothorax","Pulmonary contusion","Tension pneumothorax","Flail chest"],correct:2,explain:"Deviation AWAY from affected side + absent breath sounds = tension pneumothorax. Needle decompress STAT."},
+      {q:"Needle decompression — correct landmark?",options:["5th ICS mid-axillary","2nd ICS mid-clavicular line","3rd ICS left sternal border","7th ICS posterior"],correct:1,explain:"2nd ICS, MCL (or 4th/5th ICS MAL). Always insert above the rib — neurovascular bundle runs below."},
+    ],
+  },
+  {
+    id:4,title:"Anaphylaxis",emoji:"🐝",difficulty:"Easy",xp:60,
+    age:32,gender:"Female",chief:"Bee sting 10 min ago — throat swelling, hives everywhere",
+    vitals:{bp:"78/50",hr:"138",rr:"26",spo2:"91%",temp:"37.0°C",gcs:"13"},
+    history:"Known bee allergy, forgot EpiPen at home.",
+    steps:[
+      {q:"FIRST-LINE drug for anaphylaxis?",options:["Diphenhydramine","Methylprednisolone","Epinephrine 1:1000 IM","Salbutamol"],correct:2,explain:"Epinephrine 1:1000, 0.3–0.5mg IM anterolateral thigh is the ONLY first-line treatment. Nothing else comes first."},
+      {q:"Best IM injection site?",options:["Deltoid","Anterolateral thigh","Gluteal","IV bolus"],correct:1,explain:"Anterolateral thigh (vastus lateralis) gives fastest absorption in anaphylaxis — preferred over deltoid."},
+      {q:"After epi, BP still 78/50. Next?",options:["Wait and reassess","IV NS bolus 1L wide open","Antihistamine only","Elevate head"],correct:1,explain:"IV crystalloid compensates for vasodilatory shock. Position supine with legs elevated if hypotensive."},
+      {q:"She improves, then crashes 20 min later — what is this?",options:["Allergic rebound","Biphasic anaphylaxis","Epi reaction","Vasovagal"],correct:1,explain:"Biphasic anaphylaxis affects ~5–20% of cases hours after initial reaction. Extended monitoring is mandatory."},
+      {q:"When to give 2nd epinephrine dose?",options:["Never repeat","No improvement after 5–15 min","Only with physician order","After antihistamines fail"],correct:1,explain:"Repeat epi every 5–15 min with no response. Up to 3 doses may be needed. Never withhold in true anaphylaxis."},
+    ],
+  },
+  {
+    id:5,title:"Diabetic Emergency",emoji:"🍬",difficulty:"Easy",xp:55,
+    age:47,gender:"Male",chief:"Found unresponsive at home by wife, known diabetic",
+    vitals:{bp:"130/80",hr:"98",rr:"18",spo2:"98%",temp:"36.9°C",gcs:"7"},
+    history:"Type 1 DM on insulin. Wife says he missed dinner last night.",
+    steps:[
+      {q:"First diagnostic test you perform?",options:["12-lead ECG","Blood glucose check","Chest auscultation","Pupil assessment"],correct:1,explain:"Altered LOC + diabetes history = check BGL immediately. Hypoglycemia is rapidly reversible if caught early."},
+      {q:"BGL = 1.8 mmol/L (32 mg/dL). What do you give?",options:["Oral glucose gel","IV Dextrose 50% 25g","Glucagon IM only","Transport first"],correct:1,explain:"Severe hypoglycemia + unconscious = IV D50% 25g immediately. Glucagon IM is alternative if no IV access."},
+      {q:"No IV access. What alternative?",options:["Wait for IV","Glucagon 1mg IM","Oral paste anyway","Intranasal insulin"],correct:1,explain:"Glucagon 1mg IM stimulates hepatic glycogenolysis — raises BGL within 10–15 min when IV not accessible."},
+      {q:"Patient wakes, BGL now 5.2. What next?",options:["Discharge on scene","Oral carbs + transport","Second D50% dose","Start insulin drip"],correct:1,explain:"Always give oral carbohydrates after IV dextrose to prevent rebound hypoglycemia, then transport for evaluation."},
+      {q:"His wife says he's been vomiting for 2 days and smells fruity. What do you suspect?",options:["Alcoholic ketoacidosis","Diabetic ketoacidosis (DKA)","Hyperosmolar state","Sepsis"],correct:1,explain:"Fruity breath (acetone) + vomiting + diabetes = DKA. Kussmaul breathing, high BGL, ketonemia. Transport urgently."},
+    ],
+  },
+  {
+    id:6,title:"Stroke Alert",emoji:"🧠",difficulty:"Medium",xp:85,
+    age:67,gender:"Female",chief:"Sudden facial droop, left arm weakness, slurred speech — onset 45 min ago",
+    vitals:{bp:"188/105",hr:"88",rr:"18",spo2:"96%",temp:"37.0°C",gcs:"13"},
+    history:"AFib on warfarin, hypertension. Last seen normal 45 min ago.",
+    steps:[
+      {q:"What scale do you use for suspected stroke?",options:["GCS only","Cincinnati Prehospital Stroke Scale","AVPU","PEARL scale"],correct:1,explain:"Cincinnati Stroke Scale (Facial droop, Arm drift, Speech) — any ONE positive = stroke alert. Fast and validated."},
+      {q:"She scores 3/3 on Cincinnati. Priority?",options:["Give aspirin","Note last-known-well time & transport to stroke center","Check glucose first","Start fluids"],correct:1,explain:"Last-known-well time determines tPA eligibility (within 4.5hrs). Transport to closest stroke center IMMEDIATELY."},
+      {q:"BGL = 3.0 mmol/L. Does this change management?",options:["No — treat as stroke","Yes — treat hypoglycemia first, reassess","No — give tPA now","Yes — give fluids only"],correct:1,explain:"Hypoglycemia mimics stroke! Always check BGL. If low, correct it — symptoms may resolve. THEN reassess for stroke."},
+      {q:"She's on warfarin. Why does this matter?",options:["Doesn't matter","Affects tPA eligibility — hemorrhagic stroke risk","Means she needs aspirin now","Indicates infection"],correct:1,explain:"Anticoagulants raise hemorrhagic stroke risk and may contraindicate tPA. ER must know her INR status."},
+      {q:"BP is 188/105. Should you lower it in the field?",options:["Yes — give labetalol now","No — avoid lowering BP prehospital unless > 220/120","Yes — any BP > 160 needs treatment","Only if headache present"],correct:1,explain:"Permissive hypertension in stroke: avoid lowering BP < 220/120 prehospital. Penumbra needs perfusion pressure."},
+    ],
+  },
+  {
+    id:7,title:"COPD Exacerbation",emoji:"💨",difficulty:"Medium",xp:90,
+    age:72,gender:"Male",chief:"Severe SOB worsening over 3 days, tripod position",
+    vitals:{bp:"148/88",hr:"112",rr:"32",spo2:"82%",temp:"38.4°C",gcs:"12"},
+    history:"Severe COPD, chronic smoker, home O2 at 2L/min.",
+    steps:[
+      {q:"SpO2 82%. COPD patient — what O2 target?",options:["100% via NRB","94–98% via NRB","88–92% via controlled O2","No supplemental O2"],correct:2,explain:"COPD patients may rely on hypoxic drive. Target SpO2 88–92% with controlled oxygen — avoid hyperoxia."},
+      {q:"Severe respiratory distress. First treatment?",options:["IV antibiotics","Salbutamol + ipratropium nebulized","Intubate immediately","Chest X-ray"],correct:1,explain:"Dual bronchodilator therapy (salbutamol + ipratropium) is first-line for acute COPD exacerbation."},
+      {q:"RR 36, GCS dropping to 10. What now?",options:["More nebulizers","Prepare for CPAP or definitive airway","Give morphine","Position change only"],correct:1,explain:"Respiratory fatigue + declining GCS = impending respiratory failure. CPAP/BiPAP or RSI must be considered."},
+      {q:"You apply CPAP at 5 cmH2O. What does CPAP do?",options:["Forces air in like a ventilator","Maintains positive pressure preventing alveolar collapse","Delivers 100% O2 only","Replaces breathing"],correct:1,explain:"CPAP maintains positive end-expiratory pressure (PEEP), stenting open alveoli and reducing work of breathing."},
+      {q:"What sign tells you intubation is now required?",options:["SpO2 < 95%","Apnea or agonal respirations, GCS < 8","RR > 25","Fever alone"],correct:1,explain:"Apnea, agonal breathing, or GCS ≤ 8 = definitive airway needed. RSI preferred — BVM until ready."},
+    ],
+  },
+  {
+    id:8,title:"Opioid Overdose",emoji:"💉",difficulty:"Easy",xp:50,
+    age:29,gender:"Male",chief:"Found unresponsive in bathroom, needle beside him, pinpoint pupils",
+    vitals:{bp:"96/60",hr:"56",rr:"6",spo2:"78%",temp:"36.2°C",gcs:"3"},
+    history:"Unknown. Friend says he uses heroin. Last seen 30 min ago.",
+    steps:[
+      {q:"Classic opioid toxidrome triad?",options:["Tachycardia, dry skin, fever","Miosis, CNS depression, respiratory depression","Agitation, diaphoresis, hypertension","Seizures, hyponatremia, hyperthermia"],correct:1,explain:"Opioid triad: miosis (pinpoint pupils) + CNS depression + respiratory depression. RR 6 + SpO2 78% confirms."},
+      {q:"FIRST intervention for RR of 6?",options:["Naloxone IM","BVM ventilation immediately","IV line first","Check BGL"],correct:1,explain:"Oxygenate FIRST. BVM before naloxone — hypoxia kills faster than the opioid itself. Airway, airway, airway."},
+      {q:"After ventilation, what drug do you give?",options:["Flumazenil","Naloxone 0.4–2mg IN/IM/IV","Dextrose 50%","Epinephrine"],correct:1,explain:"Naloxone is a competitive opioid antagonist. Rapidly reverses respiratory depression, sedation, and miosis."},
+      {q:"Patient wakes up, agitated. Greatest concern?",options:["None — he's awake","Naloxone wears off before opioid — re-narcotization","He may be violent","He needs food"],correct:1,explain:"Naloxone duration is 30–90 min — shorter than most opioids. Re-sedation can kill. He MUST be monitored."},
+      {q:"He refuses transport. What is your next step?",options:["Restrain him physically","Document refusal, ensure supervision, consider ALS","Force transport","Give more naloxone and leave"],correct:1,explain:"Document competent refusal. Provide safety instructions, ensure someone stays with him, consider ALS handoff."},
+    ],
+  },
+  {
+    id:9,title:"Burns & Inhalation Injury",emoji:"🔥",difficulty:"Hard",xp:110,
+    age:41,gender:"Female",chief:"House fire — singed eyebrows, hoarse voice, burns on face/chest",
+    vitals:{bp:"124/76",hr:"116",rr:"24",spo2:"95%",temp:"37.6°C",gcs:"13"},
+    history:"Trapped 15 minutes in smoke-filled room before rescue.",
+    steps:[
+      {q:"Singed eyebrows + hoarse voice — greatest concern?",options:["CO only","Inhalation injury — imminent airway compromise","Superficial burns only","Anxiety"],correct:1,explain:"Upper airway burns swell rapidly — hoarseness is a pre-occlusion sign. Early intubation is critical before edema closes the airway."},
+      {q:"O2 delivery for CO exposure?",options:["2L/min nasal cannula","100% O2 via tight-fitting NRB mask","Room air","CPAP at 5 cmH2O"],correct:1,explain:"100% O2 reduces carboxyhemoglobin half-life from ~5hrs to ~60–90min. Always high-flow for CO exposure."},
+      {q:"Rule of Nines — burns to face + anterior chest = ?",options:["9%","18%","27%","36%"],correct:2,explain:"Face/head = 9%. Anterior chest = 18%. Total = 27% TBSA — major burn requiring aggressive fluid resuscitation."},
+      {q:"Parkland formula: 70kg patient, 27% burns. First 8hrs fluid?",options:["~2,500mL","~3,780mL","~7,560mL","~1,000mL"],correct:1,explain:"Total = 4 × 70 × 27 = 7,560mL. Half in first 8hrs = 3,780mL LR. Start aggressive resuscitation early."},
+      {q:"Her voice is now barely audible. What do you do?",options:["Monitor and transport","RSI — intubate NOW before full obstruction","Give racemic epi and wait","Cricothyrotomy immediately"],correct:1,explain:"Worsening hoarseness = progressing edema. Intubate NOW while airway is still visible. Delay = surgical airway only."},
+    ],
+  },
+  {
+    id:10,title:"Obstetric Emergency — Eclampsia",emoji:"🤰",difficulty:"Hard",xp:130,
+    age:28,gender:"Female",chief:"38 weeks pregnant, severe headache, visual changes, RUQ pain",
+    vitals:{bp:"172/112",hr:"96",rr:"20",spo2:"97%",temp:"37.1°C",gcs:"14"},
+    history:"G2P1, no prior prenatal complications. Sudden onset 1 hour ago.",
+    steps:[
+      {q:"BP 172/112 + pregnancy + headache = ?",options:["Gestational hypertension","Severe preeclampsia","Migraine","Pre-term labor"],correct:1,explain:"Severe preeclampsia: BP ≥ 160/110 + symptoms (headache, visual changes, RUQ pain) in pregnancy ≥ 20 weeks."},
+      {q:"She starts seizing (eclampsia). First-line drug?",options:["Diazepam 10mg IV","Magnesium sulfate 4g IV slow","Phenytoin loading dose","Lorazepam 4mg IM"],correct:1,explain:"MgSO4 is the drug of choice for eclamptic seizures AND prevention. Reduces CNS excitability via calcium antagonism."},
+      {q:"Magnesium toxicity sign to monitor?",options:["Tachycardia > 120","Loss of patellar (deep tendon) reflexes","Worsening hypertension","Skin flushing only"],correct:1,explain:"Loss of DTRs = early Mg toxicity. Respiratory arrest follows. Antidote: calcium gluconate 1g IV. Monitor reflexes constantly."},
+      {q:"Optimal position for late pregnancy?",options:["Supine flat","Left lateral decubitus (or right hip wedge)","Trendelenburg","Sitting upright only"],correct:1,explain:"Left lateral tilt prevents aortocaval compression by the gravid uterus, which can severely reduce cardiac output."},
+      {q:"Transport destination priority?",options:["Nearest ED regardless","Obstetric-capable hospital (Level II/III) ASAP","Deliver on scene first","Wait for OB on scene"],correct:1,explain:"Eclampsia requires immediate obstetric intervention. Transport to OB-capable facility while continuing MgSO4 and monitoring."},
+    ],
+  },
+];
+
+const TERMS = [
+  {term:"Tachycardia",def:"Heart rate > 100 beats per minute",category:"Cardiology",emoji:"💓"},
+  {term:"Bradycardia",def:"Heart rate < 60 beats per minute",category:"Cardiology",emoji:"🐢"},
+  {term:"Dyspnea",def:"Subjective difficulty breathing or shortness of breath",category:"Respiratory",emoji:"😮‍💨"},
+  {term:"Diaphoresis",def:"Profuse, abnormal sweating — often a sign of shock or MI",category:"General",emoji:"💧"},
+  {term:"Syncope",def:"Transient loss of consciousness from cerebral hypoperfusion",category:"Neurology",emoji:"😵"},
+  {term:"Hemoptysis",def:"Coughing up blood from the lower respiratory tract",category:"Respiratory",emoji:"🩸"},
+  {term:"Epistaxis",def:"Bleeding from the nasal cavity (nosebleed)",category:"ENT",emoji:"👃"},
+  {term:"Hematuria",def:"Presence of blood in the urine",category:"Renal",emoji:"🔴"},
+  {term:"Palpitations",def:"Uncomfortable awareness of one's own heartbeat",category:"Cardiology",emoji:"💗"},
+  {term:"Edema",def:"Abnormal accumulation of fluid in interstitial tissue causing swelling",category:"General",emoji:"🫧"},
+  {term:"Cyanosis",def:"Bluish discoloration of skin/mucous membranes from hypoxemia",category:"Respiratory",emoji:"🔵"},
+  {term:"Hypoxia",def:"Insufficient oxygen delivery to body tissues",category:"Respiratory",emoji:"⬇️"},
+  {term:"Ischemia",def:"Reduced blood flow causing inadequate oxygen supply to tissue",category:"Cardiology",emoji:"🚫"},
+  {term:"Sepsis",def:"Life-threatening organ dysfunction from dysregulated response to infection",category:"Critical Care",emoji:"🦠"},
+  {term:"Pneumothorax",def:"Air in the pleural space causing partial or total lung collapse",category:"Respiratory",emoji:"💨"},
+  {term:"Emesis",def:"The act of vomiting — expulsion of gastric contents",category:"GI",emoji:"🤢"},
+  {term:"Paresthesia",def:"Abnormal sensation — tingling, numbness, or 'pins and needles'",category:"Neurology",emoji:"⚡"},
+  {term:"Hypertension",def:"Persistently elevated blood pressure ≥ 140/90 mmHg",category:"Cardiology",emoji:"📈"},
+  {term:"Tachypnea",def:"Respiratory rate > 20 breaths per minute",category:"Respiratory",emoji:"🌬️"},
+  {term:"Bradypnea",def:"Abnormally slow breathing — RR < 12 breaths per minute",category:"Respiratory",emoji:"🐌"},
+  {term:"Apnea",def:"Complete cessation of breathing for ≥ 10 seconds",category:"Respiratory",emoji:"🛑"},
+  {term:"Hypercapnia",def:"Elevated CO2 in the blood (PaCO2 > 45 mmHg) — causes respiratory acidosis",category:"Respiratory",emoji:"💨"},
+  {term:"Intubation",def:"Insertion of an endotracheal tube into the trachea to secure the airway",category:"Airway",emoji:"🫁"},
+  {term:"Laryngospasm",def:"Sudden involuntary contraction of laryngeal muscles causing complete airway closure",category:"Airway",emoji:"🔒"},
+  {term:"Cricothyrotomy",def:"Emergency airway through the cricothyroid membrane when intubation fails",category:"Airway",emoji:"✂️"},
+  {term:"RSI",def:"Rapid Sequence Intubation — simultaneous sedative + paralytic to facilitate safe intubation",category:"Airway",emoji:"💉"},
+  {term:"PEEP",def:"Positive End-Expiratory Pressure — maintains pressure at end of expiration to prevent alveolar collapse",category:"Airway",emoji:"🌡️"},
+  {term:"Capnography",def:"Continuous monitoring of exhaled CO2 — gold standard for ETT placement confirmation",category:"Airway",emoji:"📊"},
+  {term:"Atelectasis",def:"Collapse or incomplete expansion of alveoli within the lung",category:"Respiratory",emoji:"🫧"},
+  {term:"Hemothorax",def:"Accumulation of blood in the pleural space between the lung and chest wall",category:"Trauma",emoji:"🩸"},
+  {term:"Flail Chest",def:"Three or more consecutive ribs fractured in two places — paradoxical chest movement",category:"Trauma",emoji:"💥"},
+  {term:"Tamponade",def:"Compression of the heart from fluid in the pericardial sac — Beck's triad",category:"Cardiology",emoji:"🫀"},
+  {term:"Distributive Shock",def:"Shock from massive vasodilation — includes septic, anaphylactic, neurogenic types",category:"Critical Care",emoji:"📉"},
+  {term:"Preload",def:"Volume of blood in the ventricle at end of diastole (end-diastolic volume)",category:"Cardiology",emoji:"🔄"},
+  {term:"Afterload",def:"Resistance the ventricle must overcome to eject blood during systole",category:"Cardiology",emoji:"⬆️"},
+  {term:"Eclampsia",def:"Onset of new-onset seizures in a patient with preeclampsia — obstetric emergency",category:"OB/GYN",emoji:"🤰"},
+  {term:"Anisocoria",def:"Unequal pupil sizes — may indicate herniation, CN III palsy, or medications",category:"Neurology",emoji:"👁️"},
+  {term:"Rhabdomyolysis",def:"Breakdown of skeletal muscle releasing myoglobin — can cause acute kidney injury",category:"Toxicology",emoji:"💪"},
+  {term:"Hyperkalemia",def:"Elevated serum potassium > 5.5 mEq/L — causes peaked T waves, bradycardia, V-fib",category:"Electrolytes",emoji:"⚠️"},
+  {term:"Korotkoff Sounds",def:"Sounds heard through a stethoscope during BP measurement as cuff is deflated",category:"Assessment",emoji:"🩺"},
+  {term:"Kussmaul Breathing",def:"Deep, labored breathing pattern — compensatory response to metabolic acidosis (e.g. DKA)",category:"Respiratory",emoji:"🌀"},
+  {term:"Cushing's Triad",def:"Hypertension + bradycardia + irregular respirations — sign of increased intracranial pressure",category:"Neurology",emoji:"🧠"},
+  {term:"Beck's Triad",def:"Hypotension + muffled heart sounds + JVD — classic signs of cardiac tamponade",category:"Cardiology",emoji:"🫀"},
+  {term:"Obstructive Shock",def:"Shock from mechanical blockage of circulation — PE, tamponade, tension pneumothorax",category:"Critical Care",emoji:"🚧"},
+  {term:"Pulse Oximetry",def:"Non-invasive measurement of peripheral oxygen saturation (SpO2) using light absorption",category:"Assessment",emoji:"📡"},
+  {term:"Diuresis",def:"Increased production and excretion of urine",category:"Renal",emoji:"🚿"},
+  {term:"Orthopnea",def:"Dyspnea that occurs when lying flat — relieved by sitting upright (classic in CHF)",category:"Cardiology",emoji:"🛏️"},
+  {term:"Stridor",def:"High-pitched inspiratory sound from upper airway obstruction — URGENT airway threat",category:"Airway",emoji:"🔊"},
+  {term:"Wheezing",def:"High-pitched expiratory sound from lower airway narrowing — asthma, bronchospasm, COPD",category:"Respiratory",emoji:"🎶"},
+  {term:"Crackles (Rales)",def:"Discontinuous popping lung sounds — fluid in alveoli, pulmonary edema, pneumonia",category:"Respiratory",emoji:"💦"},
+];
+
+const VITALS = [
+  {name:"Heart Rate",normal:"60–100 bpm",low:"< 60 (bradycardia)",high:"> 100 (tachycardia)",icon:"❤️",color:"#ff4757"},
+  {name:"Blood Pressure",normal:"< 120/80 mmHg",low:"< 90/60 (hypotension)",high:"> 140/90 (hypertension)",icon:"🩺",color:"#ffa502"},
+  {name:"Respiratory Rate",normal:"12–20 breaths/min",low:"< 12 (bradypnea)",high:"> 20 (tachypnea)",icon:"🌬️",color:"#2ed573"},
+  {name:"SpO2",normal:"> 95%",low:"< 90% (critical hypoxia)",high:"N/A (100% normal max)",icon:"💨",color:"#1e90ff"},
+  {name:"Temperature",normal:"36.5–37.5°C",low:"< 35°C (hypothermia)",high:"> 38°C (fever) / > 40°C critical",icon:"🌡️",color:"#a29bfe"},
+  {name:"GCS",normal:"15 (fully conscious)",low:"< 8 = definitive airway",high:"N/A",icon:"🧠",color:"#fd79a8"},
+  {name:"Blood Glucose",normal:"4–7 mmol/L fasting",low:"< 4 mmol/L (hypoglycemia)",high:"> 11.1 mmol/L (hyperglycemia)",icon:"🍬",color:"#fdcb6e"},
+  {name:"EtCO2",normal:"35–45 mmHg",low:"< 35 (hyperventilation / shock)",high:"> 45 (hypoventilation / COPD)",icon:"📊",color:"#00cec9"},
+];
+
+const PROTOCOLS = [
+  {
+    title:"Cardiac Arrest — Adult",icon:"💔",color:"#ff4757",
+    steps:["Confirm unresponsive, no normal breathing","Call for AED + backup immediately","CPR — 30:2, 100–120 compressions/min, 5–6cm depth","Attach AED, analyze rhythm ASAP","Shockable (VF/pVT): shock → resume CPR immediately","Non-shockable (PEA/asystole): CPR + treat reversible causes","IV/IO access during CPR — don't stop compressions","Epinephrine 1mg IV/IO q3–5min","Amiodarone 300mg IV for refractory VF/pVT","Treat 4Hs & 4Ts (reversible causes)"],
+    tips:"Push HARD (5–6cm), FAST (100–120/min), full recoil, MINIMIZE interruptions < 10sec",
+  },
+  {
+    title:"Stroke — Cincinnati Scale",icon:"🧠",color:"#1e90ff",
+    steps:["Facial droop: ask to smile — one side drooping?","Arm drift: eyes closed, arms out 10s — one drifts?","Speech: repeat phrase — slurred, wrong words, or mute?","Any ONE positive = STROKE ALERT","Record last-known-well time immediately","Blood glucose check — rule out hypoglycemia mimicry","Transport to stroke center NOW — pre-notify","12-lead ECG en route for AFib detection","Never lower BP prehospital unless > 220/120"],
+    tips:"Time = Brain: 1.9 million neurons lost per minute of untreated stroke",
+  },
+  {
+    title:"RSI — Rapid Sequence Intubation",icon:"🫁",color:"#00cec9",
+    steps:["SOAPME: Suction, O2, Airway equipment, Pharmacology, Monitor, Equipment","Pre-oxygenate: 100% O2 × 3 min via NRB or BVM","Pre-treatment: lidocaine/fentanyl if ICP concern (optional)","Sedation: ketamine 1–2mg/kg or etomidate 0.3mg/kg IV","Paralytic: succinylcholine 1.5mg/kg IV (or rocuronium 1.2mg/kg)","Cricoid pressure during induction (controversial but common)","Laryngoscopy: visualize cords, advance ETT","Confirm: waveform capnography + bilateral breath sounds","Post-intubation: sedate, analgesia, ventilator settings","Secure tube, reassess frequently — document depth"],
+    tips:"ALWAYS have a failed-airway rescue plan: BVM → LMA → Surgical airway",
+  },
+  {
+    title:"Anaphylaxis Protocol",icon:"🐝",color:"#ffa502",
+    steps:["Remove/stop allergen exposure","Epinephrine 0.3–0.5mg IM anterolateral thigh","Supine position, legs elevated if hypotensive","High-flow O2 via NRB mask 15L/min","Large bore IV × 2, NS bolus if hypotensive","Repeat epi q5–15 min if no improvement","Diphenhydramine 25–50mg IV/IM (secondary)","Corticosteroids for biphasic prevention","Transport — monitor for biphasic reaction"],
+    tips:"Epinephrine FIRST. Antihistamines do NOT treat anaphylaxis — only epinephrine does",
+  },
+  {
+    title:"Hemorrhagic Shock",icon:"🩸",color:"#e84393",
+    steps:["Direct pressure to all external bleeding","Tourniquet for limb hemorrhage — document time!","Wound packing with hemostatic gauze if available","Large bore IV × 2 or IO access","Permissive hypotension: SBP 70–90 (penetrating trauma)","Warm crystalloid bolus 250–500mL increments","Consider blood products (1:1:1 ratio if available)","Prevent hypothermia — warm patient actively","Rapid transport to trauma center"],
+    tips:"Damage control resuscitation: minimize crystalloid, push for blood products early",
+  },
+  {
+    title:"Needle Chest Decompression",icon:"💨",color:"#2ed573",
+    steps:["Identify suspected tension pneumothorax clinically","2nd ICS mid-clavicular line (or 4th/5th ICS MAL)","Clean site if time permits","Large-bore needle 14g or 16g, minimum 8cm length","Insert above the rib (avoid neurovascular bundle below)","Listen for rush of air = decompression successful","Remove needle, leave catheter in place","Reassess breath sounds + tracheal position","Prepare for chest tube if available","Monitor for re-accumulation — may need repeat"],
+    tips:"Never delay decompression for imaging if clinical tension pneumothorax is evident",
+  },
+];
+
+const DRUGS = [
+  {name:"Epinephrine 1:1000",dose:"0.3–0.5mg IM",indication:"Anaphylaxis",mechanism:"Alpha/Beta adrenergic agonist — vasoconstriction + bronchodilation + positive chronotropy",contraindication:"None absolute in true anaphylaxis",emoji:"💉",color:"#ff4757"},
+  {name:"Aspirin",dose:"324mg PO chewed",indication:"Suspected ACS/MI",mechanism:"Irreversible COX-1 inhibitor — inhibits thromboxane A2 → platelet aggregation",contraindication:"Active GI bleed, true aspirin allergy, children (Reye's syndrome)",emoji:"💊",color:"#ffa502"},
+  {name:"Nitroglycerin",dose:"0.4mg SL q5min × 3",indication:"Chest pain, ACS, acute CHF",mechanism:"Nitric oxide → smooth muscle relaxation → venodilation → reduces preload",contraindication:"SBP < 90, phosphodiesterase inhibitors (48–72h), inferior STEMI + RV infarct",emoji:"💛",color:"#fdcb6e"},
+  {name:"Salbutamol (Albuterol)",dose:"2.5mg nebulized q20min",indication:"Asthma, bronchospasm, COPD exacerbation",mechanism:"Selective Beta-2 agonist → bronchial smooth muscle relaxation",contraindication:"Severe tachycardia (relative), hypokalemia risk with repeated doses",emoji:"💨",color:"#2ed573"},
+  {name:"Dextrose 50%",dose:"25g (50mL) IV slow push",indication:"Hypoglycemia BGL < 4 mmol/L with AMS",mechanism:"Provides immediate glucose substrate for cerebral and systemic metabolism",contraindication:"Hemorrhagic stroke (relative). Give thiamine 100mg first if Wernicke's suspected",emoji:"🍬",color:"#a29bfe"},
+  {name:"Midazolam",dose:"2.5–5mg IM/IN or 1–2mg IV titrated",indication:"Active seizures, procedural sedation, RSI adjunct",mechanism:"Benzodiazepine — enhances GABA-A → CNS depression and anticonvulsant effect",contraindication:"Severe respiratory depression, hypotension (use with caution)",emoji:"⚡",color:"#1e90ff"},
+  {name:"Naloxone",dose:"0.4–2mg IV/IM/IN — titrate to respirations",indication:"Opioid overdose, respiratory depression",mechanism:"Competitive mu-opioid receptor antagonist — reverses all opioid effects",contraindication:"None absolute in overdose setting. Caution in opioid-dependent (precipitates withdrawal)",emoji:"🔄",color:"#e17055"},
+  {name:"Morphine Sulfate",dose:"2–4mg IV slow push, titrate prn",indication:"Severe pain, acute pulmonary edema",mechanism:"Mu-opioid receptor agonist — analgesia, venodilation, anxiolysis",contraindication:"SBP < 90, respiratory depression, head injury (relative), hypersensitivity",emoji:"🌿",color:"#fd79a8"},
+  {name:"Ketamine",dose:"RSI: 1–2mg/kg IV | Analgesia: 0.3mg/kg IV",indication:"RSI sedation, pain management, status asthmaticus, excited delirium",mechanism:"NMDA receptor antagonist — dissociative anesthesia, bronchodilator, maintains BP/HR",contraindication:"Elevated ICP (controversial), known psychosis (relative), uncontrolled HTN",emoji:"🌀",color:"#00cec9"},
+  {name:"Succinylcholine",dose:"1.5mg/kg IV push (RSI)",indication:"Depolarizing neuromuscular blockade for RSI — ultra-short duration",mechanism:"Depolarizing NMJ blocker — fasciculations then paralysis (~10 min duration)",contraindication:"Hyperkalemia, burns > 24h, crush injury > 72h, denervation, malignant hyperthermia hx",emoji:"⚗️",color:"#6c5ce7"},
+  {name:"Rocuronium",dose:"1.2mg/kg IV (RSI); 0.6mg/kg maintenance",indication:"Non-depolarizing NMJ blockade — use when succinylcholine contraindicated",mechanism:"Competes with ACh at NMJ — paralysis without fasciculations (45–70 min duration)",contraindication:"Rocuronium allergy — reversed by sugammadex 16mg/kg",emoji:"🧪",color:"#a29bfe"},
+  {name:"Magnesium Sulfate",dose:"4g IV slow over 15–20 min",indication:"Eclampsia, torsades de pointes, severe refractory asthma",mechanism:"Calcium antagonist — reduces neuronal excitability, bronchospasm, and platelet aggregation",contraindication:"Renal failure (dose-reduce and monitor), heart block",emoji:"✨",color:"#fdcb6e"},
+];
+
+const INTUBATION_STEPS = [
+  {step:1,title:"Preparation — SOAPME",icon:"🛠️",color:"#ffa502",content:"S = Suction (Yankauer + backup ready, functional). O = Oxygen (100% pre-oxygenation × 3 min). A = Airway (ETT sizes: target + one above + one below, 10mL syringe, stylet, tape, BOUGIE ready). P = Pharmacology (sedative + paralytic drawn and labelled). M = Monitor (SpO2, EtCO2, ECG, BP). E = Equipment (laryngoscope blade tested, video laryngoscope if available, BVM attached to O2)."},
+  {step:2,title:"Pre-Oxygenation",icon:"💨",color:"#2ed573",content:"100% O2 via tight-fitting NRB mask minimum 3 minutes. In apneic/hypoventilating patients: BVM 2-person technique. Goal: SpO2 > 93–98% before induction. In critically ill patients, safe apnea time may be < 1 minute — efficiency matters. Consider HFNO (high-flow nasal oxygen) during intubation attempt if available to extend safe apnea window."},
+  {step:3,title:"Pre-Treatment (Optional)",icon:"💊",color:"#a29bfe",content:"OPTIONAL — give 3 minutes before induction if time allows. Lidocaine 1.5mg/kg IV: blunts ICP response in head trauma (evidence mixed). Fentanyl 3mcg/kg IV: opioid blunting response (use in hemodynamically stable patients). Skip pre-treatment if the patient is critically unstable — speed of securing the airway is more important."},
+  {step:4,title:"Sedation (Induction Agent)",icon:"😴",color:"#6c5ce7",content:"KETAMINE 1–2mg/kg IV: preferred choice for hemodynamically unstable, bronchospasm, trauma, excited delirium. Maintains BP and HR, bronchodilates. ETOMIDATE 0.3mg/kg IV: hemodynamically neutral, rapid onset (< 60s), minimal cardiac depression. Adrenal suppression concern in sepsis — single dose still widely used. PROPOFOL 1.5–2mg/kg IV: excellent sedation BUT causes hypotension — use ONLY in hemodynamically stable patients."},
+  {step:5,title:"Paralytic (Neuromuscular Blockade)",icon:"⚗️",color:"#e84393",content:"SUCCINYLCHOLINE 1.5mg/kg IV: depolarizing agent — fast onset 45s, ultra-short 10min. CONTRAINDICATED: hyperkalemia, burns > 24h, crush injury > 72h, denervation, malignant hyperthermia history. ROCURONIUM 1.2mg/kg IV: non-depolarizing — use when succinylcholine is contraindicated. Onset ~60s at this dose. Duration 45–70 min. Reversed by sugammadex 16mg/kg. Wait for fasciculations (succ) or 60 seconds (roc) before attempting laryngoscopy."},
+  {step:6,title:"Laryngoscopy & Tube Placement",icon:"🔦",color:"#ff4757",content:"POSITION: Sniffing position — head extended, neck flexed (ear-to-sternal notch alignment). LARYNGOSCOPE: Macintosh (curved) — tip into vallecula, lift anteriorly. Miller (straight) — tip under epiglottis, lift. VISUALIZE: Aim for Grade 1 (cords fully visible) or Grade 2 (partial cords). ADVANCE ETT: Through cords 2–3cm past tip. Inflate cuff 10mL air. Adult male ~23cm, female ~21cm at lips. BOUGIE: If poor view (Grade 3–4), place bougie first, railroad ETT over it."},
+  {step:7,title:"Confirmation of Placement",icon:"✅",color:"#2ed573",content:"PRIMARY — Waveform capnography (EtCO2): Gold standard. Continuous CO2 waveform = tube in trachea. Flat line after 4–6 breaths = esophageal — pull tube now. SECONDARY checks: Bilateral equal breath sounds in axillae, symmetrical chest rise, misting/fogging in tube, SpO2 improving, absence of sounds over epigastrium. CXR at hospital confirms tip position ~2cm above carina."},
+  {step:8,title:"Post-Intubation Care",icon:"📋",color:"#1e90ff",content:"Secure tube (commercial holder or tape — verify depth). SEDATION + ANALGESIA: propofol/midazolam + fentanyl infusion. VENTILATOR SETTINGS: Tidal volume 6–8mL/kg ideal body weight (lung protective). RR 12–16/min. FiO2 100% initially (wean to keep SpO2 94–98%). PEEP 5 cmH2O start. Monitor: EtCO2 target 35–45 mmHg, SpO2, BP (intubation commonly drops BP — have vasopressors ready), peak pressures. Reassess frequently."},
+];
+
+const DIFFICULT_AIRWAY = [
+  {sign:"LEMON Assessment",detail:"Look (anatomy, trauma, beard, obesity) | Evaluate 3-3-2 (mouth opening, thyromental, hyoid-thyroid distance) | Mallampati (Class III/IV = difficult) | Obstruction (foreign body, mass, angioedema) | Neck mobility (cervical spine immobilization)"},
+  {sign:"3-3-2 Rule",detail:"3 finger-breadths = mouth opening | 3 finger-breadths = thyromental distance | 2 finger-breadths = hyoid to thyroid cartilage. Below these = high likelihood of difficult laryngoscopy"},
+  {sign:"Failed Intubation Protocol",detail:"Maximum 3 attempts total (including by most skilled operator). Declare failed airway. Call for help. Return to BVM ventilation and oxygenation. Insert supraglottic airway (LMA/iGel). Last resort: surgical cricothyrotomy."},
+  {sign:"Supraglottic Airway (LMA/iGel)",detail:"Does NOT protect against aspiration but DOES maintain ventilation. Insert along hard palate until resistance. Sizes by weight. Use as rescue device — bridge to definitive airway or surgical intervention."},
+  {sign:"Surgical Cricothyrotomy",detail:"Last resort in 'can't intubate, can't oxygenate' scenario. Landmark: thyroid cartilage → soft spot below → cricoid ring = cricothyroid membrane. Horizontal stab incision, dilate, insert cuffed ETT size 6.0. Confirm with EtCO2."},
+];
+
+const CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;600;700;800&family=Nunito:wght@400;600;700&display=swap');
+  :root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--accent:#00d2ff;--text:#e8eaf6;--muted:#8892b0;--success:#2ed573;--warning:#ffa502;--danger:#ff4757;--radius:16px;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  h1,h2,h3,.hf{font-family:'Oxanium',monospace;}
+  .app{max-width:900px;margin:0 auto;padding:16px;padding-bottom:40px;}
+  .header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--surface);border-radius:var(--radius);margin-bottom:18px;border:1px solid rgba(0,210,255,0.15);position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-icon{font-size:26px;}
+  .logo-text{font-family:'Oxanium',monospace;font-size:17px;font-weight:800;color:var(--accent);letter-spacing:1px;}
+  .logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+  .xp-bar-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+  .xp-label{font-size:10px;color:var(--accent);font-family:'Oxanium',monospace;}
+  .xp-track{width:130px;height:7px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+  .xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),#0066ff);border-radius:99px;transition:width 0.8s ease;}
+  .level-badge{background:linear-gradient(135deg,var(--accent),#0066ff);color:#000;font-family:'Oxanium',monospace;font-weight:800;font-size:11px;padding:3px 9px;border-radius:99px;}
+  .nav{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:20px;}
+  @media(max-width:700px){.nav{grid-template-columns:repeat(4,1fr);}}
+  @media(max-width:480px){.nav{grid-template-columns:repeat(2,1fr);}}
+  .nav-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 8px;cursor:pointer;transition:all 0.25s;text-align:center;}
+  .nav-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.18);}
+  .nav-card.active{border-color:var(--accent);box-shadow:0 0 18px rgba(0,210,255,0.2);}
+  .nav-icon{font-size:22px;margin-bottom:5px;display:block;}
+  .nav-label{font-family:'Oxanium',monospace;font-size:10px;font-weight:700;color:var(--text);}
+  .nav-desc{font-size:9px;color:var(--muted);margin-top:2px;}
+  .nav-dot{width:5px;height:5px;border-radius:50%;margin:5px auto 0;}
+  .panel{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:22px;animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .panel-title{font-family:'Oxanium',monospace;font-size:19px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:9px;}
+  .scenario-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:18px;}
+  @media(max-width:600px){.scenario-grid{grid-template-columns:1fr;}}
+  .scenario-card{background:var(--surface2);border:1px solid rgba(255,255,255,0.06);border-radius:11px;padding:14px;cursor:pointer;transition:all 0.25s;}
+  .scenario-card:hover{border-color:rgba(0,210,255,0.4);transform:translateY(-2px);}
+  .scenario-card.done{border-color:var(--success);}
+  .sc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}
+  .sc-emoji{font-size:26px;}
+  .sc-badge{font-size:9px;padding:2px 8px;border-radius:99px;font-weight:700;font-family:'Oxanium',monospace;}
+  .sc-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:700;margin-bottom:3px;}
+  .sc-sub{font-size:10px;color:var(--muted);}
+  .sc-xp{font-size:11px;color:var(--warning);font-weight:700;font-family:'Oxanium',monospace;margin-top:6px;}
+  .patient-card{background:linear-gradient(135deg,#1a2235,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:11px;padding:16px;margin-bottom:16px;}
+  .patient-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+  .patient-emoji{font-size:34px;}
+  .patient-title{font-family:'Oxanium',monospace;font-size:15px;font-weight:800;color:var(--accent);}
+  .patient-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+  .chief-complaint{background:rgba(255,71,87,0.1);border-left:3px solid var(--danger);padding:8px 11px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:10px;}
+  .vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:9px;}
+  @media(max-width:500px){.vitals-grid{grid-template-columns:repeat(2,1fr);}}
+  .vital-chip{background:var(--surface);border-radius:7px;padding:6px 8px;text-align:center;border:1px solid rgba(255,255,255,0.06);}
+  .vital-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+  .vital-val{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;color:var(--accent);margin-top:2px;}
+  .history-box{background:rgba(162,155,254,0.08);border-left:3px solid #a29bfe;padding:8px 11px;border-radius:0 8px 8px 0;font-size:11px;color:var(--muted);}
+  .question-wrap{background:var(--surface2);border-radius:11px;padding:16px;margin-top:12px;}
+  .q-step{font-size:9px;color:var(--accent);font-family:'Oxanium',monospace;margin-bottom:5px;letter-spacing:1px;}
+  .q-progress{height:3px;background:var(--surface);border-radius:99px;margin-bottom:12px;}
+  .q-progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width 0.5s ease;}
+  .q-text{font-size:14px;font-weight:700;margin-bottom:12px;line-height:1.5;}
+  .options{display:flex;flex-direction:column;gap:8px;}
+  .option-btn{background:var(--surface);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:10px 13px;border-radius:9px;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;transition:all 0.2s;display:flex;align-items:center;gap:9px;}
+  .option-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(0,210,255,0.08);}
+  .option-btn.correct{background:rgba(46,213,115,0.15);border-color:var(--success);color:var(--success);}
+  .option-btn.wrong{background:rgba(255,71,87,0.15);border-color:var(--danger);color:var(--danger);}
+  .option-btn:disabled{cursor:default;}
+  .option-letter{width:24px;height:24px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-size:10px;font-weight:700;flex-shrink:0;}
+  .explain-box{background:rgba(46,213,115,0.08);border:1px solid rgba(46,213,115,0.3);border-radius:9px;padding:11px;margin-top:10px;font-size:12px;line-height:1.6;animation:fadeIn 0.3s ease;}
+  .next-btn{margin-top:11px;background:var(--accent);color:#000;border:none;padding:11px 26px;border-radius:99px;font-family:'Oxanium',monospace;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;width:100%;}
+  .next-btn:hover{transform:scale(1.02);box-shadow:0 0 18px rgba(0,210,255,0.4);}
+  .result-card{text-align:center;padding:26px;background:var(--surface2);border-radius:11px;margin-top:16px;}
+  .result-emoji{font-size:52px;margin-bottom:12px;}
+  .result-title{font-family:'Oxanium',monospace;font-size:20px;font-weight:800;margin-bottom:5px;}
+  .result-xp{font-family:'Oxanium',monospace;font-size:17px;color:var(--warning);}
+  .score-bar{height:9px;background:var(--surface);border-radius:99px;margin:12px 0;overflow:hidden;}
+  .score-fill{height:100%;background:linear-gradient(90deg,var(--success),#00b894);border-radius:99px;transition:width 1s ease;}
+  .term-mode-tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
+  .mode-tab{padding:6px 14px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-size:11px;font-weight:700;font-family:'Oxanium',monospace;transition:all 0.2s;background:var(--surface2);color:var(--muted);}
+  .mode-tab.active{background:var(--accent);color:#000;border-color:var(--accent);}
+  .term-card{background:var(--surface2);border-radius:14px;padding:26px;text-align:center;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.06);transition:all 0.3s;}
+  .term-card.flip{background:rgba(0,210,255,0.08);border-color:rgba(0,210,255,0.3);}
+  .term-emoji-big{font-size:40px;margin-bottom:9px;}
+  .term-word{font-family:'Oxanium',monospace;font-size:22px;font-weight:800;margin-bottom:4px;}
+  .term-cat{font-size:9px;color:var(--accent);font-family:'Oxanium',monospace;letter-spacing:1.5px;text-transform:uppercase;}
+  .term-def{font-size:14px;color:var(--text);line-height:1.6;margin-bottom:7px;}
+  .tap-hint{font-size:10px;color:var(--muted);margin-top:7px;}
+  .term-nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
+  .term-btn{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:8px 18px;border-radius:99px;font-family:'Oxanium',monospace;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;}
+  .term-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .term-count{font-family:'Oxanium',monospace;color:var(--muted);font-size:12px;}
+  .streak-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,165,2,0.15);border:1px solid rgba(255,165,2,0.3);padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;color:var(--warning);}
+  .vitals-table{display:flex;flex-direction:column;gap:9px;margin-top:16px;}
+  .vital-row{background:var(--surface2);border-radius:11px;padding:12px 14px;border:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:40px 1fr 1fr 1fr;gap:9px;align-items:center;}
+  @media(max-width:600px){.vital-row{grid-template-columns:36px 1fr;}}
+  .vital-row-icon{font-size:20px;}
+  .vital-col-name{font-family:'Oxanium',monospace;font-weight:700;font-size:12px;}
+  .vital-col-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
+  .vital-col-val{font-size:11px;}
+  .vital-normal{color:var(--success);}
+  .vital-low{color:#74b9ff;}
+  .vital-high{color:var(--danger);}
+  .protocol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}
+  @media(max-width:600px){.protocol-grid{grid-template-columns:1fr;}}
+  .protocol-card{background:var(--surface2);border-radius:11px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;overflow:hidden;transition:all 0.25s;}
+  .protocol-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15);}
+  .protocol-header{padding:13px 15px;display:flex;align-items:center;gap:9px;}
+  .protocol-icon{font-size:24px;}
+  .protocol-title{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;}
+  .protocol-body{padding:0 15px 13px;}
+  .protocol-steps{list-style:none;}
+  .protocol-steps li{font-size:11px;padding:4px 0 4px 17px;border-bottom:1px solid rgba(255,255,255,0.04);position:relative;color:var(--muted);line-height:1.5;}
+  .protocol-steps li::before{content:'→';position:absolute;left:0;color:var(--accent);font-family:'Oxanium',monospace;font-weight:700;}
+  .protocol-steps li:last-child{border-bottom:none;}
+  .protocol-tip{background:rgba(255,165,2,0.1);border-left:3px solid var(--warning);padding:6px 10px;border-radius:0 6px 6px 0;font-size:10px;color:var(--warning);margin-top:7px;font-weight:600;}
+  .drug-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}
+  @media(max-width:600px){.drug-grid{grid-template-columns:1fr;}}
+  .drug-card{background:var(--surface2);border-radius:11px;padding:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.25s;}
+  .drug-card:hover{transform:translateY(-2px);}
+  .drug-header{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
+  .drug-emoji{font-size:24px;}
+  .drug-name{font-family:'Oxanium',monospace;font-size:12px;font-weight:800;}
+  .drug-row{display:flex;gap:7px;margin-bottom:5px;align-items:flex-start;}
+  .drug-key{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;min-width:65px;padding-top:2px;}
+  .drug-val{font-size:11px;flex:1;line-height:1.5;}
+  .intub-steps{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
+  .intub-step{background:var(--surface2);border-radius:11px;padding:14px 16px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.25s;border-left:3px solid transparent;}
+  .intub-step.open{border-left-color:var(--accent);background:rgba(0,210,255,0.05);}
+  .intub-step:hover{border-color:rgba(255,255,255,0.15);}
+  .intub-step-header{display:flex;align-items:center;gap:10px;}
+  .intub-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:12px;flex-shrink:0;}
+  .intub-icon{font-size:20px;}
+  .intub-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:700;flex:1;}
+  .intub-chevron{color:var(--muted);font-size:12px;transition:transform 0.2s;}
+  .intub-chevron.open{transform:rotate(90deg);}
+  .intub-content{margin-top:10px;font-size:12px;line-height:1.7;color:var(--muted);padding-left:40px;}
+  .da-cards{display:flex;flex-direction:column;gap:9px;margin-top:11px;}
+  .da-card{background:var(--surface);border-radius:9px;padding:12px 14px;border:1px solid rgba(255,165,2,0.2);}
+  .da-title{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;color:var(--warning);margin-bottom:4px;}
+  .da-detail{font-size:11px;color:var(--muted);line-height:1.6;}
+  .home-hero{background:linear-gradient(135deg,#111827,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:var(--radius);padding:26px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
+  .home-hero::before{content:'🚑';position:absolute;font-size:160px;opacity:0.04;top:50%;left:50%;transform:translate(-50%,-50%);}
+  .hero-title{font-family:'Oxanium',monospace;font-size:clamp(19px,5vw,28px);font-weight:800;line-height:1.2;margin-bottom:7px;}
+  .hero-accent{color:var(--accent);}
+  .hero-sub{color:var(--muted);font-size:13px;max-width:460px;margin:0 auto 16px;}
+  .stats-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+  .stat-box{text-align:center;}
+  .stat-num{font-family:'Oxanium',monospace;font-size:19px;font-weight:800;color:var(--accent);}
+  .stat-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+  .badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;}
+  .badge{padding:4px 11px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;border:1px solid;opacity:0.3;}
+  .badge.earned{opacity:1;}
+  .back-btn{background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted);padding:6px 14px;border-radius:99px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;transition:all 0.2s;margin-bottom:13px;display:inline-flex;align-items:center;gap:5px;}
+  .back-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .term-quiz-question{background:var(--surface2);border-radius:11px;padding:20px;text-align:center;margin-bottom:12px;border:1px solid rgba(255,255,255,0.06);}
+  .watermark{text-align:center;padding:22px 0 8px;}
+  .watermark-line{height:1px;background:linear-gradient(90deg,transparent,rgba(0,210,255,0.3),transparent);margin-bottom:14px;}
+  .watermark-text{font-family:'Oxanium',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;}
+  .watermark-name{font-family:'Oxanium',monospace;font-size:18px;font-weight:800;background:linear-gradient(90deg,var(--accent),#a29bfe,#fd79a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;margin-top:5px;}
+  .watermark-sub{font-size:10px;color:rgba(0,210,255,0.4);font-family:'Oxanium',monospace;letter-spacing:1.5px;margin-top:6px;}
+  .watermark-badge{display:inline-block;border:1px solid rgba(0,210,255,0.2);border-radius:99px;padding:5px 18px;margin-top:9px;font-size:10px;color:rgba(0,210,255,0.5);font-family:'Oxanium',monospace;letter-spacing:1px;}
+`;
+
+function XPBar({ xp, level }) {
+  const pct = Math.min((xp % 200) / 200 * 100, 100);
+  return (
+    <div className="xp-bar-wrap">
+      <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+        <span className="level-badge">LVL {level}</span>
+        <span className="xp-label">{xp} XP</span>
+      </div>
+      <div className="xp-track"><div className="xp-fill" style={{ width: `${pct}%` }} /></div>
+    </div>
+  );
+}
+
+function ScenarioModule({ setXp, completedScenarios, setCompletedScenarios }) {
+  const [active, setActive] = useState(null);
+  const [step, setStep] = useState(0);
+  const [chosen, setChosen] = useState(null);
+  const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
+
+  const start = (sc) => { setActive(sc); setStep(0); setChosen(null); setScore(0); setDone(false); };
+
+  const handleAnswer = (idx) => {
+    if (chosen !== null) return;
+    setChosen(idx);
+    if (idx === active.steps[step].correct) setScore(s => s + 1);
+  };
+
+  const handleNext = () => {
+    if (step + 1 >= active.steps.length) {
+      const final = score + (chosen === active.steps[step].correct ? 1 : 0);
+      setDone(true);
+      setXp(x => x + Math.round(active.xp * (final / active.steps.length)));
+      if (!completedScenarios.includes(active.id)) setCompletedScenarios(cs => [...cs, active.id]);
+    } else { setStep(s => s + 1); setChosen(null); }
+  };
+
+  const DC = { Easy: "#2ed573", Medium: "#ffa502", Hard: "#ff4757" };
+  const LT = ["A","B","C","D"];
+
+  if (!active) return (
+    <div>
+      <div className="panel-title">🚑 Emergency Scenarios</div>
+      <p style={{ color: "var(--muted)", fontSize: 12 }}>Real calls. Real decisions. Make the right call under pressure.</p>
+      <div className="scenario-grid">
+        {SCENARIOS.map(sc => (
+          <div key={sc.id} className={`scenario-card ${completedScenarios.includes(sc.id) ? "done" : ""}`} onClick={() => start(sc)}>
+            <div className="sc-header">
+              <span className="sc-emoji">{sc.emoji}</span>
+              <span className="sc-badge" style={{ background: DC[sc.difficulty]+"22", color: DC[sc.difficulty] }}>{sc.difficulty}</span>
+            </div>
+            <div className="sc-title">{sc.title}</div>
+            <div className="sc-sub">Age {sc.age} · {sc.gender} · {sc.steps.length}Q</div>
+            <div className="sc-xp">⭐ {sc.xp} XP {completedScenarios.includes(sc.id) ? "✅" : ""}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (done) {
+    const final = score;
+    const pct = Math.round(final / active.steps.length * 100);
+    return (
+      <div>
+        <button className="back-btn" onClick={() => setActive(null)}>← Back to Scenarios</button>
+        <div className="result-card">
+          <div className="result-emoji">{pct >= 80 ? "🏆" : pct >= 60 ? "🎯" : "📚"}</div>
+          <div className="result-title">{pct >= 80 ? "Outstanding!" : pct >= 60 ? "Good Call!" : "Keep Studying!"}</div>
+          <div style={{ color: "var(--muted)", fontSize: 12, margin: "5px 0" }}>{final}/{active.steps.length} correct · {active.title}</div>
+          <div className="score-bar"><div className="score-fill" style={{ width: `${pct}%` }} /></div>
+          <div className="result-xp">+{Math.round(active.xp * (final / active.steps.length))} XP earned</div>
+          <button className="next-btn" style={{ marginTop: 16 }} onClick={() => setActive(null)}>Try Another Scenario →</button>
+        </div>
+      </div>
+    );
+  }
+
+  const q = active.steps[step];
+  return (
+    <div>
+      <button className="back-btn" onClick={() => setActive(null)}>← Back to Scenarios</button>
+      <div className="patient-card">
+        <div className="patient-header"><span className="patient-emoji">{active.emoji}</span><div><div className="patient-title">{active.title}</div><div className="patient-sub">{active.age}yo {active.gender}</div></div></div>
+        <div className="chief-complaint"><strong>Chief Complaint:</strong> {active.chief}</div>
+        <div className="vitals-grid">{Object.entries(active.vitals).map(([k,v]) => (<div key={k} className="vital-chip"><div className="vital-label">{k.toUpperCase()}</div><div className="vital-val">{v}</div></div>))}</div>
+        <div className="history-box"><strong>History:</strong> {active.history}</div>
+      </div>
+      <div className="question-wrap">
+        <div className="q-step">QUESTION {step+1} OF {active.steps.length}</div>
+        <div className="q-progress"><div className="q-progress-fill" style={{ width:`${(step/active.steps.length)*100}%` }} /></div>
+        <div className="q-text">{q.q}</div>
+        <div className="options">
+          {q.options.map((opt,i) => {
+            let cls="option-btn";
+            if(chosen!==null){if(i===q.correct)cls+=" correct";else if(i===chosen&&chosen!==q.correct)cls+=" wrong";}
+            return (<button key={i} className={cls} disabled={chosen!==null} onClick={()=>handleAnswer(i)}><span className="option-letter">{LT[i]}</span>{opt}</button>);
+          })}
+        </div>
+        {chosen!==null&&(<><div className="explain-box">💡 <strong>Explanation:</strong> {q.explain}</div><button className="next-btn" onClick={handleNext}>{step+1>=active.steps.length?"See Results →":"Next Question →"}</button></>)}
+      </div>
+    </div>
+  );
+}
+
+function TerminologyModule({ setXp }) {
+  const [mode, setMode] = useState("flashcard");
+  const [idx, setIdx] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [quizQ, setQuizQ] = useState(null);
+  const [quizChosen, setQuizChosen] = useState(null);
+  const [streak, setStreak] = useState(0);
+  const [filter, setFilter] = useState("All");
+
+  const cats = ["All",...Array.from(new Set(TERMS.map(t=>t.category))).sort()];
+  const filtered = filter==="All" ? TERMS : TERMS.filter(t=>t.category===filter);
+
+  const genQuiz = () => {
+    if(TERMS.length<4) return;
+    const correct = filtered[Math.floor(Math.random()*filtered.length)];
+    const dist = TERMS.filter(t=>t.term!==correct.term).sort(()=>Math.random()-0.5).slice(0,3);
+    const opts = [...dist,correct].sort(()=>Math.random()-0.5);
+    setQuizQ({correct,opts,correctIdx:opts.indexOf(correct)});
+    setQuizChosen(null);
+  };
+  useEffect(()=>{ if(mode==="quiz") genQuiz(); },[mode,filter]);
+
+  const LT=["A","B","C","D"];
+  const term = filtered[idx%filtered.length];
+
+  return (
+    <div>
+      <div className="panel-title">📖 Medical Terminology</div>
+      <div style={{ display:"flex", gap:7, marginBottom:12, flexWrap:"wrap" }}>
+        {["flashcard","quiz"].map(m=>(
+          <button key={m} className={`mode-tab ${mode===m?"active":""}`} onClick={()=>{setMode(m);setFlipped(false);setIdx(0);}}>
+            {m==="flashcard"?"📚 Flashcards":"🎯 Quiz Mode"}
+          </button>
+        ))}
+        <select value={filter} onChange={e=>{setFilter(e.target.value);setIdx(0);setFlipped(false);}}
+          style={{background:"var(--surface2)",border:"1px solid rgba(255,255,255,0.1)",color:"var(--muted)",padding:"5px 9px",borderRadius:99,fontSize:10,fontFamily:"Oxanium,monospace",cursor:"pointer"}}>
+          {cats.map(c=><option key={c} value={c}>{c}</option>)}
+        </select>
+        <span style={{fontSize:10,color:"var(--muted)",alignSelf:"center"}}>{filtered.length} terms</span>
+      </div>
+
+      {mode==="flashcard"&&term&&(
+        <div>
+          <div className={`term-card ${flipped?"flip":""}`} onClick={()=>setFlipped(f=>!f)}>
+            {!flipped
+              ?<><div className="term-emoji-big">{term.emoji}</div><div className="term-word">{term.term}</div><div className="term-cat">{term.category}</div><div className="tap-hint" style={{marginTop:10}}>👆 Tap to reveal definition</div></>
+              :<><div className="term-emoji-big">{term.emoji}</div><div className="term-def">{term.def}</div><div className="term-cat">{term.category}</div><div className="tap-hint">👆 Tap to flip back</div></>
+            }
+          </div>
+          <div className="term-nav">
+            <button className="term-btn" onClick={()=>{setIdx(i=>(i-1+filtered.length)%filtered.length);setFlipped(false);}}>← Prev</button>
+            <span className="term-count">{(idx%filtered.length)+1} / {filtered.length}</span>
+            <button className="term-btn" onClick={()=>{setIdx(i=>(i+1)%filtered.length);setFlipped(false);}}>Next →</button>
+          </div>
+        </div>
+      )}
+
+      {mode==="quiz"&&quizQ&&(
+        <div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:11}}>
+            <span style={{color:"var(--muted)",fontSize:11}}>What does this term mean?</span>
+            {streak>1&&<span className="streak-badge">🔥 {streak} streak! +15 XP</span>}
+          </div>
+          <div className="term-quiz-question">
+            <div className="term-emoji-big">{quizQ.correct.emoji}</div>
+            <div className="term-word">{quizQ.correct.term}</div>
+            <div className="term-cat">{quizQ.correct.category}</div>
+          </div>
+          <div className="options">
+            {quizQ.opts.map((opt,i)=>{
+              let cls="option-btn";
+              if(quizChosen!==null){if(i===quizQ.correctIdx)cls+=" correct";else if(i===quizChosen)cls+=" wrong";}
+              return(<button key={i} className={cls} disabled={quizChosen!==null} onClick={()=>{setQuizChosen(i);if(i===quizQ.correctIdx){setStreak(s=>s+1);setXp(x=>x+15);}else setStreak(0);}}><span className="option-letter">{LT[i]}</span>{opt.def}</button>);
+            })}
+          </div>
+          {quizChosen!==null&&<button className="next-btn" style={{marginTop:11}} onClick={genQuiz}>Next Term →</button>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function VitalsModule() {
+  return (
+    <div>
+      <div className="panel-title">❤️ Vital Signs Reference</div>
+      <p style={{color:"var(--muted)",fontSize:12,marginBottom:4}}>Know your normals. Recognize the danger zones immediately.</p>
+      <div className="vitals-table">
+        {VITALS.map(v=>(
+          <div key={v.name} className="vital-row" style={{borderLeft:`3px solid ${v.color}`}}>
+            <div className="vital-row-icon">{v.icon}</div>
+            <div><div className="vital-col-name" style={{color:v.color}}>{v.name}</div></div>
+            <div><div className="vital-col-label">Normal</div><div className="vital-col-val vital-normal">✅ {v.normal}</div></div>
+            <div><div className="vital-col-label">Abnormal</div><div className="vital-col-val vital-low" style={{fontSize:10}}>🔵 {v.low}</div><div className="vital-col-val vital-high" style={{fontSize:10}}>🔴 {v.high}</div></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ProtocolsModule() {
+  const [active,setActive]=useState(null);
+  if(active) return(
+    <div>
+      <button className="back-btn" onClick={()=>setActive(null)}>← All Protocols</button>
+      <div className="panel-title" style={{marginBottom:16}}>{active.icon} {active.title}</div>
+      <div style={{background:"var(--surface2)",borderRadius:11,overflow:"hidden"}}>
+        <ol style={{padding:"14px 16px",listStyle:"none"}}>
+          {active.steps.map((s,i)=>(
+            <li key={i} style={{display:"flex",gap:10,padding:"8px 0",borderBottom:"1px solid rgba(255,255,255,0.04)",alignItems:"flex-start"}}>
+              <span style={{background:active.color,color:"#000",borderRadius:"50%",width:20,height:20,display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,fontFamily:"Oxanium,monospace",fontWeight:800,flexShrink:0,marginTop:2}}>{i+1}</span>
+              <span style={{fontSize:12,lineHeight:1.6}}>{s}</span>
+            </li>
+          ))}
+        </ol>
+        <div style={{padding:"0 16px 14px"}}><div className="protocol-tip">⚡ KEY PEARL: {active.tips}</div></div>
+      </div>
+    </div>
+  );
+  return(
+    <div>
+      <div className="panel-title">📋 Treatment Protocols</div>
+      <p style={{color:"var(--muted)",fontSize:12}}>Step-by-step clinical guides for critical emergencies.</p>
+      <div className="protocol-grid">
+        {PROTOCOLS.map((p,i)=>(
+          <div key={i} className="protocol-card" onClick={()=>setActive(p)} style={{borderTop:`3px solid ${p.color}`}}>
+            <div className="protocol-header"><span className="protocol-icon">{p.icon}</span><span className="protocol-title">{p.title}</span></div>
+            <div className="protocol-body"><ul className="protocol-steps">{p.steps.slice(0,3).map((s,j)=><li key={j}>{s}</li>)}<li style={{color:"var(--accent)"}}>+{p.steps.length-3} more steps...</li></ul></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function PharmacologyModule() {
+  const [active,setActive]=useState(null);
+  if(active) return(
+    <div>
+      <button className="back-btn" onClick={()=>setActive(null)}>← Drug Reference</button>
+      <div style={{background:"var(--surface2)",borderRadius:14,padding:20,borderTop:`3px solid ${active.color}`}}>
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
+          <span style={{fontSize:42}}>{active.emoji}</span>
+          <div><div style={{fontFamily:"Oxanium,monospace",fontSize:18,fontWeight:800}}>{active.name}</div><div style={{fontSize:11,color:active.color,fontFamily:"Oxanium,monospace",marginTop:3}}>{active.indication}</div></div>
+        </div>
+        {[{k:"💊 Dose",v:active.dose},{k:"🎯 Indication",v:active.indication},{k:"⚙️ Mechanism",v:active.mechanism},{k:"🚫 Contraindications",v:active.contraindication,danger:true}].map(row=>(
+          <div key={row.k} style={{marginBottom:12,paddingBottom:12,borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+            <div style={{fontSize:9,color:"var(--muted)",textTransform:"uppercase",letterSpacing:0.5,marginBottom:4}}>{row.k}</div>
+            <div style={{fontSize:13,color:row.danger?"var(--danger)":"var(--text)",lineHeight:1.6}}>{row.v}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+  return(
+    <div>
+      <div className="panel-title">💊 Pharmacology</div>
+      <p style={{color:"var(--muted)",fontSize:12}}>Essential EMS medications — doses, mechanisms, contraindications.</p>
+      <div className="drug-grid">
+        {DRUGS.map((d,i)=>(
+          <div key={i} className="drug-card" onClick={()=>setActive(d)} style={{borderTop:`3px solid ${d.color}`}}>
+            <div className="drug-header"><span className="drug-emoji">{d.emoji}</span><div className="drug-name">{d.name}</div></div>
+            <div className="drug-row"><span className="drug-key">Dose</span><span className="drug-val" style={{color:d.color,fontWeight:700,fontFamily:"Oxanium,monospace"}}>{d.dose}</span></div>
+            <div className="drug-row"><span className="drug-key">For</span><span className="drug-val">{d.indication}</span></div>
+            <div style={{fontSize:10,color:"var(--accent)",marginTop:6,fontFamily:"Oxanium,monospace"}}>Tap for full details →</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function IntubationModule() {
+  const [open,setOpen]=useState(null);
+  const [view,setView]=useState("steps");
+  return(
+    <div>
+      <div className="panel-title">🫁 Airway & Intubation</div>
+      <p style={{color:"var(--muted)",fontSize:12,marginBottom:14}}>Master RSI, airway management, and difficult airway rescue — the highest-stakes skill in paramedicine.</p>
+      <div style={{display:"flex",gap:7,marginBottom:16}}>
+        <button className={`mode-tab ${view==="steps"?"active":""}`} onClick={()=>setView("steps")}>RSI Protocol</button>
+        <button className={`mode-tab ${view==="difficult"?"active":""}`} onClick={()=>setView("difficult")}>Difficult Airway</button>
+      </div>
+
+      {view==="steps"&&(
+        <div>
+          <div style={{background:"rgba(0,210,255,0.08)",border:"1px solid rgba(0,210,255,0.2)",borderRadius:9,padding:"9px 13px",marginBottom:12,fontSize:11,color:"var(--accent)"}}>
+            ⚡ RSI = Rapid Sequence Intubation. Simultaneous sedative + paralytic for safe, controlled orotracheal intubation.
+          </div>
+          <div className="intub-steps">
+            {INTUBATION_STEPS.map(s=>(
+              <div key={s.step} className={`intub-step ${open===s.step?"open":""}`} onClick={()=>setOpen(open===s.step?null:s.step)}>
+                <div className="intub-step-header">
+                  <div className="intub-num" style={{background:s.color+"22",color:s.color}}>{s.step}</div>
+                  <span className="intub-icon">{s.icon}</span>
+                  <span className="intub-title">{s.title}</span>
+                  <span className={`intub-chevron ${open===s.step?"open":""}`}>▶</span>
+                </div>
+                {open===s.step&&<div className="intub-content">{s.content}</div>}
+              </div>
+            ))}
+          </div>
+          <div style={{marginTop:12,background:"rgba(255,71,87,0.08)",border:"1px solid rgba(255,71,87,0.2)",borderRadius:9,padding:"9px 13px",fontSize:11,color:"var(--danger)"}}>
+            🚨 ALWAYS have a failed-airway rescue plan before you start. Suction. BVM. LMA. Cric kit. No exceptions.
+          </div>
+        </div>
+      )}
+
+      {view==="difficult"&&(
+        <div>
+          <div style={{background:"rgba(255,165,2,0.08)",border:"1px solid rgba(255,165,2,0.2)",borderRadius:9,padding:"9px 13px",marginBottom:12,fontSize:11,color:"var(--warning)"}}>
+            ⚠️ Difficult airway = cannot intubate AND/OR cannot oxygenate. Plan for rescue BEFORE every intubation attempt.
+          </div>
+          <div className="da-cards">
+            {DIFFICULT_AIRWAY.map((d,i)=>(
+              <div key={i} className="da-card"><div className="da-title">{d.sign}</div><div className="da-detail">{d.detail}</div></div>
+            ))}
+          </div>
+          <div style={{marginTop:14,background:"var(--surface2)",borderRadius:10,padding:"13px 14px"}}>
+            <div style={{fontFamily:"Oxanium,monospace",fontSize:12,fontWeight:800,color:"#00cec9",marginBottom:9}}>ETT Size Quick Reference</div>
+            {[["Adult Male","7.5–8.0mm","23cm at lips"],["Adult Female","7.0–7.5mm","21cm at lips"],["Child (Uncuffed)","(Age÷4)+4 mm","(Age÷2)+12 cm"],["Neonate","3.0–3.5mm","9–10 cm"]].map(([pt,size,depth])=>(
+              <div key={pt} style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:7,padding:"6px 0",borderBottom:"1px solid rgba(255,255,255,0.04)",fontSize:11}}>
+                <span style={{color:"var(--muted)"}}>{pt}</span>
+                <span style={{color:"#00cec9",fontFamily:"Oxanium,monospace",fontWeight:700}}>{size}</span>
+                <span style={{color:"var(--text)"}}>{depth}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AnatomyModule() {
+  const systems=[
+    {name:"Cardiovascular",emoji:"❤️",color:"#ff4757",facts:["Heart has 4 chambers: RA, RV, LA, LV","Normal HR: 60–100 bpm at rest","SA node = natural pacemaker (60–100 bpm)","AV node delays impulse conduction ~0.1 second","Cardiac output = Heart Rate × Stroke Volume","Normal ejection fraction: 55–70%","Coronary arteries fill during diastole"]},
+    {name:"Respiratory",emoji:"🫁",color:"#2ed573",facts:["Normal RR: 12–20 breaths/min adult","Tidal volume: ~500mL per breath","300 million alveoli for gas exchange","O2 carried bound to hemoglobin (HbO2)","CO2 — not O2 — drives respiratory rate","Minute ventilation = RR × Tidal Volume","PaO2 normal: 80–100 mmHg; SpO2 > 95%"]},
+    {name:"Nervous System",emoji:"🧠",color:"#a29bfe",facts:["Brain consumes 20% of body's O2 supply","Neurons die after ~4–6 min without oxygen","GCS: Eyes + Verbal + Motor = max 15","Pupils PERRL = normal (equal and reactive)","Cushing's Triad: HTN + bradycardia + irregular breathing","Cheyne-Stokes respiration = brain herniation","Dermatomes map spinal cord levels"]},
+    {name:"Circulatory Shock",emoji:"📉",color:"#fd79a8",facts:["Class I: <15% loss — HR normal, compensated","Class II: 15–30% — HR > 100, anxious","Class III: 30–40% — HR > 120, confused","Class IV: >40% — lethargic, impending death","Shock index = HR ÷ SBP (normal < 1.0)","First compensatory response = tachycardia","Hypotension = late, decompensated sign"]},
+    {name:"Musculoskeletal",emoji:"🦴",color:"#fdcb6e",facts:["Femur fracture → up to 1,500mL blood loss","Pelvis fracture → up to 3,000mL blood loss","Traction splint for isolated femur shaft #","Compartment syndrome — 6 P's: Pain, Pallor, Pulselessness, Paresthesia, Paralysis, Pressure","Open fractures: cover with sterile dressing, don't reduce","Salter-Harris fractures in pediatric growth plates","Long bone length can approximate age in children"]},
+    {name:"Renal & Electrolytes",emoji:"🫘",color:"#00cec9",facts:["Normal urine output: 0.5–1 mL/kg/hr","Hyperkalemia → peaked T waves → V-fib risk","Hyponatremia → cerebral edema → seizures","Rhabdomyolysis → myoglobinuria → AKI","ACE inhibitors → angioedema risk (bradykinin)","NSAIDs → afferent arteriolar vasoconstriction → AKI","Furosemide → K+ wasting loop diuretic"]},
+  ];
+  const [active,setActive]=useState(null);
+  if(active) return(
+    <div>
+      <button className="back-btn" onClick={()=>setActive(null)}>← Anatomy</button>
+      <div style={{background:"var(--surface2)",borderRadius:14,overflow:"hidden"}}>
+        <div style={{padding:"16px 18px",background:`linear-gradient(135deg,${active.color}22,transparent)`,borderBottom:"1px solid rgba(255,255,255,0.06)"}}>
+          <div style={{display:"flex",alignItems:"center",gap:11}}><span style={{fontSize:36}}>{active.emoji}</span><div style={{fontFamily:"Oxanium,monospace",fontSize:18,fontWeight:800,color:active.color}}>{active.name} System</div></div>
+        </div>
+        {active.facts.map((f,i)=>(
+          <div key={i} style={{padding:"11px 18px",borderBottom:"1px solid rgba(255,255,255,0.04)",display:"flex",alignItems:"center",gap:11}}>
+            <span style={{color:active.color,fontFamily:"Oxanium,monospace",fontWeight:800,fontSize:13,minWidth:26}}>0{i+1}</span>
+            <span style={{fontSize:12,lineHeight:1.5}}>{f}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+  return(
+    <div>
+      <div className="panel-title">🫀 Anatomy & Physiology</div>
+      <p style={{color:"var(--muted)",fontSize:12}}>Essential body systems every paramedic must understand cold.</p>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:11,marginTop:16}}>
+        {systems.map(s=>(
+          <div key={s.name} onClick={()=>setActive(s)}
+            style={{background:"var(--surface2)",borderRadius:11,padding:16,cursor:"pointer",border:"1px solid rgba(255,255,255,0.06)",borderTop:`3px solid ${s.color}`,transition:"all 0.25s"}}
+            onMouseEnter={e=>e.currentTarget.style.transform="translateY(-3px)"}
+            onMouseLeave={e=>e.currentTarget.style.transform=""}>
+            <div style={{fontSize:30,marginBottom:7}}>{s.emoji}</div>
+            <div style={{fontFamily:"Oxanium,monospace",fontSize:13,fontWeight:800,color:s.color,marginBottom:3}}>{s.name}</div>
+            <div style={{fontSize:10,color:"var(--muted)"}}>{s.facts.length} key facts →</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── QUICK TIPS DATA (from EMS Daily Quick Tips series) ──────────────────────
+
+const QUICK_TIPS = [
+  {
+    day: 1,
+    title: "The Altered Mental Status Patient",
+    emoji: "🧠",
+    color: "#a29bfe",
+    summary: "Use 'Four S's' then 'NOT' to systematically work up any AMS patient.",
+    sections: [
+      {
+        heading: "Step 1 — The Four S's Method",
+        items: [
+          { key: "Sugar", detail: "Check their blood glucose level (BGL) immediately." },
+          { key: "Stroke", detail: "Perform a FAST Exam — Face, Arms, Speech, Time." },
+          { key: "Seizures", detail: "Are meds like Keppra or Dilantin on their med list?" },
+          { key: "Sepsis", detail: "Any signs of UTI, Pneumonia, or infection source?" },
+        ],
+      },
+      {
+        heading: "Step 2 — If NOT the Four S's, move to 'NOT'",
+        items: [
+          { key: "Narcan", detail: "Any signs of opiate overdose? Pinpoint pupils, low RR?" },
+          { key: "Oxygen", detail: "Is the patient hypoxic? Check SpO2 immediately." },
+          { key: "Trauma", detail: "Any major bleeding or hidden head trauma?" },
+        ],
+      },
+    ],
+    pearl: "Always check BGL first — hypoglycemia is the #1 most reversible cause of AMS.",
+  },
+  {
+    day: 2,
+    title: "The Pediatric Patient",
+    emoji: "👶",
+    color: "#2ed573",
+    summary: "Sick children don't act like children. Your first 10 seconds tell you everything.",
+    sections: [
+      {
+        heading: "General Impression — Look First",
+        items: [
+          { key: "Eye contact", detail: "Are they tracking you across the room? A sick child won't." },
+          { key: "Tone & activity", detail: "Do they appear limp or lethargic? That's a red flag." },
+          { key: "Breathing & skin", detail: "What does their breathing pattern and colour look like at a glance?" },
+        ],
+      },
+      {
+        heading: "Field Tip",
+        items: [
+          { key: "Use the family", detail: "They know the child's baseline. Ask 'Is this normal for them?'" },
+          { key: "Notecard trick", detail: "Keep a notecard with pediatric doses & quick tips in your front chest pocket." },
+        ],
+      },
+    ],
+    pearl: "A young child that doesn't notice you are there — and lets you assess them — is a very sick child.",
+  },
+  {
+    day: 3,
+    title: "CHF vs Pneumonia",
+    emoji: "🫁",
+    color: "#74b9ff",
+    summary: "Both have rales. Differentiate by history, presentation pattern, and associated findings.",
+    sections: [
+      {
+        heading: "CHF (Congestive Heart Failure)",
+        items: [
+          { key: "Sounds", detail: "Bilateral rales (wet crackles) throughout lung fields." },
+          { key: "Signs", detail: "Hypertension, JVD (jugular venous distension), leg edema." },
+          { key: "Sputum", detail: "Pink frothy sputum — classic for pulmonary edema." },
+          { key: "Onset", detail: "May wake them from sleep. Often acute in onset." },
+        ],
+      },
+      {
+        heading: "Pneumonia",
+        items: [
+          { key: "Signs", detail: "Fever, chills, green/yellow productive cough — the classic 'sick' patient." },
+          { key: "Heart rate", detail: "Mild tachycardia from infection and fever." },
+          { key: "Onset", detail: "Gets worse gradually over several days." },
+          { key: "Sounds", detail: "Early rales, progresses to rhonchi as infection develops." },
+        ],
+      },
+    ],
+    pearl: "When in doubt — look at the full history. CHF patients often have a cardiac history; pneumonia patients have an infection history.",
+  },
+  {
+    day: 4,
+    title: "The H's & T's — Never Forget Again",
+    emoji: "💔",
+    color: "#ff4757",
+    summary: "Reversible causes of cardiac arrest. Know these cold — you'll need them mid-code.",
+    sections: [
+      {
+        heading: "The H's",
+        items: [
+          { key: "Hypoxia", detail: "Already treated by the time you reach H's — airway and O2 are in." },
+          { key: "Hypovolemia", detail: "Already treated — IV bag is running." },
+          { key: "Hydrogen Ion (Acidosis)", detail: "Think Sodium Bicarb — you give it for acidosis." },
+          { key: "HyperK / HypoK", detail: "Potassium imbalance — also treated with bicarb in HyperK." },
+          { key: "Hypothermia", detail: "The lonely one — stands alone. Someone found in the cold." },
+        ],
+      },
+      {
+        heading: "The T's",
+        items: [
+          { key: "Tension Pneumothorax", detail: "Caused by Trauma — needle decompress immediately." },
+          { key: "Cardiac Tamponade", detail: "Also Trauma — Beck's Triad: JVD + hypotension + muffled heart sounds." },
+          { key: "Toxins", detail: "Nobody wants a toxin — it stands alone. Think overdose." },
+          { key: "Thrombosis (PE + MI)", detail: "A clot — Pulmonary Embolism or Myocardial Infarction." },
+        ],
+      },
+    ],
+    pearl: "Memory trick: Group H's in pairs — (Hypoxia + Hypovolemia), (Acidosis + HyperK), then Hypothermia alone. T's: Trauma causes 2 of them!",
+  },
+  {
+    day: 5,
+    title: "Getting Ready for Medic School",
+    emoji: "🎓",
+    color: "#ffa502",
+    summary: "Three proven strategies that separate students who pass from those who don't.",
+    sections: [
+      {
+        heading: "The Big 3 — Pre-Study These Topics NOW",
+        items: [
+          { key: "Cardiology", detail: "EKG interpretation, cardiac rhythms, ACS management — this is the hardest section." },
+          { key: "Pharmacology", detail: "Know your drug classes, receptor types, and mechanisms before day 1." },
+          { key: "Drug Cards", detail: "Build a set early. If you know the mechanism, the rest fills itself in." },
+        ],
+      },
+      {
+        heading: "Study Strategies That Work",
+        items: [
+          { key: "Sit front, record lectures", detail: "Listen back during your commute — your car becomes a classroom 24/7." },
+          { key: "Start a study group", detail: "Teach-back what you've learned. Teaching = the deepest form of learning." },
+          { key: "Consistency over cramming", detail: "Daily 30 min beats 6-hour weekend sessions every time." },
+        ],
+      },
+    ],
+    pearl: "In one Medic school class, 16 out of 30 students failed in the first semester. The Big 3 topics took them all out.",
+  },
+  {
+    day: 6,
+    title: "The Stroke Patient — FAST + More",
+    emoji: "🧠",
+    color: "#1e90ff",
+    summary: "No stroke is a stroke until you check blood glucose. Speed is everything.",
+    sections: [
+      {
+        heading: "FAST Exam",
+        items: [
+          { key: "Face", detail: "Any unilateral facial droop? Ask them to smile." },
+          { key: "Arms", detail: "Arm drift test + grip strength bilaterally." },
+          { key: "Speech", detail: "Can't speak, slurs words, or says wrong words?" },
+          { key: "Time", detail: "When was the last time they were seen normal? Record it." },
+        ],
+      },
+      {
+        heading: "Don't Miss These",
+        items: [
+          { key: "BGL first", detail: "Hypoglycemia perfectly mimics stroke. Always check before calling it a stroke." },
+          { key: "Vertical nystagmus", detail: "Hypertension + vertigo + N/V + severe headache = posterior circulation stroke." },
+          { key: "Move fast", detail: "Blood glucose, vitals, stroke scale — all at once with your team. Then radio in and go." },
+        ],
+      },
+    ],
+    pearl: "The moment you suspect stroke: note the last-known-well time, pre-notify the hospital, and transport to a stroke center — don't delay for anything.",
+  },
+  {
+    day: 7,
+    title: "12-Lead EKG — What to Do When Unsure",
+    emoji: "📈",
+    color: "#e84393",
+    summary: "You don't have to be 100% certain. Here's how to manage uncertainty on a cardiac call.",
+    sections: [
+      {
+        heading: "If You're Unsure About the EKG",
+        items: [
+          { key: "Real STEMIs get worse", detail: "They don't stay constant. Trend your EKGs — burn another one every 5–10 min." },
+          { key: "Treat the patient, not the monitor", detail: "Continue BLS/ALS care regardless. Stabilize, treat, transport." },
+          { key: "Alert the hospital early", detail: "Pre-notify with 'questionable EKG, critical patient' — let them prepare the resus room." },
+        ],
+      },
+      {
+        heading: "Mindset on Scene",
+        items: [
+          { key: "Don't freeze on the EKG", detail: "You still have a patient who needs aspirin, oxygen, IV, and transport." },
+          { key: "Serial EKGs are your friend", detail: "If it's a STEMI, the changes will evolve and become obvious." },
+          { key: "Never sweat it in triage", detail: "Notify the ER early — they'd rather prepare for nothing than be surprised." },
+        ],
+      },
+    ],
+    pearl: "Your job isn't to diagnose — it's to recognize, treat, transport, and communicate. Let the cath lab confirm.",
+  },
+  {
+    day: 8,
+    title: "HyperK on ECG",
+    emoji: "⚡",
+    color: "#fdcb6e",
+    summary: "Rising potassium causes progressive, fatal ECG changes. Know the phases cold.",
+    sections: [
+      {
+        heading: "ECG Changes — Phase by Phase",
+        items: [
+          { key: "Phase 1 — Peaked T Waves", detail: "Narrow, tall, sharp T waves. QRS still normal width. K+ is elevated but not critical yet." },
+          { key: "Phase 2 — Wide QRS + Peaked T", detail: "QRS begins to widen as K+ rises further. Patient is at high arrhythmia risk." },
+          { key: "Phase 3 — Sine Wave", detail: "'Funky Looking Sine Wave' — P waves disappear, QRS and T merge. Pre-V-fib. Emergency." },
+        ],
+      },
+      {
+        heading: "Who to Suspect",
+        items: [
+          { key: "Dialysis patients", detail: "The obvious ones. Missed dialysis + peaked T waves = HyperK until proven otherwise." },
+          { key: "History first", detail: "How would they end up here? Story + ECG changes = your diagnosis." },
+        ],
+      },
+    ],
+    pearl: "Treatment: Calcium Gluconate (stabilizes heart membrane), Sodium Bicarb (shifts K+ into cells), Salbutamol nebs — buy time for definitive care.",
+  },
+  {
+    day: 9,
+    title: "Remembering Drug Cards",
+    emoji: "💊",
+    color: "#6c5ce7",
+    summary: "If you understand the mechanism of action, the rest of the drug card fills itself in.",
+    sections: [
+      {
+        heading: "The Mechanism Approach — Example: Epinephrine",
+        items: [
+          { key: "Alpha 1", detail: "Causes vasoconstriction → raises blood pressure." },
+          { key: "Beta 1", detail: "Increases heart rate and contractility." },
+          { key: "Beta 2", detail: "Dilates the bronchial tree → bronchodilation." },
+        ],
+      },
+      {
+        heading: "From Mechanism → Derive the Rest",
+        items: [
+          { key: "Indication (Why give it?)", detail: "It raises BP + HR + opens airways → hypotension, bradycardia, anaphylaxis, asthma." },
+          { key: "Contraindication (Why NOT?)", detail: "HR of 180? You wouldn't give something that raises HR further." },
+          { key: "Adverse Effects", detail: "What would too much of these effects look like? Tachycardia, hypertension, tremor." },
+        ],
+      },
+    ],
+    pearl: "Study mechanism + dose first. Indications, contraindications, and side effects will naturally make sense — you won't need to memorize them.",
+  },
+  {
+    day: 10,
+    title: "Types of Shock",
+    emoji: "📉",
+    color: "#fd79a8",
+    summary: "4 types of shock — one of them has 3 subtypes. Know them all cold.",
+    sections: [
+      {
+        heading: "The 4 Types",
+        items: [
+          { key: "Cardiogenic", detail: "'The heart caused it.' MI leads to pump failure → the heart can't push blood forward." },
+          { key: "Obstructive", detail: "'Something is blocking normal blood flow.' Tension pneumothorax, PE, tamponade." },
+          { key: "Distributive (3 subtypes)", detail: "Massive vasodilation → very low diastolic BP. Subtypes: Neurogenic, Septic, Anaphylactic." },
+          { key: "Hypovolemic", detail: "Not just trauma bleeding — severe dehydration and burns cause massive fluid loss too." },
+        ],
+      },
+      {
+        heading: "Distributive Subtypes",
+        items: [
+          { key: "Neurogenic", detail: "Spinal cord injury → loss of sympathetic tone → vessels dilate uncontrolled." },
+          { key: "Septic", detail: "Massive infection → inflammatory mediators → vasodilation + capillary leak." },
+          { key: "Anaphylactic", detail: "IgE-mediated → histamine release → severe vasodilation + bronchospasm." },
+        ],
+      },
+    ],
+    pearl: "Distributive shock patients have a much lower diastolic BP than hemorrhagic shock — their bodies have lost the epi compensatory response.",
+  },
+  {
+    day: 11,
+    title: "Medical Abbreviations",
+    emoji: "🔤",
+    color: "#00cec9",
+    summary: "You'll see these on every call, chart, and hospital handoff. Know them before you need them.",
+    sections: [
+      {
+        heading: "Common Abbreviations",
+        items: [
+          { key: "ABG", detail: "Arterial Blood Gas — measures O2, CO2, pH in arterial blood." },
+          { key: "ESRD", detail: "End-Stage Renal Disease — dialysis patients, watch for HyperK." },
+          { key: "CBC", detail: "Complete Blood Count — WBC, RBC, hemoglobin, platelets." },
+          { key: "ASA", detail: "Aspirin — ask if they took it, and if they're allergic." },
+          { key: "SIDS", detail: "Sudden Infant Death Syndrome — infant found unexpectedly unresponsive." },
+          { key: "ROSC", detail: "Return of Spontaneous Circulation — the goal in cardiac arrest." },
+          { key: "NPO", detail: "Nothing by mouth — patient can't eat or drink (pre-op, vomiting risk)." },
+          { key: "STEMI", detail: "ST-Elevation Myocardial Infarction — the big one. Time = muscle." },
+          { key: "TIA", detail: "Transient Ischemic Attack — 'mini stroke,' resolves fully within 24h." },
+          { key: "PO", detail: "Per Oral — given by mouth." },
+          { key: "KVO", detail: "Keep Vein Open — very slow IV rate just to maintain access." },
+        ],
+      },
+    ],
+    pearl: "Speak and chart the full word in patient care — but you'll need to understand abbreviations when reading hospital records, medication lists, and speaking with nurses.",
+  },
+];
+
+function QuickTipsModule() {
+  const [selected, setSelected] = useState(null);
+  const [notes, setNotes] = useState({});
+  const [noteInput, setNoteInput] = useState("");
+  const [notingFor, setNotingFor] = useState(null);
+
+  const saveNote = (day) => {
+    if (!noteInput.trim()) return;
+    setNotes(n => ({ ...n, [day]: [...(n[day] || []), noteInput.trim()] }));
+    setNoteInput("");
+    setNotingFor(null);
+  };
+
+  const deleteNote = (day, idx) => {
+    setNotes(n => ({ ...n, [day]: n[day].filter((_, i) => i !== idx) }));
+  };
+
+  if (selected) {
+    const tip = QUICK_TIPS.find(t => t.day === selected);
+    const dayNotes = notes[tip.day] || [];
+    return (
+      <div>
+        <button className="back-btn" onClick={() => { setSelected(null); setNotingFor(null); setNoteInput(""); }}>← All Tips</button>
+        <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:16 }}>
+          <span style={{ fontSize:40 }}>{tip.emoji}</span>
+          <div>
+            <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:tip.color, letterSpacing:2, textTransform:"uppercase", marginBottom:3 }}>Day {tip.day} / 11</div>
+            <div style={{ fontFamily:"Oxanium,monospace", fontSize:18, fontWeight:800 }}>{tip.title}</div>
+          </div>
+        </div>
+
+        <div style={{ background:`${tip.color}11`, border:`1px solid ${tip.color}44`, borderRadius:10, padding:"10px 14px", marginBottom:16, fontSize:13, color:tip.color, fontWeight:600 }}>
+          💡 {tip.summary}
+        </div>
+
+        {tip.sections.map((sec, si) => (
+          <div key={si} style={{ marginBottom:16 }}>
+            <div style={{ fontFamily:"Oxanium,monospace", fontSize:12, fontWeight:800, color:tip.color, marginBottom:9, textTransform:"uppercase", letterSpacing:1 }}>{sec.heading}</div>
+            {sec.items.map((item, ii) => (
+              <div key={ii} style={{ background:"var(--surface2)", borderRadius:9, padding:"11px 14px", marginBottom:7, borderLeft:`3px solid ${tip.color}` }}>
+                <div style={{ fontFamily:"Oxanium,monospace", fontSize:12, fontWeight:800, color:tip.color, marginBottom:3 }}>{item.key}</div>
+                <div style={{ fontSize:13, color:"var(--text)", lineHeight:1.6 }}>{item.detail}</div>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        <div style={{ background:"rgba(255,165,2,0.1)", border:"1px solid rgba(255,165,2,0.3)", borderRadius:10, padding:"10px 14px", marginBottom:20, fontSize:12, color:"var(--warning)" }}>
+          ⭐ <strong>PEARL:</strong> {tip.pearl}
+        </div>
+
+        {/* NOTES SECTION */}
+        <div style={{ background:"var(--surface2)", borderRadius:12, padding:16, border:"1px solid rgba(255,255,255,0.08)" }}>
+          <div style={{ fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, color:"#f9ca24", marginBottom:12, display:"flex", alignItems:"center", gap:8 }}>
+            📝 My Notes
+            <span style={{ fontSize:10, color:"var(--muted)", fontWeight:400, letterSpacing:1 }}>— personal reminders for this tip</span>
+          </div>
+
+          {dayNotes.length === 0 && notingFor !== tip.day && (
+            <div style={{ fontSize:12, color:"var(--muted)", fontStyle:"italic", marginBottom:12 }}>No notes yet. Add one below!</div>
+          )}
+
+          {dayNotes.map((note, ni) => (
+            <div key={ni} style={{ display:"flex", alignItems:"flex-start", gap:9, background:"rgba(249,202,36,0.08)", border:"1px solid rgba(249,202,36,0.2)", borderRadius:8, padding:"9px 12px", marginBottom:7 }}>
+              <span style={{ color:"#f9ca24", marginTop:1 }}>📌</span>
+              <span style={{ flex:1, fontSize:13, lineHeight:1.6 }}>{note}</span>
+              <button onClick={() => deleteNote(tip.day, ni)} style={{ background:"transparent", border:"none", color:"var(--muted)", cursor:"pointer", fontSize:14, padding:0, flexShrink:0 }}>✕</button>
+            </div>
+          ))}
+
+          {notingFor === tip.day ? (
+            <div style={{ display:"flex", gap:8, marginTop:4 }}>
+              <input
+                autoFocus
+                value={noteInput}
+                onChange={e => setNoteInput(e.target.value)}
+                onKeyDown={e => { if(e.key==="Enter") saveNote(tip.day); if(e.key==="Escape") { setNotingFor(null); setNoteInput(""); } }}
+                placeholder="Type your note and press Enter..."
+                style={{ flex:1, background:"var(--surface)", border:"1px solid rgba(249,202,36,0.4)", color:"var(--text)", padding:"9px 13px", borderRadius:99, fontSize:13, fontFamily:"Nunito,sans-serif", outline:"none" }}
+              />
+              <button onClick={() => saveNote(tip.day)} style={{ background:"#f9ca24", color:"#000", border:"none", borderRadius:99, padding:"9px 16px", fontFamily:"Oxanium,monospace", fontWeight:800, fontSize:12, cursor:"pointer" }}>Save</button>
+              <button onClick={() => { setNotingFor(null); setNoteInput(""); }} style={{ background:"transparent", border:"1px solid rgba(255,255,255,0.1)", color:"var(--muted)", borderRadius:99, padding:"9px 12px", cursor:"pointer", fontSize:12 }}>Cancel</button>
+            </div>
+          ) : (
+            <button onClick={() => setNotingFor(tip.day)} style={{ background:"transparent", border:"1px dashed rgba(249,202,36,0.4)", color:"#f9ca24", padding:"8px 16px", borderRadius:99, cursor:"pointer", fontFamily:"Oxanium,monospace", fontSize:11, fontWeight:700, marginTop:4 }}>
+              + Add Note
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="panel-title">📝 EMS Quick Tips</div>
+      <p style={{ color:"var(--muted)", fontSize:12, marginBottom:16 }}>Field-tested tips from experienced medics. Tap any tip to read + add your own notes.</p>
+      <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+        {QUICK_TIPS.map(tip => (
+          <div key={tip.day} onClick={() => setSelected(tip.day)}
+            style={{ background:"var(--surface2)", borderRadius:12, padding:"14px 16px", cursor:"pointer", border:`1px solid rgba(255,255,255,0.06)`, borderLeft:`4px solid ${tip.color}`, transition:"all 0.2s", display:"flex", alignItems:"center", gap:14 }}
+            onMouseEnter={e=>e.currentTarget.style.borderColor=tip.color}
+            onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(255,255,255,0.06)"}>
+            <span style={{ fontSize:32, flexShrink:0 }}>{tip.emoji}</span>
+            <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ fontFamily:"Oxanium,monospace", fontSize:9, color:tip.color, letterSpacing:2, textTransform:"uppercase", marginBottom:3 }}>Day {tip.day}</div>
+              <div style={{ fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, marginBottom:3 }}>{tip.title}</div>
+              <div style={{ fontSize:11, color:"var(--muted)", lineHeight:1.5 }}>{tip.summary}</div>
+              {(notes[tip.day] || []).length > 0 && (
+                <div style={{ marginTop:5, fontSize:10, color:"#f9ca24", fontFamily:"Oxanium,monospace" }}>📝 {notes[tip.day].length} note{notes[tip.day].length>1?"s":""}</div>
+              )}
+            </div>
+            <span style={{ color:"var(--muted)", fontSize:16, flexShrink:0 }}>→</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Watermark() {
+  return (
+    <div className="watermark">
+      <div className="watermark-line" />
+      <div className="watermark-text">Designed & Built by</div>
+      <div className="watermark-name">OMAR AL ALI</div>
+      <div className="watermark-sub">Paramedic Student · Emergency Care Education</div>
+      <div className="watermark-badge">🚑 MedicAce · v2.0 · All rights reserved</div>
+    </div>
+  );
+}
+
+// ─── SUPABASE CLIENT ──────────────────────────────────────────────────────────
+
+const SUPABASE_URL = "https://axejhgjceetbqdgjeygl.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZWpoZ2pjZWV0YnFkZ2pleWdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4Njk5NTMsImV4cCI6MjA5MDQ0NTk1M30.-zdqH3CwBS-QHjEYqXZUW27rAYtG5bzx0DvsW1APk5U";
+
+// Minimal Supabase client (no SDK dependency needed)
+const sb = {
+  _headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` },
+
+  async signUp(email, password, meta = {}) {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
+      method: "POST", headers: this._headers,
+      body: JSON.stringify({ email, password, data: meta }),
+    });
+    return r.json();
+  },
+
+  async signIn(email, password) {
+    const r = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: "POST", headers: this._headers,
+      body: JSON.stringify({ email, password }),
+    });
+    return r.json();
+  },
+
+  async signOut(accessToken) {
+    await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
+      method: "POST", headers: { ...this._headers, "Authorization": `Bearer ${accessToken}` },
+    });
+  },
+
+  async getProfile(userId, accessToken) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}&select=*`, {
+      headers: { ...this._headers, "Authorization": `Bearer ${accessToken}` },
+    });
+    const data = await r.json();
+    return Array.isArray(data) ? data[0] : null;
+  },
+
+  async upsertProfile(profile, accessToken) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
+      method: "POST",
+      headers: { ...this._headers, "Authorization": `Bearer ${accessToken}`, "Prefer": "resolution=merge-duplicates" },
+      body: JSON.stringify(profile),
+    });
+    return r.ok;
+  },
+
+  async updateProfile(userId, updates, accessToken) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${userId}`, {
+      method: "PATCH",
+      headers: { ...this._headers, "Authorization": `Bearer ${accessToken}` },
+      body: JSON.stringify({ ...updates, updated_at: new Date().toISOString() }),
+    });
+    return r.ok;
+  },
+};
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+
+function hashPass(pw) {
+  let h = 0;
+  for (let i = 0; i < pw.length; i++) { h = ((h << 5) - h) + pw.charCodeAt(i); h |= 0; }
+  return Math.abs(h).toString(36);
+}
+
+function avatarColor(email) {
+  const cols = ["#ff4757","#ffa502","#2ed573","#1e90ff","#a29bfe","#fd79a8","#00cec9","#fdcb6e","#e84393","#00d2ff"];
+  let h = 0; for (let c of email) h = (h * 31 + c.charCodeAt(0)) | 0;
+  return cols[Math.abs(h) % cols.length];
+}
+
+function initials(name) {
+  return name.trim().split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2) || "?";
+}
+
+// ─── AUTH SCREEN ──────────────────────────────────────────────────────────────
+
+function AuthScreen({ onLogin }) {
+  const [mode, setMode] = useState("login");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPw, setShowPw] = useState(false);
+  const [successMsg, setSuccessMsg] = useState("");
+
+  const clearErr = () => setError("");
+
+  const handleLogin = async () => {
+    setError(""); setLoading(true);
+    if (!email.trim() || !password) { setError("Please fill in all fields."); setLoading(false); return; }
+    try {
+      const res = await sb.signIn(email.trim().toLowerCase(), password);
+      if (res.error || !res.access_token) {
+        setError(res.error?.message || "Incorrect email or password.");
+        setLoading(false); return;
+      }
+      // Fetch profile from Supabase
+      const profile = await sb.getProfile(res.user.id, res.access_token);
+      onLogin({
+        id: res.user.id,
+        email: res.user.email,
+        accessToken: res.access_token,
+        name: profile?.name || res.user.email,
+        school: profile?.school || "",
+        bio: profile?.bio || "",
+        avatarColor: profile?.avatar_color || avatarColor(res.user.email),
+        xp: profile?.xp || 0,
+        completedScenarios: profile?.completed_scenarios || [],
+      });
+    } catch(e) { setError("Login failed. Check your connection and try again."); }
+    setLoading(false);
+  };
+
+  const handleRegister = async () => {
+    setError(""); setLoading(true);
+    if (!name.trim() || !email.trim() || !password || !confirm) { setError("Please fill in all fields."); setLoading(false); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setError("Please enter a valid email address."); setLoading(false); return; }
+    if (password.length < 6) { setError("Password must be at least 6 characters."); setLoading(false); return; }
+    if (password !== confirm) { setError("Passwords do not match."); setLoading(false); return; }
+    try {
+      const color = avatarColor(email.trim().toLowerCase());
+      const res = await sb.signUp(email.trim().toLowerCase(), password, { name: name.trim(), avatar_color: color });
+      if (res.error) { setError(res.error.message || "Registration failed."); setLoading(false); return; }
+
+      if (res.user && !res.session) {
+        // Email confirmation required
+        setSuccessMsg("✅ Account created! Check your email to confirm, then sign in.");
+        setMode("login"); setLoading(false); return;
+      }
+      if (res.session) {
+        // Auto-confirmed (email confirmation disabled)
+        const profile = await sb.getProfile(res.user.id, res.session.access_token);
+        onLogin({
+          id: res.user.id, email: res.user.email,
+          accessToken: res.session.access_token,
+          name: name.trim(), school: "", bio: "",
+          avatarColor: color, xp: profile?.xp || 0,
+          completedScenarios: profile?.completed_scenarios || [],
+        });
+        return;
+      }
+      setError("Something went wrong. Please try again.");
+    } catch(e) { setError("Registration failed. Check your connection."); }
+    setLoading(false);
+  };
+
+  const inputStyle = {
+    width:"100%", background:"var(--surface2)", border:"1px solid rgba(255,255,255,0.12)",
+    color:"var(--text)", padding:"13px 16px", borderRadius:12, fontSize:14,
+    fontFamily:"Nunito,sans-serif", outline:"none", marginBottom:12, transition:"border-color 0.2s",
+  };
+
+  return (
+    <div style={{ minHeight:"100vh", background:"var(--bg)", display:"flex", alignItems:"center", justifyContent:"center", padding:20 }}>
+      <div style={{ width:"100%", maxWidth:400 }}>
+        <div style={{ textAlign:"center", marginBottom:36 }}>
+          <div style={{ fontSize:52, marginBottom:10 }}>🚑</div>
+          <div style={{ fontFamily:"Oxanium,monospace", fontSize:28, fontWeight:800, color:"var(--accent)", letterSpacing:2 }}>MedicAce</div>
+          <div style={{ fontSize:11, color:"var(--muted)", letterSpacing:3, textTransform:"uppercase", marginTop:4 }}>Paramedic Training Platform</div>
+        </div>
+
+        <div style={{ background:"var(--surface)", borderRadius:20, padding:28, border:"1px solid rgba(0,210,255,0.15)", boxShadow:"0 20px 60px rgba(0,0,0,0.5)" }}>
+          <div style={{ display:"flex", background:"var(--surface2)", borderRadius:12, padding:4, marginBottom:24, gap:4 }}>
+            {["login","register"].map(m => (
+              <button key={m} onClick={() => { setMode(m); clearErr(); setSuccessMsg(""); }}
+                style={{ flex:1, padding:"9px 0", borderRadius:9, border:"none", cursor:"pointer", fontFamily:"Oxanium,monospace", fontWeight:800, fontSize:12, transition:"all 0.2s",
+                  background: mode===m ? "var(--accent)" : "transparent", color: mode===m ? "#000" : "var(--muted)", letterSpacing:1 }}>
+                {m === "login" ? "SIGN IN" : "REGISTER"}
+              </button>
+            ))}
+          </div>
+
+          {successMsg && (
+            <div style={{ background:"rgba(46,213,115,0.1)", border:"1px solid rgba(46,213,115,0.3)", borderRadius:9, padding:"10px 14px", marginBottom:14, fontSize:12, color:"var(--success)", lineHeight:1.5 }}>
+              {successMsg}
+            </div>
+          )}
+
+          {mode === "register" && (
+            <input style={inputStyle} placeholder="Full Name" value={name} onChange={e => setName(e.target.value)}
+              onFocus={e => e.target.style.borderColor="var(--accent)"} onBlur={e => e.target.style.borderColor="rgba(255,255,255,0.12)"} />
+          )}
+
+          <input style={inputStyle} placeholder="Email address" type="email" value={email} onChange={e => setEmail(e.target.value)}
+            onFocus={e => e.target.style.borderColor="var(--accent)"} onBlur={e => e.target.style.borderColor="rgba(255,255,255,0.12)"} />
+
+          <div style={{ position:"relative" }}>
+            <input style={{...inputStyle, paddingRight:48}} placeholder="Password" type={showPw ? "text" : "password"} value={password} onChange={e => setPassword(e.target.value)}
+              onFocus={e => e.target.style.borderColor="var(--accent)"} onBlur={e => e.target.style.borderColor="rgba(255,255,255,0.12)"}
+              onKeyDown={e => { if(e.key==="Enter") mode==="login" ? handleLogin() : handleRegister(); }} />
+            <button onClick={() => setShowPw(s=>!s)} style={{ position:"absolute", right:14, top:14, background:"none", border:"none", color:"var(--muted)", cursor:"pointer", fontSize:16 }}>
+              {showPw ? "🙈" : "👁️"}
+            </button>
+          </div>
+
+          {mode === "register" && (
+            <input style={inputStyle} placeholder="Confirm Password" type={showPw ? "text" : "password"} value={confirm} onChange={e => setConfirm(e.target.value)}
+              onFocus={e => e.target.style.borderColor="var(--accent)"} onBlur={e => e.target.style.borderColor="rgba(255,255,255,0.12)"}
+              onKeyDown={e => { if(e.key==="Enter") handleRegister(); }} />
+          )}
+
+          {error && (
+            <div style={{ background:"rgba(255,71,87,0.1)", border:"1px solid rgba(255,71,87,0.3)", borderRadius:9, padding:"10px 14px", marginBottom:14, fontSize:12, color:"var(--danger)", lineHeight:1.5 }}>
+              ⚠️ {error}
+            </div>
+          )}
+
+          <button onClick={mode==="login" ? handleLogin : handleRegister} disabled={loading}
+            style={{ width:"100%", background:"var(--accent)", color:"#000", border:"none", padding:"14px 0", borderRadius:12, fontFamily:"Oxanium,monospace", fontWeight:800, fontSize:15, cursor:loading?"not-allowed":"pointer", opacity:loading?0.6:1, letterSpacing:1, transition:"all 0.2s" }}>
+            {loading ? "⏳ Please wait..." : mode==="login" ? "SIGN IN →" : "CREATE ACCOUNT →"}
+          </button>
+
+          <div style={{ textAlign:"center", marginTop:16, fontSize:12, color:"var(--muted)" }}>
+            {mode==="login" ? "Don't have an account? " : "Already have an account? "}
+            <span onClick={() => { setMode(mode==="login"?"register":"login"); clearErr(); setSuccessMsg(""); }} style={{ color:"var(--accent)", cursor:"pointer", fontWeight:700 }}>
+              {mode==="login" ? "Register here" : "Sign in"}
+            </span>
+          </div>
+        </div>
+
+        <div style={{ textAlign:"center", marginTop:20, fontSize:11, color:"rgba(136,146,176,0.4)" }}>
+          🔒 Powered by Supabase · Data stored securely in the cloud
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── PROFILE PAGE ─────────────────────────────────────────────────────────────
+
+function ProfilePage({ user, setUser, onLogout, completedScenarios, xp }) {
+  const [editMode, setEditMode] = useState(false);
+  const [name, setName] = useState(user.name);
+  const [school, setSchool] = useState(user.school || "");
+  const [bio, setBio] = useState(user.bio || "");
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+
+  const level = Math.max(1, Math.floor(xp / 200) + 1);
+  const xpInLevel = xp % 200;
+  const joined = new Date(user.createdAt).toLocaleDateString("en-US", { year:"numeric", month:"long", day:"numeric" });
+  const lastLogin = new Date(user.lastLogin).toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+
+  const BADGES = [
+    {label:"🚑 First Responder", desc:"Earn 50 XP", condition:xp>=50},
+    {label:"💊 Med Student", desc:"Earn 200 XP", condition:xp>=200},
+    {label:"🎯 Scenario Ace", desc:"Complete 3 scenarios", condition:completedScenarios.length>=3},
+    {label:"🫁 Airway Master", desc:"Earn 400 XP", condition:xp>=400},
+    {label:"🔥 On Fire", desc:"Earn 600 XP", condition:xp>=600},
+    {label:"🏆 Paramedic Pro", desc:"Earn 1000 XP", condition:xp>=1000},
+    {label:"⭐ Elite Medic", desc:"Complete 8 scenarios", condition:completedScenarios.length>=8},
+  ];
+
+  const earned = BADGES.filter(b => b.condition);
+
+  const saveProfile = async () => {
+    if (!name.trim()) return;
+    setSaving(true);
+    const updated = { ...user, name:name.trim(), school:school.trim(), bio:bio.trim() };
+    await sb.updateProfile(user.id, { name:name.trim(), school:school.trim(), bio:bio.trim() }, user.accessToken);
+    setUser(updated);
+    setEditMode(false);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+    setSaving(false);
+  };
+
+  const inputS = { width:"100%", background:"var(--surface)", border:"1px solid rgba(255,255,255,0.12)", color:"var(--text)", padding:"11px 14px", borderRadius:10, fontSize:13, fontFamily:"Nunito,sans-serif", outline:"none", marginBottom:10 };
+
+  return (
+    <div style={{ maxWidth:900, margin:"0 auto", padding:16, paddingBottom:40 }}>
+      <style>{CSS}</style>
+
+      {/* Profile Header */}
+      <div style={{ background:"linear-gradient(135deg,var(--surface),#0d1525)", border:"1px solid rgba(0,210,255,0.2)", borderRadius:20, padding:24, marginBottom:18, position:"relative", overflow:"hidden" }}>
+        <div style={{ position:"absolute", top:0, left:0, right:0, height:3, background:`linear-gradient(90deg,${user.avatarColor},var(--accent))` }} />
+        <div style={{ display:"flex", alignItems:"flex-start", gap:18, flexWrap:"wrap" }}>
+          {/* Avatar */}
+          <div style={{ width:76, height:76, borderRadius:"50%", background:`linear-gradient(135deg,${user.avatarColor},${user.avatarColor}88)`, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"Oxanium,monospace", fontSize:26, fontWeight:800, color:"#fff", flexShrink:0, boxShadow:`0 0 24px ${user.avatarColor}55` }}>
+            {initials(user.name)}
+          </div>
+          <div style={{ flex:1, minWidth:0 }}>
+            {editMode ? (
+              <div>
+                <input style={{...inputS, fontSize:16, fontWeight:700, fontFamily:"Oxanium,monospace"}} value={name} onChange={e=>setName(e.target.value)} placeholder="Full Name" />
+                <input style={inputS} value={school} onChange={e=>setSchool(e.target.value)} placeholder="School / Program (optional)" />
+                <textarea style={{...inputS, resize:"none", height:64, lineHeight:1.5}} value={bio} onChange={e=>setBio(e.target.value)} placeholder="Short bio (optional)" />
+                <div style={{ display:"flex", gap:8 }}>
+                  <button onClick={saveProfile} disabled={saving} style={{ background:"var(--accent)", color:"#000", border:"none", padding:"9px 20px", borderRadius:99, fontFamily:"Oxanium,monospace", fontWeight:800, fontSize:12, cursor:"pointer" }}>
+                    {saving ? "Saving..." : "Save Changes"}
+                  </button>
+                  <button onClick={() => setEditMode(false)} style={{ background:"transparent", border:"1px solid rgba(255,255,255,0.1)", color:"var(--muted)", padding:"9px 16px", borderRadius:99, cursor:"pointer", fontSize:12 }}>Cancel</button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div style={{ fontFamily:"Oxanium,monospace", fontSize:22, fontWeight:800, marginBottom:2 }}>{user.name}</div>
+                {user.school && <div style={{ fontSize:12, color:"var(--accent)", marginBottom:4 }}>🎓 {user.school}</div>}
+                {user.bio && <div style={{ fontSize:13, color:"var(--muted)", lineHeight:1.5, marginBottom:6 }}>{user.bio}</div>}
+                <div style={{ fontSize:11, color:"var(--muted)" }}>📧 {user.email} · Joined {joined}</div>
+                <div style={{ display:"flex", gap:8, marginTop:12 }}>
+                  <button onClick={() => setEditMode(true)} style={{ background:"transparent", border:"1px solid rgba(0,210,255,0.3)", color:"var(--accent)", padding:"7px 16px", borderRadius:99, cursor:"pointer", fontFamily:"Oxanium,monospace", fontSize:11, fontWeight:700 }}>
+                    ✏️ Edit Profile
+                  </button>
+                  <button onClick={onLogout} style={{ background:"transparent", border:"1px solid rgba(255,71,87,0.3)", color:"var(--danger)", padding:"7px 16px", borderRadius:99, cursor:"pointer", fontFamily:"Oxanium,monospace", fontSize:11, fontWeight:700 }}>
+                    🚪 Sign Out
+                  </button>
+                </div>
+                {saved && <div style={{ marginTop:8, fontSize:11, color:"var(--success)" }}>✅ Profile saved!</div>}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Stats Row */}
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10, marginBottom:18 }}>
+        {[
+          { icon:"⭐", val:xp, label:"Total XP" },
+          { icon:"🏅", val:`LVL ${level}`, label:"Current Level" },
+          { icon:"🚑", val:completedScenarios.length, label:"Scenarios Done" },
+          { icon:"🏆", val:earned.length, label:"Badges Earned" },
+        ].map((s,i) => (
+          <div key={i} style={{ background:"var(--surface)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:14, padding:"14px 10px", textAlign:"center" }}>
+            <div style={{ fontSize:22, marginBottom:5 }}>{s.icon}</div>
+            <div style={{ fontFamily:"Oxanium,monospace", fontSize:18, fontWeight:800, color:"var(--accent)" }}>{s.val}</div>
+            <div style={{ fontSize:10, color:"var(--muted)", textTransform:"uppercase", letterSpacing:0.5 }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* XP Progress */}
+      <div style={{ background:"var(--surface)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:14, padding:18, marginBottom:18 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
+          <div style={{ fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800 }}>⚡ Level Progress</div>
+          <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:"var(--accent)" }}>{xpInLevel} / 200 XP to Level {level+1}</div>
+        </div>
+        <div style={{ height:10, background:"var(--surface2)", borderRadius:99, overflow:"hidden" }}>
+          <div style={{ height:"100%", width:`${(xpInLevel/200)*100}%`, background:`linear-gradient(90deg,var(--accent),#0066ff)`, borderRadius:99, transition:"width 1s ease" }} />
+        </div>
+      </div>
+
+      {/* Badges */}
+      <div style={{ background:"var(--surface)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:14, padding:18, marginBottom:18 }}>
+        <div style={{ fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, marginBottom:14 }}>🏆 Badges</div>
+        <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:9 }}>
+          {BADGES.map(b => (
+            <div key={b.label} style={{ background:b.condition?"rgba(0,210,255,0.08)":"var(--surface2)", border:`1px solid ${b.condition?"rgba(0,210,255,0.3)":"rgba(255,255,255,0.05)"}`, borderRadius:10, padding:"11px 13px", display:"flex", alignItems:"center", gap:10, opacity:b.condition?1:0.4 }}>
+              <span style={{ fontSize:22 }}>{b.label.split(" ")[0]}</span>
+              <div>
+                <div style={{ fontSize:12, fontWeight:700, color:b.condition?"var(--text)":"var(--muted)" }}>{b.label.split(" ").slice(1).join(" ")}</div>
+                <div style={{ fontSize:10, color:b.condition?"var(--accent)":"var(--muted)" }}>{b.condition ? "✅ Unlocked" : b.desc}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Completed Scenarios */}
+      {completedScenarios.length > 0 && (
+        <div style={{ background:"var(--surface)", border:"1px solid rgba(255,255,255,0.06)", borderRadius:14, padding:18, marginBottom:18 }}>
+          <div style={{ fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, marginBottom:12 }}>🚑 Completed Scenarios</div>
+          <div style={{ display:"flex", flexWrap:"wrap", gap:8 }}>
+            {completedScenarios.map(id => {
+              const sc = SCENARIOS.find(s => s.id === id);
+              if (!sc) return null;
+              return (
+                <div key={id} style={{ background:"rgba(46,213,115,0.1)", border:"1px solid rgba(46,213,115,0.3)", borderRadius:8, padding:"6px 12px", fontSize:12, color:"var(--success)" }}>
+                  {sc.emoji} {sc.title}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <Watermark />
+    </div>
+  );
+}
+
+// ─── MAIN APP ─────────────────────────────────────────────────────────────────
+
+function App() {
+  const [authState, setAuthState] = useState("loading");
+  const [user, setUser] = useState(null);
+  const [tab, setTab] = useState("home");
+  const [xp, setXp] = useState(0);
+  const [completedScenarios, setCompletedScenarios] = useState([]);
+
+  const level = Math.max(1, Math.floor(xp / 200) + 1);
+
+  // Restore session from localStorage on mount
+  useEffect(() => {
+    (async () => {
+      try {
+        const raw = localStorage.getItem("pg_session");
+        if (raw) {
+          const sess = JSON.parse(raw);
+          // Re-fetch latest profile from Supabase
+          const profile = await sb.getProfile(sess.id, sess.accessToken);
+          if (profile) {
+            setUser({ ...sess, xp: profile.xp || 0, completedScenarios: profile.completed_scenarios || [], school: profile.school || "", bio: profile.bio || "", name: profile.name || sess.name });
+            setXp(profile.xp || 0);
+            setCompletedScenarios(profile.completed_scenarios || []);
+            setAuthState("app");
+            return;
+          }
+        }
+      } catch(_) {}
+      setAuthState("auth");
+    })();
+  }, []);
+
+  // Sync XP + completedScenarios to Supabase whenever they change
+  useEffect(() => {
+    if (!user || authState !== "app") return;
+    const t = setTimeout(() => {
+      sb.updateProfile(user.id, { xp, completed_scenarios: completedScenarios }, user.accessToken).catch(()=>{});
+    }, 1000); // debounce 1s
+    return () => clearTimeout(t);
+  }, [xp, completedScenarios]);
+
+  const handleLogin = (u) => {
+    setUser(u);
+    setXp(u.xp || 0);
+    setCompletedScenarios(u.completedScenarios || []);
+    localStorage.setItem("pg_session", JSON.stringify({ id: u.id, email: u.email, accessToken: u.accessToken, name: u.name, avatarColor: u.avatarColor }));
+    setAuthState("app");
+    setTab("home");
+  };
+
+  const handleLogout = async () => {
+    try { await sb.signOut(user.accessToken); } catch(_) {}
+    localStorage.removeItem("pg_session");
+    setUser(null); setXp(0); setCompletedScenarios([]);
+    setTab("home"); setAuthState("auth");
+  };
+
+  const BADGES = [
+    {label:"🚑 First Responder", condition:xp>=50},
+    {label:"💊 Med Student", condition:xp>=200},
+    {label:"🎯 Scenario Ace", condition:completedScenarios.length>=3},
+    {label:"🫁 Airway Master", condition:xp>=400},
+    {label:"🔥 On Fire", condition:xp>=600},
+    {label:"🏆 Paramedic Pro", condition:xp>=1000},
+    {label:"⭐ Elite Medic", condition:completedScenarios.length>=8},
+  ];
+
+  if (authState === "loading") return (
+    <>
+      <style>{CSS}</style>
+      <div style={{ minHeight:"100vh", background:"var(--bg)", display:"flex", alignItems:"center", justifyContent:"center", flexDirection:"column", gap:16 }}>
+        <div style={{ fontSize:48 }}>🚑</div>
+        <div style={{ fontFamily:"Oxanium,monospace", color:"var(--accent)", fontSize:14, letterSpacing:3 }}>LOADING...</div>
+        <div style={{ width:120, height:4, background:"var(--surface)", borderRadius:99, overflow:"hidden" }}>
+          <div style={{ height:"100%", background:"var(--accent)", borderRadius:99, animation:"loadbar 1.2s ease-in-out infinite" }} />
+        </div>
+        <style>{`@keyframes loadbar{0%{width:0%}50%{width:100%}100%{width:0%;left:100%}}`}</style>
+      </div>
+    </>
+  );
+
+  if (authState === "auth") return <><style>{CSS}</style><AuthScreen onLogin={handleLogin} /></>;
+
+  if (tab === "profile") return (
+    <ProfilePage user={user} setUser={u => setUser(u)} onLogout={handleLogout} completedScenarios={completedScenarios} xp={xp} />
+  );
+
+  return (
+    <>
+      <style>{CSS}</style>
+      <div className="app">
+        <div className="header">
+          <div className="logo">
+            <span className="logo-icon">🚑</span>
+            <div><div className="logo-text">MedicAce</div><div className="logo-sub">Paramedic Training Platform</div></div>
+          </div>
+          <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+            <XPBar xp={xp} level={level} />
+            <div onClick={() => setTab("profile")} title="My Profile"
+              style={{ width:38, height:38, borderRadius:"50%", background:`linear-gradient(135deg,${user.avatarColor},${user.avatarColor}88)`, display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"Oxanium,monospace", fontWeight:800, fontSize:14, color:"#fff", cursor:"pointer", flexShrink:0, boxShadow:`0 0 12px ${user.avatarColor}44`, border:"2px solid rgba(255,255,255,0.15)", transition:"transform 0.2s" }}
+              onMouseEnter={e=>e.currentTarget.style.transform="scale(1.1)"}
+              onMouseLeave={e=>e.currentTarget.style.transform=""}>
+              {initials(user.name)}
+            </div>
+          </div>
+        </div>
+
+        {tab==="home" && (
+          <div className="panel" style={{marginBottom:18}}>
+            <div className="home-hero">
+              <div style={{ fontSize:13, color:"var(--accent)", fontFamily:"Oxanium,monospace", marginBottom:6 }}>👋 Welcome back, {user.name.split(" ")[0]}!</div>
+              <div className="hero-title">Train Like Your <span className="hero-accent">Patient's Life</span> Depends On It</div>
+              <div className="hero-sub">Scenarios, terminology, intubation, drug guides, protocols — all in one place.</div>
+              <div className="stats-row">
+                <div className="stat-box"><div className="stat-num">{SCENARIOS.length}</div><div className="stat-label">Scenarios</div></div>
+                <div className="stat-box"><div className="stat-num">{TERMS.length}</div><div className="stat-label">Med Terms</div></div>
+                <div className="stat-box"><div className="stat-num">{DRUGS.length}</div><div className="stat-label">Drugs</div></div>
+                <div className="stat-box"><div className="stat-num">{PROTOCOLS.length}</div><div className="stat-label">Protocols</div></div>
+                <div className="stat-box"><div className="stat-num">{INTUBATION_STEPS.length}</div><div className="stat-label">RSI Steps</div></div>
+                <div className="stat-box"><div className="stat-num">{QUICK_TIPS.length}</div><div className="stat-label">Quick Tips</div></div>
+              </div>
+            </div>
+            <div style={{padding:"0 4px"}}>
+              <div style={{fontFamily:"Oxanium,monospace",fontSize:11,color:"var(--muted)",marginBottom:7,textTransform:"uppercase",letterSpacing:1}}>Your Badges</div>
+              <div className="badge-row">
+                {BADGES.map(b=>(
+                  <span key={b.label} className={`badge ${b.condition?"earned":""}`}
+                    style={{borderColor:b.condition?"var(--accent)":"rgba(255,255,255,0.1)",color:b.condition?"var(--accent)":"var(--muted)"}}>
+                    {b.label}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="nav">
+          {MODULES.map(m=>(
+            <div key={m.id} className={`nav-card ${tab===m.id?"active":""}`} onClick={()=>setTab(m.id)}
+              style={tab===m.id?{boxShadow:`0 0 18px ${m.color}33`}:{}}>
+              <span className="nav-icon">{m.icon}</span>
+              <div className="nav-label">{m.label}</div>
+              <div className="nav-desc">{m.desc}</div>
+              <div className="nav-dot" style={{background:m.color}} />
+            </div>
+          ))}
+        </div>
+
+        <div className="panel">
+          {tab==="home" && (
+            <div>
+              <div className="panel-title" style={{marginBottom:9}}>🎮 Quick Start</div>
+              <p style={{color:"var(--muted)",fontSize:13,lineHeight:1.7}}>
+                Choose any module above to begin. Complete scenarios to earn XP and unlock badges. Drill terminology until it's automatic. Study intubation steps until you can do them in your sleep. Train hard — save lives.
+              </p>
+              <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:9,marginTop:14}}>
+                <button className="next-btn" style={{margin:0}} onClick={()=>setTab("scenarios")}>🚑 Run a Scenario</button>
+                <button className="next-btn" style={{margin:0,background:"#00cec9"}} onClick={()=>setTab("intubation")}>🫁 Learn Intubation</button>
+              </div>
+            </div>
+          )}
+          {tab==="scenarios"   &&<ScenarioModule setXp={setXp} completedScenarios={completedScenarios} setCompletedScenarios={setCompletedScenarios}/>}
+          {tab==="terminology" &&<TerminologyModule setXp={setXp}/>}
+          {tab==="vitals"      &&<VitalsModule/>}
+          {tab==="protocols"   &&<ProtocolsModule/>}
+          {tab==="pharmacology"&&<PharmacologyModule/>}
+          {tab==="intubation"  &&<IntubationModule/>}
+          {tab==="anatomy"     &&<AnatomyModule/>}
+          {tab==="quicktips"  &&<QuickTipsModule/>}
+        </div>
+
+        <Watermark />
+      </div>
+    </>
+  );
+}
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
+
