@@ -2157,8 +2157,99 @@ function ExamPrepModule() {
         </div>
       </div>
 
+      {/* SIMPLE NOTES SECTION */}
+      <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:"var(--muted)", marginBottom:10, textTransform:"uppercase", letterSpacing:1 }}>📖 Simple Study Notes</div>
+
+      {[
+        {
+          emoji:"💊", color:"#ffa502", title:"Pain Management — Simple Explanation",
+          sections:[
+            {
+              heading:"What is Multimodal Analgesia?",
+              body:"Think of it like this: instead of giving ONE very strong painkiller, you combine MULTIPLE drugs that each work in a DIFFERENT way. This means each drug can be given at a LOWER dose — so the patient gets better pain relief with FEWER side effects.\n\nExample: You don't just give morphine. You give paracetamol + an anti-inflammatory + a nerve block + a small dose of opioid. All together they work better than any one alone."
+            },
+            {
+              heading:"The Pain Ladder — What do you give first?",
+              body:"Start at the bottom and move up based on pain severity:\n1️⃣ Mild pain (1–3): Non-drug methods + Paracetamol/NSAIDs\n2️⃣ Moderate pain (4–6): Add weak opioids like codeine + adjuvants\n3️⃣ Severe pain (7–10): Add strong opioids like morphine\n\nAdjuvants = helper drugs like Ketamine or Gabapentin that boost pain relief."
+            },
+            {
+              heading:"What is Procedural Sedation?",
+              body:"When a patient needs a painful procedure (like putting a dislocated shoulder back in place), you give them a drug to make them calm, sleepy, and pain-free — but they're NOT fully unconscious like in surgery.\n\nThe KEY difference: the patient can still breathe on their own and protect their airway."
+            },
+            {
+              heading:"The 4 Sedation Drugs — Easy Way to Remember",
+              body:"🟡 KETAMINE — The #1 field drug. NMDA blocker. Gives pain relief AND sedation. PRESERVES airway. Dose: 1mg/kg IV. Used for shoulder dislocation, fracture reduction.\n\n🔵 PROPOFOL — Works fast but gives NO pain relief. Can drop blood pressure. For stable patients only.\n\n🟢 ETOMIDATE — Heart-friendly (haemodynamically stable). No analgesia. Risk of adrenal suppression in sepsis.\n\n🟣 MIDAZOLAM — Benzodiazepine. Gives calm + amnesia. Good for anxious patients.",
+            },
+          ]
+        },
+        {
+          emoji:"🧪", color:"#ff4757", title:"Toxidromes — Simple Explanation",
+          sections:[
+            {
+              heading:"What is a Toxidrome?",
+              body:"A toxidrome is a GROUP OF SYMPTOMS that always appear together when someone takes a certain type of drug. Once you recognise the pattern, you know exactly what they took and how to treat it — even if you don't know the exact drug.\n\nThink of it like a recipe: each drug category has its own 'symptom recipe'."
+            },
+            {
+              heading:"The 6 Toxidromes — Easy Cheat Sheet",
+              body:"🔴 STIMULANT (Cocaine, MDMA, Speed):\n→ Everything goes UP: heart rate ↑, blood pressure ↑, temperature ↑\n→ Pupils are BIG (dilated), patient is AGITATED\n→ Treat with: Midazolam (benzos calm everything down)\n\n🔵 OPIOID (Heroin, Fentanyl, Morphine):\n→ Everything goes DOWN: breathing ↓, heart rate ↓, GCS ↓\n→ Pupils are TINY (pinpoint) — this is the classic clue!\n→ Treat with: Naloxone (the antidote) + airway support\n\n🟢 CHOLINERGIC (Organophosphates, nerve agents):\n→ Remember DUMBELS: Diarrhoea, Urination, Miosis, Bradycardia, Emesis, Lacrimation, Salivation\n→ Patient is WET (lots of secretions)\n→ Treat with: Atropine (dries them up)\n\n🟡 ANTICHOLINERGIC (Atropine, antihistamines):\n→ Patient is DRY: Dry skin, Dry mouth, Flushed (red), Big pupils, Confused, Hot\n→ Mnemonic: 'Dry as bone, Red as beet, Blind as bat, Mad as hatter, Hot as hare'\n→ Treat with: Supportive + Midazolam\n\n🟣 HALLUCINOGENIC (LSD, magic mushrooms):\n→ Seeing/hearing things that aren't there, agitated, hot\n→ Treat with: Calm environment + Midazolam\n\n⚫ SEDATIVE (Benzos, alcohol, sleeping pills):\n→ Just very sleepy/unconscious, slurred speech, slow breathing\n→ Treat with: Airway support (no specific field antidote)"
+            },
+            {
+              heading:"The #1 Exam Trap — β-Blockers",
+              body:"❌ NEVER give β-blockers (like metoprolol) to a stimulant overdose patient.\n\nHere's WHY in simple terms:\nCocaine/MDMA causes your body to release adrenaline which acts on both α receptors (blood vessels) and β receptors (heart).\n\nIf you block only the β receptors with a β-blocker, the α receptors are left working ALONE — and α stimulation causes EXTREME vasoconstriction. Blood pressure becomes dangerously high. This can kill the patient.\n\n✅ Give Midazolam instead — it calms the whole system down safely."
+            },
+            {
+              heading:"Re-narcotisation — The Naloxone Trap",
+              body:"You give naloxone, the patient wakes up. 20 minutes later they're unconscious again. Why?\n\nNaloxone wears off in 30–90 minutes. But FENTANYL lasts much longer. So once the naloxone is gone, the fentanyl puts them back to sleep.\n\n✅ Solution: Give REPEAT doses of naloxone (up to 2mg total) and ALWAYS transport — never leave them alone after naloxone."
+            },
+          ]
+        },
+        {
+          emoji:"🌙", color:"#6c5ce7", title:"Nightclub Scenario — Simple Walkthrough",
+          sections:[
+            {
+              heading:"Patient 1 — Opioid Overdose (The Classic OD)",
+              body:"Found in the bathroom: not breathing properly, blue lips, syringe on the floor.\n\nWhat you see: Tiny pupils (pinpoint) + barely breathing (RR 6) + unconscious = OPIOID TOXIDROME\n\nWhat you do (in order):\n1. OPA + BVM with 100% oxygen FIRST — hypoxia kills faster than the opioid\n2. Get IV access\n3. Naloxone 0.4mg IV — he wakes up!\n4. He then crashes again (re-narcotisation) → give more naloxone\n5. Transport — never leave him alone"
+            },
+            {
+              heading:"Patient 2 — Stimulant Toxicity (The Aggressive One)",
+              body:"Pacing, sweating, chest pain, very high blood pressure, fast heart rate, big pupils.\n\nWhat you see: Everything is UP = STIMULANT TOXIDROME\n\nWhat you do:\n1. Calm environment (less stimulation = less adrenaline)\n2. Midazolam 2.5–5mg IV — calms the whole system\n3. Nitroglycerin if BP is really high AND SBP > 100\n4. IV fluids\n5. ❌ DO NOT give beta-blockers — exam trap!\n\nThen he develops VT (HR 180, wide complex, BP crashes) → More benzodiazepines"
+            },
+            {
+              heading:"Patient 3 — Benzodiazepine OD (The Vomiting One)",
+              body:"Semi-conscious female, vomiting, mixed with alcohol. Benzos + alcohol = double CNS depression.\n\nBiggest risk: She will INHALE her vomit (aspiration) and die from that — not the drugs.\n\nWhat you do:\n1. RECOVERY POSITION immediately + active suction\n2. O₂ 10–15L via NRB mask\n3. IV access + ECG\n4. Monitor and transport\n\nShe stays STABLE — she's the 'easy' patient in this scenario. No special antidote needed."
+            },
+            {
+              heading:"Who Does What in the Scenario — Easy Summary",
+              body:"Patient 1 → Treated ✅ → Improved ✅ → DETERIORATES (re-narcotisation) → Repeat naloxone\nPatient 2 → Treated ✅ → Improved ✅ → DETERIORATES (VT) → More midazolam\nPatient 3 → Treated ✅ → Improved ✅ → STAYS STABLE 😴\n\nRemember: 1 and 2 both deteriorate, 3 stays stable. This is a common exam question!"
+            },
+          ]
+        },
+      ].map((section, si) => {
+        const [open, setOpen] = useState(si === 0);
+        return (
+          <div key={si} style={{ background:"var(--surface2)", borderRadius:12, marginBottom:12, border:`1px solid rgba(255,255,255,0.06)`, overflow:"hidden" }}>
+            <div onClick={() => setOpen(o=>!o)}
+              style={{ padding:"14px 16px", display:"flex", alignItems:"center", gap:11, cursor:"pointer", borderLeft:`3px solid ${section.color}` }}>
+              <span style={{ fontSize:24 }}>{section.emoji}</span>
+              <div style={{ flex:1, fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, color:section.color }}>{section.title}</div>
+              <span style={{ color:"var(--muted)", fontSize:14, transition:"transform 0.2s", transform:open?"rotate(90deg)":"rotate(0deg)" }}>▶</span>
+            </div>
+            {open && (
+              <div style={{ padding:"0 16px 16px" }}>
+                {section.sections.map((s, i) => (
+                  <div key={i} style={{ marginTop:14 }}>
+                    <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, fontWeight:800, color:section.color, textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>{s.heading}</div>
+                    <div style={{ fontSize:13, color:"var(--text)", lineHeight:1.8, whiteSpace:"pre-line", background:"var(--surface)", borderRadius:9, padding:"12px 14px" }}>{s.body}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
+
       {/* Topic overview */}
-      <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:"var(--muted)", marginBottom:10, textTransform:"uppercase", letterSpacing:1 }}>Topics Covered</div>
+      <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:"var(--muted)", marginBottom:10, marginTop:8, textTransform:"uppercase", letterSpacing:1 }}>Topics Covered</div>
       {[
         { cat:"Pain Management", emoji:"💊", color:"#ffa502", items:["Multimodal analgesia definition & goals","Drug classes & mechanisms","Procedural sedation agents","Case examples"] },
         { cat:"Toxidromes", emoji:"🧪", color:"#ff4757", items:["6 toxidrome types & signs","DUMBELS mnemonic","ABCDE in toxicology","Specific antidotes & management"] },
