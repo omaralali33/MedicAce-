@@ -2012,7 +2012,7 @@ function ExamPrepModule() {
   const [studyCat, setStudyCat] = useState(null);
   const [studyIdx, setStudyIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
-  const [examState, setExamState] = useState({ current:0, answers:[], done:false });
+  const [examState, setExamState] = useState({ current:0, answers:new Array(HEM_QUESTIONS.length).fill(null), done:false });
 
   const cats = [...new Set(HEM_STUDY.map(s => s.category))];
   const filtered = studyCat ? HEM_STUDY.filter(s => s.category === studyCat) : HEM_STUDY;
