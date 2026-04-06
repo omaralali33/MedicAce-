@@ -1983,6 +1983,30 @@ const HEM_QUESTIONS = [
   {topic:"Nightclub Scenario",q:"Which patient in the nightclub scenario remains STABLE throughout?",opts:["Patient 1 (opioid overdose)","Patient 2 (stimulant toxicity)","Patient 3 (benzodiazepine overdose)","All three deteriorated"],ans:2,exp:"Patient 3 remains stable after initial airway management and O₂. Patient 1 re-narcotises. Patient 2 develops VT. Patient 3 is the stable one."},
 ];
 
+function NoteSection({ section, defaultOpen }) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div style={{ background:"var(--surface2)", borderRadius:12, marginBottom:12, border:"1px solid rgba(255,255,255,0.06)", overflow:"hidden" }}>
+      <div onClick={() => setOpen(o=>!o)}
+        style={{ padding:"14px 16px", display:"flex", alignItems:"center", gap:11, cursor:"pointer", borderLeft:`3px solid ${section.color}` }}>
+        <span style={{ fontSize:24 }}>{section.emoji}</span>
+        <div style={{ flex:1, fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, color:section.color }}>{section.title}</div>
+        <span style={{ color:"var(--muted)", fontSize:14, transition:"transform 0.2s", transform:open?"rotate(90deg)":"rotate(0deg)" }}>▶</span>
+      </div>
+      {open && (
+        <div style={{ padding:"0 16px 16px" }}>
+          {section.sections.map((s, i) => (
+            <div key={i} style={{ marginTop:14 }}>
+              <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, fontWeight:800, color:section.color, textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>{s.heading}</div>
+              <div style={{ fontSize:13, color:"var(--text)", lineHeight:1.8, whiteSpace:"pre-line", background:"var(--surface)", borderRadius:9, padding:"12px 14px" }}>{s.body}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ExamPrepModule() {
   const [view, setView] = useState("home"); // home | study | exam
   const [studyCat, setStudyCat] = useState(null);
@@ -2224,29 +2248,9 @@ function ExamPrepModule() {
             },
           ]
         },
-      ].map((section, si) => {
-        const [open, setOpen] = useState(si === 0);
-        return (
-          <div key={si} style={{ background:"var(--surface2)", borderRadius:12, marginBottom:12, border:`1px solid rgba(255,255,255,0.06)`, overflow:"hidden" }}>
-            <div onClick={() => setOpen(o=>!o)}
-              style={{ padding:"14px 16px", display:"flex", alignItems:"center", gap:11, cursor:"pointer", borderLeft:`3px solid ${section.color}` }}>
-              <span style={{ fontSize:24 }}>{section.emoji}</span>
-              <div style={{ flex:1, fontFamily:"Oxanium,monospace", fontSize:13, fontWeight:800, color:section.color }}>{section.title}</div>
-              <span style={{ color:"var(--muted)", fontSize:14, transition:"transform 0.2s", transform:open?"rotate(90deg)":"rotate(0deg)" }}>▶</span>
-            </div>
-            {open && (
-              <div style={{ padding:"0 16px 16px" }}>
-                {section.sections.map((s, i) => (
-                  <div key={i} style={{ marginTop:14 }}>
-                    <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, fontWeight:800, color:section.color, textTransform:"uppercase", letterSpacing:1, marginBottom:8 }}>{s.heading}</div>
-                    <div style={{ fontSize:13, color:"var(--text)", lineHeight:1.8, whiteSpace:"pre-line", background:"var(--surface)", borderRadius:9, padding:"12px 14px" }}>{s.body}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        );
-      })}
+      ].map((section, si) => (
+        <NoteSection key={si} section={section} defaultOpen={si === 0} />
+      ))}
 
       {/* Topic overview */}
       <div style={{ fontFamily:"Oxanium,monospace", fontSize:11, color:"var(--muted)", marginBottom:10, marginTop:8, textTransform:"uppercase", letterSpacing:1 }}>Topics Covered</div>
