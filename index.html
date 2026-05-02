@@ -6,179 +6,21 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>MedicAce</title>
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--accent:#00d2ff;--text:#e8eaf6;--muted:#8892b0;--success:#2ed573;--warning:#ffa502;--danger:#ff4757;--radius:16px;}
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Nunito',sans-serif;background:#0a0e1a !important;color:#e8eaf6;min-height:100vh;overflow-x:hidden;}
-  h1,h2,h3,.hf{font-family:'Oxanium',monospace;}
-  .app{max-width:900px;margin:0 auto;padding:16px;padding-bottom:40px;}
-  .header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--surface);border-radius:var(--radius);margin-bottom:18px;border:1px solid rgba(0,210,255,0.15);position:relative;overflow:hidden;}
-  .header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
-  .logo{display:flex;align-items:center;gap:10px;}
-  .logo-icon{font-size:26px;}
-  .logo-text{font-family:'Oxanium',monospace;font-size:17px;font-weight:800;color:var(--accent);letter-spacing:1px;}
-  .logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
-  .xp-bar-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
-  .xp-label{font-size:10px;color:var(--accent);font-family:'Oxanium',monospace;}
-  .xp-track{width:130px;height:7px;background:var(--surface2);border-radius:99px;overflow:hidden;}
-  .xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),#0066ff);border-radius:99px;transition:width 0.8s ease;}
-  .level-badge{background:linear-gradient(135deg,var(--accent),#0066ff);color:#000;font-family:'Oxanium',monospace;font-weight:800;font-size:11px;padding:3px 9px;border-radius:99px;}
-  .nav{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:20px;}
-  @media(max-width:480px){.nav{grid-template-columns:repeat(2,1fr);}}
-  .nav-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 8px;cursor:pointer;transition:all 0.25s;text-align:center;}
-  .nav-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.18);}
-  .nav-card.active{border-color:var(--accent);box-shadow:0 0 18px rgba(0,210,255,0.2);}
-  .nav-icon{font-size:22px;margin-bottom:5px;display:block;}
-  .nav-label{font-family:'Oxanium',monospace;font-size:10px;font-weight:700;color:var(--text);}
-  .nav-desc{font-size:9px;color:var(--muted);margin-top:2px;}
-  .nav-dot{width:5px;height:5px;border-radius:50%;margin:5px auto 0;}
-  .panel{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:22px;animation:fadeIn 0.3s ease;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-  .panel-title{font-family:'Oxanium',monospace;font-size:19px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:9px;}
-  .scenario-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:18px;}
-  @media(max-width:600px){.scenario-grid{grid-template-columns:1fr;}}
-  .scenario-card{background:var(--surface2);border:1px solid rgba(255,255,255,0.06);border-radius:11px;padding:14px;cursor:pointer;transition:all 0.25s;}
-  .scenario-card:hover{border-color:rgba(0,210,255,0.4);transform:translateY(-2px);}
-  .scenario-card.done{border-color:var(--success);}
-  .sc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}
-  .sc-emoji{font-size:26px;}
-  .sc-badge{font-size:9px;padding:2px 8px;border-radius:99px;font-weight:700;font-family:'Oxanium',monospace;}
-  .sc-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:700;margin-bottom:3px;}
-  .sc-sub{font-size:10px;color:var(--muted);}
-  .sc-xp{font-size:11px;color:var(--warning);font-weight:700;font-family:'Oxanium',monospace;margin-top:6px;}
-  .patient-card{background:linear-gradient(135deg,#1a2235,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:11px;padding:16px;margin-bottom:16px;}
-  .patient-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
-  .patient-emoji{font-size:34px;}
-  .patient-title{font-family:'Oxanium',monospace;font-size:15px;font-weight:800;color:var(--accent);}
-  .patient-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-  .chief-complaint{background:rgba(255,71,87,0.1);border-left:3px solid var(--danger);padding:8px 11px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:10px;}
-  .vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:9px;}
-  @media(max-width:500px){.vitals-grid{grid-template-columns:repeat(2,1fr);}}
-  .vital-chip{background:var(--surface);border-radius:7px;padding:6px 8px;text-align:center;border:1px solid rgba(255,255,255,0.06);}
-  .vital-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
-  .vital-val{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;color:var(--accent);margin-top:2px;}
-  .history-box{background:rgba(162,155,254,0.08);border-left:3px solid #a29bfe;padding:8px 11px;border-radius:0 8px 8px 0;font-size:11px;color:var(--muted);}
-  .question-wrap{background:var(--surface2);border-radius:11px;padding:16px;margin-top:12px;}
-  .q-step{font-size:9px;color:var(--accent);font-family:'Oxanium',monospace;margin-bottom:5px;letter-spacing:1px;}
-  .q-progress{height:3px;background:var(--surface);border-radius:99px;margin-bottom:12px;}
-  .q-progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width 0.5s ease;}
-  .q-text{font-size:14px;font-weight:700;margin-bottom:12px;line-height:1.5;}
-  .options{display:flex;flex-direction:column;gap:8px;}
-  .option-btn{background:var(--surface);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:10px 13px;border-radius:9px;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;transition:all 0.2s;display:flex;align-items:center;gap:9px;}
-  .option-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(0,210,255,0.08);}
-  .option-btn.correct{background:rgba(46,213,115,0.15);border-color:var(--success);color:var(--success);}
-  .option-btn.wrong{background:rgba(255,71,87,0.15);border-color:var(--danger);color:var(--danger);}
-  .option-btn:disabled{cursor:default;}
-  .option-letter{width:24px;height:24px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-size:10px;font-weight:700;flex-shrink:0;}
-  .explain-box{background:rgba(46,213,115,0.08);border:1px solid rgba(46,213,115,0.3);border-radius:9px;padding:11px;margin-top:10px;font-size:12px;line-height:1.6;animation:fadeIn 0.3s ease;}
-  .next-btn{margin-top:11px;background:var(--accent);color:#000;border:none;padding:11px 26px;border-radius:99px;font-family:'Oxanium',monospace;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;width:100%;}
-  .next-btn:hover{transform:scale(1.02);box-shadow:0 0 18px rgba(0,210,255,0.4);}
-  .result-card{text-align:center;padding:26px;background:var(--surface2);border-radius:11px;margin-top:16px;}
-  .result-emoji{font-size:52px;margin-bottom:12px;}
-  .result-title{font-family:'Oxanium',monospace;font-size:20px;font-weight:800;margin-bottom:5px;}
-  .result-xp{font-family:'Oxanium',monospace;font-size:17px;color:var(--warning);}
-  .score-bar{height:9px;background:var(--surface);border-radius:99px;margin:12px 0;overflow:hidden;}
-  .score-fill{height:100%;background:linear-gradient(90deg,var(--success),#00b894);border-radius:99px;transition:width 1s ease;}
-  .term-mode-tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}
-  .mode-tab{padding:6px 14px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-size:11px;font-weight:700;font-family:'Oxanium',monospace;transition:all 0.2s;background:var(--surface2);color:var(--muted);}
-  .mode-tab.active{background:var(--accent);color:#000;border-color:var(--accent);}
-  .term-card{background:var(--surface2);border-radius:14px;padding:26px;text-align:center;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.06);transition:all 0.3s;}
-  .term-card.flip{background:rgba(0,210,255,0.08);border-color:rgba(0,210,255,0.3);}
-  .term-emoji-big{font-size:40px;margin-bottom:9px;}
-  .term-word{font-family:'Oxanium',monospace;font-size:22px;font-weight:800;margin-bottom:4px;}
-  .term-cat{font-size:9px;color:var(--accent);font-family:'Oxanium',monospace;letter-spacing:1.5px;text-transform:uppercase;}
-  .term-def{font-size:14px;color:var(--text);line-height:1.6;margin-bottom:7px;}
-  .tap-hint{font-size:10px;color:var(--muted);margin-top:7px;}
-  .term-nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}
-  .term-btn{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:8px 18px;border-radius:99px;font-family:'Oxanium',monospace;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;}
-  .term-btn:hover{border-color:var(--accent);color:var(--accent);}
-  .term-count{font-family:'Oxanium',monospace;color:var(--muted);font-size:12px;}
-  .streak-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,165,2,0.15);border:1px solid rgba(255,165,2,0.3);padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;color:var(--warning);}
-  .vitals-table{display:flex;flex-direction:column;gap:9px;margin-top:16px;}
-  .vital-row{background:var(--surface2);border-radius:11px;padding:12px 14px;border:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:40px 1fr 1fr 1fr;gap:9px;align-items:center;}
-  @media(max-width:600px){.vital-row{grid-template-columns:36px 1fr;}}
-  .vital-row-icon{font-size:20px;}
-  .vital-col-name{font-family:'Oxanium',monospace;font-weight:700;font-size:12px;}
-  .vital-col-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}
-  .vital-col-val{font-size:11px;}
-  .vital-normal{color:var(--success);}
-  .vital-low{color:#74b9ff;}
-  .vital-high{color:var(--danger);}
-  .protocol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}
-  @media(max-width:600px){.protocol-grid{grid-template-columns:1fr;}}
-  .protocol-card{background:var(--surface2);border-radius:11px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;overflow:hidden;transition:all 0.25s;}
-  .protocol-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15);}
-  .protocol-header{padding:13px 15px;display:flex;align-items:center;gap:9px;}
-  .protocol-icon{font-size:24px;}
-  .protocol-title{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;}
-  .protocol-body{padding:0 15px 13px;}
-  .protocol-steps{list-style:none;}
-  .protocol-steps li{font-size:11px;padding:4px 0 4px 17px;border-bottom:1px solid rgba(255,255,255,0.04);position:relative;color:var(--muted);line-height:1.5;}
-  .protocol-steps li::before{content:'→';position:absolute;left:0;color:var(--accent);font-family:'Oxanium',monospace;font-weight:700;}
-  .protocol-steps li:last-child{border-bottom:none;}
-  .protocol-tip{background:rgba(255,165,2,0.1);border-left:3px solid var(--warning);padding:6px 10px;border-radius:0 6px 6px 0;font-size:10px;color:var(--warning);margin-top:7px;font-weight:600;}
-  .drug-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}
-  @media(max-width:600px){.drug-grid{grid-template-columns:1fr;}}
-  .drug-card{background:var(--surface2);border-radius:11px;padding:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.25s;}
-  .drug-card:hover{transform:translateY(-2px);}
-  .drug-header{display:flex;align-items:center;gap:9px;margin-bottom:9px;}
-  .drug-emoji{font-size:24px;}
-  .drug-name{font-family:'Oxanium',monospace;font-size:12px;font-weight:800;}
-  .drug-row{display:flex;gap:7px;margin-bottom:5px;align-items:flex-start;}
-  .drug-key{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;min-width:65px;padding-top:2px;}
-  .drug-val{font-size:11px;flex:1;line-height:1.5;}
-  .intub-steps{display:flex;flex-direction:column;gap:10px;margin-top:16px;}
-  .intub-step{background:var(--surface2);border-radius:11px;padding:14px 16px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.25s;border-left:3px solid transparent;}
-  .intub-step.open{border-left-color:var(--accent);background:rgba(0,210,255,0.05);}
-  .intub-step:hover{border-color:rgba(255,255,255,0.15);}
-  .intub-step-header{display:flex;align-items:center;gap:10px;}
-  .intub-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:12px;flex-shrink:0;}
-  .intub-icon{font-size:20px;}
-  .intub-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:700;flex:1;}
-  .intub-chevron{color:var(--muted);font-size:12px;transition:transform 0.2s;}
-  .intub-chevron.open{transform:rotate(90deg);}
-  .intub-content{margin-top:10px;font-size:12px;line-height:1.7;color:var(--muted);padding-left:40px;}
-  .da-cards{display:flex;flex-direction:column;gap:9px;margin-top:11px;}
-  .da-card{background:var(--surface);border-radius:9px;padding:12px 14px;border:1px solid rgba(255,165,2,0.2);}
-  .da-title{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;color:var(--warning);margin-bottom:4px;}
-  .da-detail{font-size:11px;color:var(--muted);line-height:1.6;}
-  .home-hero{background:linear-gradient(135deg,#111827,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:var(--radius);padding:26px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}
-  .home-hero::before{content:'🚑';position:absolute;font-size:160px;opacity:0.04;top:50%;left:50%;transform:translate(-50%,-50%);}
-  .hero-title{font-family:'Oxanium',monospace;font-size:clamp(19px,5vw,28px);font-weight:800;line-height:1.2;margin-bottom:7px;}
-  .hero-accent{color:var(--accent);}
-  .hero-sub{color:var(--muted);font-size:13px;max-width:460px;margin:0 auto 16px;}
-  .stats-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
-  .stat-box{text-align:center;}
-  .stat-num{font-family:'Oxanium',monospace;font-size:19px;font-weight:800;color:var(--accent);}
-  .stat-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
-  .badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;}
-  .badge{padding:4px 11px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;border:1px solid;opacity:0.3;}
-  .badge.earned{opacity:1;}
-  .back-btn{background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted);padding:6px 14px;border-radius:99px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;transition:all 0.2s;margin-bottom:13px;display:inline-flex;align-items:center;gap:5px;}
-  .back-btn:hover{border-color:var(--accent);color:var(--accent);}
-  .term-quiz-question{background:var(--surface2);border-radius:11px;padding:20px;text-align:center;margin-bottom:12px;border:1px solid rgba(255,255,255,0.06);}
-  .watermark{text-align:center;padding:22px 0 8px;}
-  .watermark-line{height:1px;background:linear-gradient(90deg,transparent,rgba(0,210,255,0.3),transparent);margin-bottom:14px;}
-  .watermark-text{font-family:'Oxanium',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;}
-  .watermark-name{font-family:'Oxanium',monospace;font-size:18px;font-weight:800;background:linear-gradient(90deg,var(--accent),#a29bfe,#fd79a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;margin-top:5px;}
-  .watermark-sub{font-size:10px;color:rgba(0,210,255,0.4);font-family:'Oxanium',monospace;letter-spacing:1.5px;margin-top:6px;}
-  .watermark-badge{display:inline-block;border:1px solid rgba(0,210,255,0.2);border-radius:99px;padding:5px 18px;margin-top:9px;font-size:10px;color:rgba(0,210,255,0.5);font-family:'Oxanium',monospace;letter-spacing:1px;}
-</style>
+<style>:root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--accent:#00d2ff;--text:#e8eaf6;--muted:#8892b0;--success:#2ed573;--warning:#ffa502;--danger:#ff4757;--radius:16px;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Nunito',sans-serif;background:#0a0e1a !important;color:#e8eaf6;min-height:100vh;overflow-x:hidden;}h1,h2,h3,.hf{font-family:'Oxanium',monospace;}.app{max-width:900px;margin:0 auto;padding:16px;padding-bottom:40px;}.header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--surface);border-radius:var(--radius);margin-bottom:18px;border:1px solid rgba(0,210,255,0.15);position:relative;overflow:hidden;}.header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}.logo{display:flex;align-items:center;gap:10px;}.logo-icon{font-size:26px;}.logo-text{font-family:'Oxanium',monospace;font-size:17px;font-weight:800;color:var(--accent);letter-spacing:1px;}.logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}.xp-bar-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}.xp-label{font-size:10px;color:var(--accent);font-family:'Oxanium',monospace;}.xp-track{width:130px;height:7px;background:var(--surface2);border-radius:99px;overflow:hidden;}.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),#0066ff);border-radius:99px;transition:width 0.8s ease;}.level-badge{background:linear-gradient(135deg,var(--accent),#0066ff);color:#000;font-family:'Oxanium',monospace;font-weight:800;font-size:11px;padding:3px 9px;border-radius:99px;}.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:20px;}@media(max-width:480px){.nav{grid-template-columns:repeat(2,1fr);}}.nav-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 8px;cursor:pointer;transition:all 0.25s;text-align:center;}.nav-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.18);}.nav-card.active{border-color:var(--accent);box-shadow:0 0 18px rgba(0,210,255,0.2);}.nav-icon{font-size:22px;margin-bottom:5px;display:block;}.nav-label{font-family:'Oxanium',monospace;font-size:10px;font-weight:700;color:var(--text);}.nav-desc{font-size:9px;color:var(--muted);margin-top:2px;}.nav-dot{width:5px;height:5px;border-radius:50%;margin:5px auto 0;}.panel{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:22px;animation:fadeIn 0.3s ease;}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.panel-title{font-family:'Oxanium',monospace;font-size:19px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:9px;}.scenario-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:18px;}@media(max-width:600px){.scenario-grid{grid-template-columns:1fr;}}.scenario-card{background:var(--surface2);border:1px solid rgba(255,255,255,0.06);border-radius:11px;padding:14px;cursor:pointer;transition:all 0.25s;}.scenario-card:hover{border-color:rgba(0,210,255,0.4);transform:translateY(-2px);}.scenario-card.done{border-color:var(--success);}.sc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}.sc-emoji{font-size:26px;}.sc-badge{font-size:9px;padding:2px 8px;border-radius:99px;font-weight:700;font-family:'Oxanium',monospace;}.sc-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:700;margin-bottom:3px;}.sc-sub{font-size:10px;color:var(--muted);}.sc-xp{font-size:11px;color:var(--warning);font-weight:700;font-family:'Oxanium',monospace;margin-top:6px;}.patient-card{background:linear-gradient(135deg,#1a2235,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:11px;padding:16px;margin-bottom:16px;}.patient-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}.patient-emoji{font-size:34px;}.patient-title{font-family:'Oxanium',monospace;font-size:15px;font-weight:800;color:var(--accent);}.patient-sub{font-size:11px;color:var(--muted);margin-top:2px;}.chief-complaint{background:rgba(255,71,87,0.1);border-left:3px solid var(--danger);padding:8px 11px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:10px;}.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:9px;}@media(max-width:500px){.vitals-grid{grid-template-columns:repeat(2,1fr);}}.vital-chip{background:var(--surface);border-radius:7px;padding:6px 8px;text-align:center;border:1px solid rgba(255,255,255,0.06);}.vital-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}.vital-val{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;color:var(--accent);margin-top:2px;}.history-box{background:rgba(162,155,254,0.08);border-left:3px solid #a29bfe;padding:8px 11px;border-radius:0 8px 8px 0;font-size:11px;color:var(--muted);}.question-wrap{background:var(--surface2);border-radius:11px;padding:16px;margin-top:12px;}.q-step{font-size:9px;color:var(--accent);font-family:'Oxanium',monospace;margin-bottom:5px;letter-spacing:1px;}.q-progress{height:3px;background:var(--surface);border-radius:99px;margin-bottom:12px;}.q-progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width 0.5s ease;}.q-text{font-size:14px;font-weight:700;margin-bottom:12px;line-height:1.5;}.options{display:flex;flex-direction:column;gap:8px;}.option-btn{background:var(--surface);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:10px 13px;border-radius:9px;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;transition:all 0.2s;display:flex;align-items:center;gap:9px;}.option-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(0,210,255,0.08);}.option-btn.correct{background:rgba(46,213,115,0.15);border-color:var(--success);color:var(--success);}.option-btn.wrong{background:rgba(255,71,87,0.15);border-color:var(--danger);color:var(--danger);}.option-btn:disabled{cursor:default;}.option-letter{width:24px;height:24px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-size:10px;font-weight:700;flex-shrink:0;}.explain-box{background:rgba(46,213,115,0.08);border:1px solid rgba(46,213,115,0.3);border-radius:9px;padding:11px;margin-top:10px;font-size:12px;line-height:1.6;animation:fadeIn 0.3s ease;}.next-btn{margin-top:11px;background:var(--accent);color:#000;border:none;padding:11px 26px;border-radius:99px;font-family:'Oxanium',monospace;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;width:100%;}.next-btn:hover{transform:scale(1.02);box-shadow:0 0 18px rgba(0,210,255,0.4);}.result-card{text-align:center;padding:26px;background:var(--surface2);border-radius:11px;margin-top:16px;}.result-emoji{font-size:52px;margin-bottom:12px;}.result-title{font-family:'Oxanium',monospace;font-size:20px;font-weight:800;margin-bottom:5px;}.result-xp{font-family:'Oxanium',monospace;font-size:17px;color:var(--warning);}.score-bar{height:9px;background:var(--surface);border-radius:99px;margin:12px 0;overflow:hidden;}.score-fill{height:100%;background:linear-gradient(90deg,var(--success),#00b894);border-radius:99px;transition:width 1s ease;}.term-mode-tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}.mode-tab{padding:6px 14px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-size:11px;font-weight:700;font-family:'Oxanium',monospace;transition:all 0.2s;background:var(--surface2);color:var(--muted);}.mode-tab.active{background:var(--accent);color:#000;border-color:var(--accent);}.term-card{background:var(--surface2);border-radius:14px;padding:26px;text-align:center;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.06);transition:all 0.3s;}.term-card.flip{background:rgba(0,210,255,0.08);border-color:rgba(0,210,255,0.3);}.term-emoji-big{font-size:40px;margin-bottom:9px;}.term-word{font-family:'Oxanium',monospace;font-size:22px;font-weight:800;margin-bottom:4px;}.term-cat{font-size:9px;color:var(--accent);font-family:'Oxanium',monospace;letter-spacing:1.5px;text-transform:uppercase;}.term-def{font-size:14px;color:var(--text);line-height:1.6;margin-bottom:7px;}.tap-hint{font-size:10px;color:var(--muted);margin-top:7px;}.term-nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}.term-btn{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:8px 18px;border-radius:99px;font-family:'Oxanium',monospace;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;}.term-btn:hover{border-color:var(--accent);color:var(--accent);}.term-count{font-family:'Oxanium',monospace;color:var(--muted);font-size:12px;}.streak-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,165,2,0.15);border:1px solid rgba(255,165,2,0.3);padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;color:var(--warning);}.vitals-table{display:flex;flex-direction:column;gap:9px;margin-top:16px;}.vital-row{background:var(--surface2);border-radius:11px;padding:12px 14px;border:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:40px 1fr 1fr 1fr;gap:9px;align-items:center;}@media(max-width:600px){.vital-row{grid-template-columns:36px 1fr;}}.vital-row-icon{font-size:20px;}.vital-col-name{font-family:'Oxanium',monospace;font-weight:700;font-size:12px;}.vital-col-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}.vital-col-val{font-size:11px;}.vital-normal{color:var(--success);}.vital-low{color:#74b9ff;}.vital-high{color:var(--danger);}.protocol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}@media(max-width:600px){.protocol-grid{grid-template-columns:1fr;}}.protocol-card{background:var(--surface2);border-radius:11px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;overflow:hidden;transition:all 0.25s;}.protocol-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15);}.protocol-header{padding:13px 15px;display:flex;align-items:center;gap:9px;}.protocol-icon{font-size:24px;}.protocol-title{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;}.protocol-body{padding:0 15px 13px;}.protocol-steps{list-style:none;}.protocol-steps li{font-size:11px;padding:4px 0 4px 17px;border-bottom:1px solid rgba(255,255,255,0.04);position:relative;color:var(--muted);line-height:1.5;}.protocol-steps li::before{content:'→';position:absolute;left:0;color:var(--accent);font-family:'Oxanium',monospace;font-weight:700;}.protocol-steps li:last-child{border-bottom:none;}.protocol-tip{background:rgba(255,165,2,0.1);border-left:3px solid var(--warning);padding:6px 10px;border-radius:0 6px 6px 0;font-size:10px;color:var(--warning);margin-top:7px;font-weight:600;}.drug-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}@media(max-width:600px){.drug-grid{grid-template-columns:1fr;}}.drug-card{background:var(--surface2);border-radius:11px;padding:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.25s;}.drug-card:hover{transform:translateY(-2px);}.drug-header{display:flex;align-items:center;gap:9px;margin-bottom:9px;}.drug-emoji{font-size:24px;}.drug-name{font-family:'Oxanium',monospace;font-size:12px;font-weight:800;}.drug-row{display:flex;gap:7px;margin-bottom:5px;align-items:flex-start;}.drug-key{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;min-width:65px;padding-top:2px;}.drug-val{font-size:11px;flex:1;line-height:1.5;}.intub-steps{display:flex;flex-direction:column;gap:10px;margin-top:16px;}.intub-step{background:var(--surface2);border-radius:11px;padding:14px 16px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.25s;border-left:3px solid transparent;}.intub-step.open{border-left-color:var(--accent);background:rgba(0,210,255,0.05);}.intub-step:hover{border-color:rgba(255,255,255,0.15);}.intub-step-header{display:flex;align-items:center;gap:10px;}.intub-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:12px;flex-shrink:0;}.intub-icon{font-size:20px;}.intub-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:700;flex:1;}.intub-chevron{color:var(--muted);font-size:12px;transition:transform 0.2s;}.intub-chevron.open{transform:rotate(90deg);}.intub-content{margin-top:10px;font-size:12px;line-height:1.7;color:var(--muted);padding-left:40px;}.da-cards{display:flex;flex-direction:column;gap:9px;margin-top:11px;}.da-card{background:var(--surface);border-radius:9px;padding:12px 14px;border:1px solid rgba(255,165,2,0.2);}.da-title{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;color:var(--warning);margin-bottom:4px;}.da-detail{font-size:11px;color:var(--muted);line-height:1.6;}.home-hero{background:linear-gradient(135deg,#111827,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:var(--radius);padding:26px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}.home-hero::before{content:'🚑';position:absolute;font-size:160px;opacity:0.04;top:50%;left:50%;transform:translate(-50%,-50%);}.hero-title{font-family:'Oxanium',monospace;font-size:clamp(19px,5vw,28px);font-weight:800;line-height:1.2;margin-bottom:7px;}.hero-accent{color:var(--accent);}.hero-sub{color:var(--muted);font-size:13px;max-width:460px;margin:0 auto 16px;}.stats-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}.stat-box{text-align:center;}.stat-num{font-family:'Oxanium',monospace;font-size:19px;font-weight:800;color:var(--accent);}.stat-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}.badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;}.badge{padding:4px 11px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;border:1px solid;opacity:0.3;}.badge.earned{opacity:1;}.back-btn{background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted);padding:6px 14px;border-radius:99px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;transition:all 0.2s;margin-bottom:13px;display:inline-flex;align-items:center;gap:5px;}.back-btn:hover{border-color:var(--accent);color:var(--accent);}.term-quiz-question{background:var(--surface2);border-radius:11px;padding:20px;text-align:center;margin-bottom:12px;border:1px solid rgba(255,255,255,0.06);}.watermark{text-align:center;padding:22px 0 8px;}.watermark-line{height:1px;background:linear-gradient(90deg,transparent,rgba(0,210,255,0.3),transparent);margin-bottom:14px;}.watermark-text{font-family:'Oxanium',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;}.watermark-name{font-family:'Oxanium',monospace;font-size:18px;font-weight:800;background:linear-gradient(90deg,var(--accent),#a29bfe,#fd79a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;margin-top:5px;}.watermark-sub{font-size:10px;color:rgba(0,210,255,0.4);font-family:'Oxanium',monospace;letter-spacing:1.5px;margin-top:6px;}.watermark-badge{display:inline-block;border:1px solid rgba(0,210,255,0.2);border-radius:99px;padding:5px 18px;margin-top:9px;font-size:10px;color:rgba(0,210,255,0.5);font-family:'Oxanium',monospace;letter-spacing:1px;}</style>
 </head>
 <body>
 <div id="root"></div>
 <script>
-
 const MODULES = [
-{ id: “scenarios”,    icon: “🚑”, label: “Live Scenarios”,    color: “#ff4757”, desc: “Real-world emergency calls” },
-{ id: “terminology”,  icon: “📖”, label: “Med Terminology”,   color: “#ffa502”, desc: “Master the language of medicine” },
-{ id: “vitals”,       icon: “❤️”, label: “Vitals Check”,      color: “#2ed573”, desc: “Normal vs danger ranges” },
-{ id: “protocols”,    icon: “📋”, label: “Protocols”,         color: “#1e90ff”, desc: “Step-by-step treatment guides” },
-{ id: “pharmacology”, icon: “💊”, label: “Pharmacology”,      color: “#a29bfe”, desc: “Drugs, doses & indications” },
-{ id: “intubation”,   icon: “🫁”, label: “Intubation”,        color: “#00cec9”, desc: “Airway management mastery” },
-{ id: “anatomy”,      icon: “🫀”, label: “Anatomy”,           color: “#fd79a8”, desc: “Body systems flashcards” },
-{ id: “quicktips”,   icon: “📝”, label: “Quick Tips”,        color: “#f9ca24”, desc: “EMS daily tips & notes” },
-{ id: “exams”,       icon: “🎓”, label: “Exam Prep”,         color: “#a8e063”, desc: “HEM 3106 practice exams” },
+  { id: "scenarios",    icon: "🚑", label: "Live Scenarios",    color: "#ff4757", desc: "Real-world emergency calls" },
+  { id: "terminology",  icon: "📖", label: "Med Terminology",   color: "#ffa502", desc: "Master the language of medicine" },
+  { id: "vitals",       icon: "❤️", label: "Vitals Check",      color: "#2ed573", desc: "Normal vs danger ranges" },
+  { id: "protocols",    icon: "📋", label: "Protocols",         color: "#1e90ff", desc: "Step-by-step treatment guides" },
+  { id: "pharmacology", icon: "💊", label: "Pharmacology",      color: "#a29bfe", desc: "Drugs, doses & indications" },
+  { id: "intubation",   icon: "🫁", label: "Intubation",        color: "#00cec9", desc: "Airway management mastery" },
+  { id: "anatomy",      icon: "🫀", label: "Anatomy",           color: "#fd79a8", desc: "Body systems flashcards" },
+  { id: "quicktips",   icon: "📝", label: "Quick Tips",        color: "#f9ca24", desc: "EMS daily tips & notes" },
+  { id: "exams",       icon: "🎓", label: "Exam Prep",         color: "#a8e063", desc: "HEM 3106 practice exams" },
 ];
 
 const SCENARIOS = [
@@ -445,7 +287,6 @@ const DIFFICULT_AIRWAY = [
 {sign:“Surgical Cricothyrotomy”,detail:“Last resort in ‘can’t intubate, can’t oxygenate’ scenario. Landmark: thyroid cartilage -> soft spot below -> cricoid ring = cricothyroid membrane. Horizontal stab incision, dilate, insert cuffed ETT size 6.0. Confirm with EtCO2.”},
 ];
 
-// ─── SUPABASE ─────────────────────────────────────────────────────────────────
 const SB_URL = “https://axejhgjceetbqdgjeygl.supabase.co”;
 const SB_KEY = “eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZWpoZ2pjZWV0YnFkZ2pleWdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2ODAyMDIsImV4cCI6MjA2MTI1NjIwMn0.3fTucEiSBiZ_syn-A3oiIVqMSm-aCzJeGdXt4e0bGqQ”;
 
@@ -501,28 +342,19 @@ clearTimeout(xpTimer);
 xpTimer = setTimeout(() => upsertProfile(S.userId, {xp: S.xp, badges: S.badges}), 1500);
 }
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
 const COLORS = [”#e74c3c”,”#e67e22”,”#f1c40f”,”#2ecc71”,”#1abc9c”,”#3498db”,”#9b59b6”,”#fd79a8”];
 let S = {
 page: “home”, loggedIn: false, userId: null, token: null,
 name: “”, email: “”, avatarColor: “#00d2ff”,
 xp: 0, badges: [],
-// Auth
 authTab: “login”, authEmail: “”, authPass: “”, authName: “”, authErr: “”, authLoading: false,
-// Scenarios
 scIdx: null, scStep: 0, scAnswered: false, scCorrect: false, scSelectedOpt: null,
-// Terminology
 termTab: “flash”, termIdx: 0, termFlipped: false, termQ: null, termAns: null, termSelectedOpt: null, termScore: 0, termTotal: 0,
-// Exam
 examIdx: 0, examAnswered: false, examCorrect: false, examSelectedOpt: null, examScore: 0, examDone: false,
 examTab: “quiz”,
-// TCA
 tcaStep: 0,
-// Tips
 tipOpen: null,
-// Protocol
 protoOpen: null,
-// Drug
 drugOpen: null,
 };
 
@@ -531,7 +363,6 @@ Object.assign(S, obj);
 render();
 }
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function xpLevel() { return Math.floor(S.xp / 200) + 1; }
 function xpPct() { return Math.min((S.xp % 200) / 200 * 100, 100); }
 function addXP(n) {
@@ -549,7 +380,6 @@ S.termOpts = opts;
 render();
 }
 
-// ─── RENDER ───────────────────────────────────────────────────────────────────
 function render() {
 const root = document.getElementById(“root”);
 if (!S.loggedIn) {
@@ -845,7 +675,6 @@ content = `<div class="pb" style="margin-bottom:12px"><div class="pf" style="wid
 const cards = HEM_STUDY || [];
 content = cards.map(c => ` <div class="card" style="margin-bottom:10px"> <div style="font-family:'Oxanium',monospace;font-weight:700;font-size:13px;color:var(--ac);margin-bottom:6px">${c.topic}</div> <div style="font-size:12px;line-height:1.7">${c.content}</div> </div>`).join(””);
 } else {
-// TCA
 content = `<div class="card" style="background:var(--s2);margin-bottom:14px"> <div style="font-family:'Oxanium',monospace;font-weight:800;font-size:15px;color:var(--ac);margin-bottom:6px">🚨 Traumatic Cardiac Arrest</div> <div class="muted">H.O.T. Approach — 10-Step Protocol</div> </div> ${(TCA_STEPS||[]).map((s, i) =>`
 <div style="display:flex;gap:11px;margin-bottom:10px;align-items:flex-start">
 <div style="min-width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#0066ff);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:11px;flex-shrink:0">${i+1}</div>
@@ -871,13 +700,10 @@ return `
   </div>`;
 }
 
-// ─── EVENT BINDING ────────────────────────────────────────────────────────────
 function bindEvents() {
-// Auth tabs
 document.querySelectorAll(”[data-authtab]”).forEach(el =>
 el.addEventListener(“click”, () => set({authTab: el.dataset.authtab, authErr: “”})));
 
-// Auth input live update
 [“ai-email”,“ai-pass”,“ai-name”].forEach(id => {
 const el = document.getElementById(id);
 if (el) el.addEventListener(“input”, e => {
@@ -887,27 +713,21 @@ if (id===“ai-name”) S.authName = e.target.value;
 });
 });
 
-// Auth submit
 const authBtn = document.getElementById(“auth-submit”);
 if (authBtn) authBtn.addEventListener(“click”, handleAuth);
 
-// Nav items
 document.querySelectorAll(”[data-page]”).forEach(el =>
 el.addEventListener(“click”, () => set({page: el.dataset.page})));
 
-// Avatar
 const ava = document.getElementById(“avatar-btn”);
 if (ava) ava.addEventListener(“click”, handleLogout);
 
-// Scenario list
 document.querySelectorAll(”[data-scstart]”).forEach(el =>
 el.addEventListener(“click”, () => set({scIdx: +el.dataset.scstart, scStep: 0, scAnswered: false, scSelectedOpt: null})));
 
-// Scenario back
 const scBack = document.getElementById(“sc-back”);
 if (scBack) scBack.addEventListener(“click”, () => set({scIdx: null}));
 
-// Scenario option
 document.querySelectorAll(”[data-scopt]”).forEach(el =>
 el.addEventListener(“click”, () => {
 if (S.scAnswered) return;
@@ -918,23 +738,19 @@ if (isOk) addXP(10);
 set({scAnswered: true, scCorrect: isOk, scSelectedOpt: i});
 }));
 
-// Scenario next
 const scNext = document.getElementById(“sc-next”);
 if (scNext) scNext.addEventListener(“click”, () =>
 set({scStep: S.scStep+1, scAnswered: false, scSelectedOpt: null}));
 
-// Scenario done
 const scDone = document.getElementById(“sc-done”);
 if (scDone) scDone.addEventListener(“click”, () => {
 addXP(30);
 set({scIdx: null});
 });
 
-// Terminology tabs
 document.querySelectorAll(”[data-termtab]”).forEach(el =>
 el.addEventListener(“click”, () => set({termTab: el.dataset.termtab})));
 
-// Flashcard flip
 const fc = document.getElementById(“flash-card”);
 if (fc) fc.addEventListener(“click”, () => set({termFlipped: !S.termFlipped}));
 
@@ -949,7 +765,6 @@ const termNext = document.getElementById(“term-next”);
 if (termNext) termNext.addEventListener(“click”, () =>
 set({termIdx: (S.termIdx + 1) % TERMS.length, termFlipped: false}));
 
-// Quiz start
 const tqs = document.getElementById(“term-quiz-start”);
 if (tqs) tqs.addEventListener(“click”, () => {
 const q = TERMS[Math.floor(Math.random() * TERMS.length)];
@@ -961,7 +776,6 @@ S.termSelectedOpt = null;
 render();
 });
 
-// Term quiz option
 document.querySelectorAll(”[data-termopt]”).forEach(el =>
 el.addEventListener(“click”, () => {
 if (S.termAns !== null) return;
@@ -973,7 +787,6 @@ S.termAns = ans;
 render();
 }));
 
-// Term next q
 const tnq = document.getElementById(“term-next-q”);
 if (tnq) tnq.addEventListener(“click”, () => {
 const q = TERMS[Math.floor(Math.random() * TERMS.length)];
@@ -984,32 +797,27 @@ S.termAns = null;
 render();
 });
 
-// Protocols open
 document.querySelectorAll(”[data-protoopen]”).forEach(el =>
 el.addEventListener(“click”, () => {
 const i = +el.dataset.protoopen;
 set({protoOpen: S.protoOpen === i ? null : i});
 }));
 
-// Drugs open
 document.querySelectorAll(”[data-drugopen]”).forEach(el =>
 el.addEventListener(“click”, () => {
 const i = +el.dataset.drugopen;
 set({drugOpen: S.drugOpen === i ? null : i});
 }));
 
-// Tips open
 document.querySelectorAll(”[data-tipopen]”).forEach(el =>
 el.addEventListener(“click”, () => {
 const i = +el.dataset.tipopen;
 set({tipOpen: S.tipOpen === i ? null : i});
 }));
 
-// Exam tabs
 document.querySelectorAll(”[data-examtab]”).forEach(el =>
 el.addEventListener(“click”, () => set({examTab: el.dataset.examtab})));
 
-// Exam option
 document.querySelectorAll(”[data-examopt]”).forEach(el =>
 el.addEventListener(“click”, () => {
 if (S.examAnswered) return;
@@ -1020,7 +828,6 @@ if (isOk) { S.examScore++; addXP(5); }
 set({examAnswered: true, examCorrect: isOk, examSelectedOpt: i});
 }));
 
-// Exam next
 const examNext = document.getElementById(“exam-next”);
 if (examNext) examNext.addEventListener(“click”, () => {
 const nextIdx = S.examIdx + 1;
@@ -1032,13 +839,11 @@ set({examIdx: nextIdx, examAnswered: false, examSelectedOpt: null});
 }
 });
 
-// Exam restart
 const examRestart = document.getElementById(“exam-restart”);
 if (examRestart) examRestart.addEventListener(“click”, () =>
 set({examIdx: 0, examScore: 0, examDone: false, examAnswered: false, examSelectedOpt: null}));
 }
 
-// ─── AUTH HANDLER ─────────────────────────────────────────────────────────────
 async function handleAuth() {
 S.authLoading = true; S.authErr = “”; render();
 try {
@@ -1076,7 +881,6 @@ localStorage.removeItem(“ma_sess”);
 set({loggedIn:false, userId:null, token:null, name:””, email:””, xp:0, badges:[]});
 }
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
 (async function init() {
 try {
 const raw = localStorage.getItem(“ma_sess”);
