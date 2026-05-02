@@ -6,7 +6,44 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>MedicAce</title>
 <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@400;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-<style>:root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--accent:#00d2ff;--text:#e8eaf6;--muted:#8892b0;--success:#2ed573;--warning:#ffa502;--danger:#ff4757;--radius:16px;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Nunito',sans-serif;background:#0a0e1a !important;color:#e8eaf6;min-height:100vh;overflow-x:hidden;}h1,h2,h3,.hf{font-family:'Oxanium',monospace;}.app{max-width:900px;margin:0 auto;padding:16px;padding-bottom:40px;}.header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--surface);border-radius:var(--radius);margin-bottom:18px;border:1px solid rgba(0,210,255,0.15);position:relative;overflow:hidden;}.header::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}.logo{display:flex;align-items:center;gap:10px;}.logo-icon{font-size:26px;}.logo-text{font-family:'Oxanium',monospace;font-size:17px;font-weight:800;color:var(--accent);letter-spacing:1px;}.logo-sub{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}.xp-bar-wrap{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}.xp-label{font-size:10px;color:var(--accent);font-family:'Oxanium',monospace;}.xp-track{width:130px;height:7px;background:var(--surface2);border-radius:99px;overflow:hidden;}.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),#0066ff);border-radius:99px;transition:width 0.8s ease;}.level-badge{background:linear-gradient(135deg,var(--accent),#0066ff);color:#000;font-family:'Oxanium',monospace;font-weight:800;font-size:11px;padding:3px 9px;border-radius:99px;}.nav{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:20px;}@media(max-width:480px){.nav{grid-template-columns:repeat(2,1fr);}}.nav-card{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 8px;cursor:pointer;transition:all 0.25s;text-align:center;}.nav-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,0.18);}.nav-card.active{border-color:var(--accent);box-shadow:0 0 18px rgba(0,210,255,0.2);}.nav-icon{font-size:22px;margin-bottom:5px;display:block;}.nav-label{font-family:'Oxanium',monospace;font-size:10px;font-weight:700;color:var(--text);}.nav-desc{font-size:9px;color:var(--muted);margin-top:2px;}.nav-dot{width:5px;height:5px;border-radius:50%;margin:5px auto 0;}.panel{background:var(--surface);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:22px;animation:fadeIn 0.3s ease;}@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}.panel-title{font-family:'Oxanium',monospace;font-size:19px;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:9px;}.scenario-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:18px;}@media(max-width:600px){.scenario-grid{grid-template-columns:1fr;}}.scenario-card{background:var(--surface2);border:1px solid rgba(255,255,255,0.06);border-radius:11px;padding:14px;cursor:pointer;transition:all 0.25s;}.scenario-card:hover{border-color:rgba(0,210,255,0.4);transform:translateY(-2px);}.scenario-card.done{border-color:var(--success);}.sc-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:7px;}.sc-emoji{font-size:26px;}.sc-badge{font-size:9px;padding:2px 8px;border-radius:99px;font-weight:700;font-family:'Oxanium',monospace;}.sc-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:700;margin-bottom:3px;}.sc-sub{font-size:10px;color:var(--muted);}.sc-xp{font-size:11px;color:var(--warning);font-weight:700;font-family:'Oxanium',monospace;margin-top:6px;}.patient-card{background:linear-gradient(135deg,#1a2235,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:11px;padding:16px;margin-bottom:16px;}.patient-header{display:flex;align-items:center;gap:12px;margin-bottom:10px;}.patient-emoji{font-size:34px;}.patient-title{font-family:'Oxanium',monospace;font-size:15px;font-weight:800;color:var(--accent);}.patient-sub{font-size:11px;color:var(--muted);margin-top:2px;}.chief-complaint{background:rgba(255,71,87,0.1);border-left:3px solid var(--danger);padding:8px 11px;border-radius:0 8px 8px 0;font-size:12px;margin-bottom:10px;}.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:9px;}@media(max-width:500px){.vitals-grid{grid-template-columns:repeat(2,1fr);}}.vital-chip{background:var(--surface);border-radius:7px;padding:6px 8px;text-align:center;border:1px solid rgba(255,255,255,0.06);}.vital-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}.vital-val{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;color:var(--accent);margin-top:2px;}.history-box{background:rgba(162,155,254,0.08);border-left:3px solid #a29bfe;padding:8px 11px;border-radius:0 8px 8px 0;font-size:11px;color:var(--muted);}.question-wrap{background:var(--surface2);border-radius:11px;padding:16px;margin-top:12px;}.q-step{font-size:9px;color:var(--accent);font-family:'Oxanium',monospace;margin-bottom:5px;letter-spacing:1px;}.q-progress{height:3px;background:var(--surface);border-radius:99px;margin-bottom:12px;}.q-progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width 0.5s ease;}.q-text{font-size:14px;font-weight:700;margin-bottom:12px;line-height:1.5;}.options{display:flex;flex-direction:column;gap:8px;}.option-btn{background:var(--surface);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:10px 13px;border-radius:9px;cursor:pointer;text-align:left;font-family:'Nunito',sans-serif;font-size:12px;font-weight:600;transition:all 0.2s;display:flex;align-items:center;gap:9px;}.option-btn:hover:not(:disabled){border-color:var(--accent);background:rgba(0,210,255,0.08);}.option-btn.correct{background:rgba(46,213,115,0.15);border-color:var(--success);color:var(--success);}.option-btn.wrong{background:rgba(255,71,87,0.15);border-color:var(--danger);color:var(--danger);}.option-btn:disabled{cursor:default;}.option-letter{width:24px;height:24px;border-radius:50%;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-size:10px;font-weight:700;flex-shrink:0;}.explain-box{background:rgba(46,213,115,0.08);border:1px solid rgba(46,213,115,0.3);border-radius:9px;padding:11px;margin-top:10px;font-size:12px;line-height:1.6;animation:fadeIn 0.3s ease;}.next-btn{margin-top:11px;background:var(--accent);color:#000;border:none;padding:11px 26px;border-radius:99px;font-family:'Oxanium',monospace;font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;width:100%;}.next-btn:hover{transform:scale(1.02);box-shadow:0 0 18px rgba(0,210,255,0.4);}.result-card{text-align:center;padding:26px;background:var(--surface2);border-radius:11px;margin-top:16px;}.result-emoji{font-size:52px;margin-bottom:12px;}.result-title{font-family:'Oxanium',monospace;font-size:20px;font-weight:800;margin-bottom:5px;}.result-xp{font-family:'Oxanium',monospace;font-size:17px;color:var(--warning);}.score-bar{height:9px;background:var(--surface);border-radius:99px;margin:12px 0;overflow:hidden;}.score-fill{height:100%;background:linear-gradient(90deg,var(--success),#00b894);border-radius:99px;transition:width 1s ease;}.term-mode-tabs{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;}.mode-tab{padding:6px 14px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-size:11px;font-weight:700;font-family:'Oxanium',monospace;transition:all 0.2s;background:var(--surface2);color:var(--muted);}.mode-tab.active{background:var(--accent);color:#000;border-color:var(--accent);}.term-card{background:var(--surface2);border-radius:14px;padding:26px;text-align:center;min-height:170px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(255,255,255,0.06);transition:all 0.3s;}.term-card.flip{background:rgba(0,210,255,0.08);border-color:rgba(0,210,255,0.3);}.term-emoji-big{font-size:40px;margin-bottom:9px;}.term-word{font-family:'Oxanium',monospace;font-size:22px;font-weight:800;margin-bottom:4px;}.term-cat{font-size:9px;color:var(--accent);font-family:'Oxanium',monospace;letter-spacing:1.5px;text-transform:uppercase;}.term-def{font-size:14px;color:var(--text);line-height:1.6;margin-bottom:7px;}.tap-hint{font-size:10px;color:var(--muted);margin-top:7px;}.term-nav{display:flex;justify-content:space-between;align-items:center;margin-top:12px;}.term-btn{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:8px 18px;border-radius:99px;font-family:'Oxanium',monospace;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.2s;}.term-btn:hover{border-color:var(--accent);color:var(--accent);}.term-count{font-family:'Oxanium',monospace;color:var(--muted);font-size:12px;}.streak-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,165,2,0.15);border:1px solid rgba(255,165,2,0.3);padding:3px 10px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;color:var(--warning);}.vitals-table{display:flex;flex-direction:column;gap:9px;margin-top:16px;}.vital-row{background:var(--surface2);border-radius:11px;padding:12px 14px;border:1px solid rgba(255,255,255,0.06);display:grid;grid-template-columns:40px 1fr 1fr 1fr;gap:9px;align-items:center;}@media(max-width:600px){.vital-row{grid-template-columns:36px 1fr;}}.vital-row-icon{font-size:20px;}.vital-col-name{font-family:'Oxanium',monospace;font-weight:700;font-size:12px;}.vital-col-label{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;}.vital-col-val{font-size:11px;}.vital-normal{color:var(--success);}.vital-low{color:#74b9ff;}.vital-high{color:var(--danger);}.protocol-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}@media(max-width:600px){.protocol-grid{grid-template-columns:1fr;}}.protocol-card{background:var(--surface2);border-radius:11px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;overflow:hidden;transition:all 0.25s;}.protocol-card:hover{transform:translateY(-2px);border-color:rgba(255,255,255,0.15);}.protocol-header{padding:13px 15px;display:flex;align-items:center;gap:9px;}.protocol-icon{font-size:24px;}.protocol-title{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;}.protocol-body{padding:0 15px 13px;}.protocol-steps{list-style:none;}.protocol-steps li{font-size:11px;padding:4px 0 4px 17px;border-bottom:1px solid rgba(255,255,255,0.04);position:relative;color:var(--muted);line-height:1.5;}.protocol-steps li::before{content:'→';position:absolute;left:0;color:var(--accent);font-family:'Oxanium',monospace;font-weight:700;}.protocol-steps li:last-child{border-bottom:none;}.protocol-tip{background:rgba(255,165,2,0.1);border-left:3px solid var(--warning);padding:6px 10px;border-radius:0 6px 6px 0;font-size:10px;color:var(--warning);margin-top:7px;font-weight:600;}.drug-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;margin-top:16px;}@media(max-width:600px){.drug-grid{grid-template-columns:1fr;}}.drug-card{background:var(--surface2);border-radius:11px;padding:14px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.25s;}.drug-card:hover{transform:translateY(-2px);}.drug-header{display:flex;align-items:center;gap:9px;margin-bottom:9px;}.drug-emoji{font-size:24px;}.drug-name{font-family:'Oxanium',monospace;font-size:12px;font-weight:800;}.drug-row{display:flex;gap:7px;margin-bottom:5px;align-items:flex-start;}.drug-key{font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;min-width:65px;padding-top:2px;}.drug-val{font-size:11px;flex:1;line-height:1.5;}.intub-steps{display:flex;flex-direction:column;gap:10px;margin-top:16px;}.intub-step{background:var(--surface2);border-radius:11px;padding:14px 16px;border:1px solid rgba(255,255,255,0.06);cursor:pointer;transition:all 0.25s;border-left:3px solid transparent;}.intub-step.open{border-left-color:var(--accent);background:rgba(0,210,255,0.05);}.intub-step:hover{border-color:rgba(255,255,255,0.15);}.intub-step-header{display:flex;align-items:center;gap:10px;}.intub-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:12px;flex-shrink:0;}.intub-icon{font-size:20px;}.intub-title{font-family:'Oxanium',monospace;font-size:13px;font-weight:700;flex:1;}.intub-chevron{color:var(--muted);font-size:12px;transition:transform 0.2s;}.intub-chevron.open{transform:rotate(90deg);}.intub-content{margin-top:10px;font-size:12px;line-height:1.7;color:var(--muted);padding-left:40px;}.da-cards{display:flex;flex-direction:column;gap:9px;margin-top:11px;}.da-card{background:var(--surface);border-radius:9px;padding:12px 14px;border:1px solid rgba(255,165,2,0.2);}.da-title{font-family:'Oxanium',monospace;font-size:12px;font-weight:700;color:var(--warning);margin-bottom:4px;}.da-detail{font-size:11px;color:var(--muted);line-height:1.6;}.home-hero{background:linear-gradient(135deg,#111827,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:var(--radius);padding:26px;text-align:center;margin-bottom:20px;position:relative;overflow:hidden;}.home-hero::before{content:'🚑';position:absolute;font-size:160px;opacity:0.04;top:50%;left:50%;transform:translate(-50%,-50%);}.hero-title{font-family:'Oxanium',monospace;font-size:clamp(19px,5vw,28px);font-weight:800;line-height:1.2;margin-bottom:7px;}.hero-accent{color:var(--accent);}.hero-sub{color:var(--muted);font-size:13px;max-width:460px;margin:0 auto 16px;}.stats-row{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}.stat-box{text-align:center;}.stat-num{font-family:'Oxanium',monospace;font-size:19px;font-weight:800;color:var(--accent);}.stat-label{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}.badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:16px;}.badge{padding:4px 11px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;border:1px solid;opacity:0.3;}.badge.earned{opacity:1;}.back-btn{background:transparent;border:1px solid rgba(255,255,255,0.1);color:var(--muted);padding:6px 14px;border-radius:99px;cursor:pointer;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;transition:all 0.2s;margin-bottom:13px;display:inline-flex;align-items:center;gap:5px;}.back-btn:hover{border-color:var(--accent);color:var(--accent);}.term-quiz-question{background:var(--surface2);border-radius:11px;padding:20px;text-align:center;margin-bottom:12px;border:1px solid rgba(255,255,255,0.06);}.watermark{text-align:center;padding:22px 0 8px;}.watermark-line{height:1px;background:linear-gradient(90deg,transparent,rgba(0,210,255,0.3),transparent);margin-bottom:14px;}.watermark-text{font-family:'Oxanium',monospace;font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;}.watermark-name{font-family:'Oxanium',monospace;font-size:18px;font-weight:800;background:linear-gradient(90deg,var(--accent),#a29bfe,#fd79a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:4px;margin-top:5px;}.watermark-sub{font-size:10px;color:rgba(0,210,255,0.4);font-family:'Oxanium',monospace;letter-spacing:1.5px;margin-top:6px;}.watermark-badge{display:inline-block;border:1px solid rgba(0,210,255,0.2);border-radius:99px;padding:5px 18px;margin-top:9px;font-size:10px;color:rgba(0,210,255,0.5);font-family:'Oxanium',monospace;letter-spacing:1px;}</style>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#0a0e1a!important;color:#e8eaf6;font-family:'Nunito',sans-serif;min-height:100vh;}
+#app{max-width:900px;margin:0 auto;padding:16px 16px 60px;}
+.hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:#111827;border-radius:16px;margin-bottom:18px;border:1px solid rgba(0,210,255,0.15);position:relative;overflow:hidden;}
+.hdr::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#00d2ff,transparent);}
+.nav{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px;}
+@media(min-width:500px){.nav{grid-template-columns:repeat(5,1fr);}}
+@media(min-width:720px){.nav{grid-template-columns:repeat(9,1fr);}}
+.nc{background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:10px 6px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.nc.on{border-color:#00d2ff;box-shadow:0 0 18px rgba(0,210,255,0.2);}
+.panel{background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:20px;animation:fi 0.3s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.card{background:#1a2235;border:1px solid rgba(255,255,255,0.06);border-radius:11px;padding:14px;cursor:pointer;transition:all 0.2s;}
+.card:hover{transform:translateY(-2px);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:14px;}
+@media(max-width:480px){.g2{grid-template-columns:1fr;}}
+.btn{background:#00d2ff;color:#000;border:none;padding:11px;border-radius:99px;font-family:'Oxanium',monospace;font-size:13px;font-weight:800;cursor:pointer;width:100%;margin-top:10px;}
+.bk{background:transparent;border:1px solid rgba(255,255,255,0.1);color:#8892b0;padding:6px 14px;border-radius:99px;cursor:pointer;font-size:11px;font-weight:700;margin-bottom:13px;}
+.tab{padding:6px 14px;border-radius:99px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;font-size:11px;font-weight:700;font-family:'Oxanium',monospace;background:#1a2235;color:#8892b0;}
+.tab.on{background:#00d2ff;color:#000;border-color:#00d2ff;}
+.ob{background:#111827;border:1px solid rgba(255,255,255,0.1);color:#e8eaf6;padding:10px 13px;border-radius:9px;cursor:pointer;text-align:left;font-size:13px;font-weight:600;display:flex;align-items:center;gap:9px;width:100%;margin-bottom:8px;}
+.ob:hover:not([disabled]){border-color:#00d2ff;background:rgba(0,210,255,0.08);}
+.ob.ok{background:rgba(46,213,115,0.15)!important;border-color:#2ed573!important;color:#2ed573!important;}
+.ob.er{background:rgba(255,71,87,0.15)!important;border-color:#ff4757!important;color:#ff4757!important;}
+.ol{width:24px;height:24px;border-radius:50%;background:#1a2235;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-size:10px;font-weight:700;flex-shrink:0;}
+.expl{background:rgba(46,213,115,0.08);border:1px solid rgba(46,213,115,0.3);border-radius:9px;padding:11px;margin-top:10px;font-size:12px;line-height:1.6;}
+.pb{height:5px;background:#1a2235;border-radius:99px;overflow:hidden;margin-bottom:12px;}
+.pf{height:100%;background:#00d2ff;border-radius:99px;transition:width 0.4s;}
+.vc{background:#111827;border-radius:7px;padding:6px 8px;text-align:center;border:1px solid rgba(255,255,255,0.06);}
+.sc{background:#1a2235;border-radius:11px;padding:13px 16px;cursor:pointer;margin-bottom:10px;border-left:3px solid transparent;}
+.sc .sb{display:none;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);}
+.sc.op .sb{display:block;}
+.ai{display:block;width:100%;background:#1a2235;border:1px solid rgba(255,255,255,0.12);color:#e8eaf6;padding:13px 16px;border-radius:12px;font-size:14px;font-family:'Nunito',sans-serif;outline:none;margin-bottom:12px;}
+.ai:focus{border-color:#00d2ff;}
+.mu{color:#8892b0;font-size:12px;}
+.pt{font-family:'Oxanium',monospace;font-size:18px;font-weight:800;margin-bottom:10px;}
+</style>
 </head>
 <body>
 <div id="root"></div>
@@ -287,613 +324,504 @@ const DIFFICULT_AIRWAY = [
 {sign:“Surgical Cricothyrotomy”,detail:“Last resort in ‘can’t intubate, can’t oxygenate’ scenario. Landmark: thyroid cartilage -> soft spot below -> cricoid ring = cricothyroid membrane. Horizontal stab incision, dilate, insert cuffed ETT size 6.0. Confirm with EtCO2.”},
 ];
 
-const SB_URL = “https://axejhgjceetbqdgjeygl.supabase.co”;
-const SB_KEY = “eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZWpoZ2pjZWV0YnFkZ2pleWdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2ODAyMDIsImV4cCI6MjA2MTI1NjIwMn0.3fTucEiSBiZ_syn-A3oiIVqMSm-aCzJeGdXt4e0bGqQ”;
+// ── SUPABASE ──────────────────────────────────────────────────────────────────
+const SB=“https://axejhgjceetbqdgjeygl.supabase.co”;
+const SK=“eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF4ZWpoZ2pjZWV0YnFkZ2pleWdsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2ODAyMDIsImV4cCI6MjA2MTI1NjIwMn0.3fTucEiSBiZ_syn-A3oiIVqMSm-aCzJeGdXt4e0bGqQ”;
+const H={“Content-Type”:“application/json”,“apikey”:SK};
+async function signIn(e,p){return(await fetch(SB+”/auth/v1/token?grant_type=password”,{method:“POST”,headers:H,body:JSON.stringify({email:e,password:p})})).json();}
+async function signUp(e,p,n){return(await fetch(SB+”/auth/v1/signup”,{method:“POST”,headers:H,body:JSON.stringify({email:e,password:p,data:{name:n}})})).json();}
+async function getProfile(uid,tok){const r=await fetch(SB+”/rest/v1/profiles?id=eq.”+uid+”&select=*”,{headers:{…H,“Authorization”:“Bearer “+tok}});const d=await r.json();return d[0];}
+async function saveProfile(uid,tok,data){await fetch(SB+”/rest/v1/profiles”,{method:“POST”,headers:{…H,“Authorization”:“Bearer “+tok,“Prefer”:“resolution=merge-duplicates”},body:JSON.stringify({id:uid,…data})});}
 
-async function sbFetch(path, opts={}) {
-const r = await fetch(SB_URL + path, {
-…opts,
-headers: {
-“apikey”: SB_KEY,
-“Authorization”: “Bearer “ + (S.token || SB_KEY),
-“Content-Type”: “application/json”,
-…opts.headers
-}
-});
-return r;
-}
-
-async function signIn(email, password) {
-const r = await fetch(SB_URL + “/auth/v1/token?grant_type=password”, {
-method: “POST”,
-headers: {“apikey”:SB_KEY,“Content-Type”:“application/json”},
-body: JSON.stringify({email, password})
-});
-return r.json();
-}
-
-async function signUp(email, password, name) {
-const r = await fetch(SB_URL + “/auth/v1/signup”, {
-method: “POST”,
-headers: {“apikey”:SB_KEY,“Content-Type”:“application/json”},
-body: JSON.stringify({email, password, data:{name}})
-});
-return r.json();
-}
-
-async function loadProfile(userId) {
-const r = await sbFetch(`/rest/v1/profiles?id=eq.${userId}&select=*`);
-const rows = await r.json();
-return rows[0];
-}
-
-async function upsertProfile(userId, data) {
-await sbFetch(”/rest/v1/profiles”, {
-method: “POST”,
-headers: {“Prefer”:“resolution=merge-duplicates”},
-body: JSON.stringify({id: userId, …data})
-});
-}
-
-let xpTimer = null;
-function saveXP() {
-if (!S.userId) return;
-clearTimeout(xpTimer);
-xpTimer = setTimeout(() => upsertProfile(S.userId, {xp: S.xp, badges: S.badges}), 1500);
-}
-
-const COLORS = [”#e74c3c”,”#e67e22”,”#f1c40f”,”#2ecc71”,”#1abc9c”,”#3498db”,”#9b59b6”,”#fd79a8”];
-let S = {
-page: “home”, loggedIn: false, userId: null, token: null,
-name: “”, email: “”, avatarColor: “#00d2ff”,
-xp: 0, badges: [],
-authTab: “login”, authEmail: “”, authPass: “”, authName: “”, authErr: “”, authLoading: false,
-scIdx: null, scStep: 0, scAnswered: false, scCorrect: false, scSelectedOpt: null,
-termTab: “flash”, termIdx: 0, termFlipped: false, termQ: null, termAns: null, termSelectedOpt: null, termScore: 0, termTotal: 0,
-examIdx: 0, examAnswered: false, examCorrect: false, examSelectedOpt: null, examScore: 0, examDone: false,
-examTab: “quiz”,
-tcaStep: 0,
-tipOpen: null,
-protoOpen: null,
-drugOpen: null,
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let S={page:“auth”,tab:“home”,user:null,xp:0,done:[],
+aMode:“login”,aEmail:””,aPass:””,aName:””,aErr:””,aLoading:false,
+sc:null,scStep:0,scAns:null,scScore:0,scDone:false,
+tMode:“flash”,tIdx:0,tFlip:false,tQ:null,tAns:null,tOpts:[],tScore:0,tTotal:0,
+prOpen:null,drOpen:null,itOpen:null,tipOpen:null,
+exTab:“quiz”,exIdx:0,exAns:null,exScore:0,exDone:false,tcaOpen:null
 };
+let svTimer=null;
+function set(o){Object.assign(S,o);draw();}
+function addXP(n){S.xp+=n;clearTimeout(svTimer);svTimer=setTimeout(()=>{if(S.user)saveProfile(S.user.id,S.user.tok,{xp:S.xp,completed_scenarios:S.done}).catch(()=>{});},1500);draw();}
 
-function set(obj) {
-Object.assign(S, obj);
-render();
+// ── DRAW ──────────────────────────────────────────────────────────────────────
+function draw(){
+const R=document.getElementById(“root”);
+if(!R)return;
+if(S.page===“auth”){R.innerHTML=authHTML();bindAuth();return;}
+R.innerHTML=’<div id="app">’+appHTML()+’</div>’;
+bindApp();
 }
 
-function xpLevel() { return Math.floor(S.xp / 200) + 1; }
-function xpPct() { return Math.min((S.xp % 200) / 200 * 100, 100); }
-function addXP(n) {
-S.xp += n;
-saveXP();
-render();
-}
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+function authHTML(){
+const reg=S.aMode===“reg”;
+return `<div style="min-height:100vh;background:#0a0e1a;display:flex;align-items:center;justify-content:center;padding:20px">
 
-function initTermQuiz() {
-const q = TERMS[Math.floor(Math.random() * TERMS.length)];
-const wrong = TERMS.filter(t => t.term !== q.term).sort(() => 0.5 - Math.random()).slice(0, 3);
-const opts = […wrong.map(t => t.def), q.def].sort(() => 0.5 - Math.random());
-set({termQ: q, termAns: null, termSelectedOpt: null, termTab: “quiz”});
-S.termOpts = opts;
-render();
-}
-
-function render() {
-const root = document.getElementById(“root”);
-if (!S.loggedIn) {
-root.innerHTML = renderAuth();
-} else {
-root.innerHTML = `<div id="app"> ${renderHeader()} ${renderNav()} <div id="content"> ${renderPage()} </div> ${renderFooter()} </div>`;
-}
-bindEvents();
-}
-
-function renderAuth() {
-return `
-
-  <div class="auth-wrap">
-    <div class="auth-box">
-      <div style="text-align:center;margin-bottom:24px">
-        <div style="font-size:48px">🚑</div>
-        <div class="auth-title">MedicAce</div>
-        <div class="auth-sub">Paramedic Training Platform</div>
+  <div style="width:100%;max-width:400px">
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="font-size:56px">🚑</div>
+      <div style="font-family:'Oxanium',monospace;font-size:28px;font-weight:800;color:#00d2ff;letter-spacing:2px;margin-top:8px">MedicAce</div>
+      <div style="font-size:11px;color:#8892b0;letter-spacing:3px;margin-top:4px">PARAMEDIC TRAINING PLATFORM</div>
+    </div>
+    <div style="background:#111827;border-radius:20px;padding:28px;border:1px solid rgba(0,210,255,0.15)">
+      <div style="display:flex;background:#1a2235;border-radius:12px;padding:4px;margin-bottom:22px;gap:4px">
+        <button id="btnLogin" style="flex:1;padding:9px;border-radius:9px;border:none;cursor:pointer;font-family:'Oxanium',monospace;font-weight:800;font-size:12px;background:${!reg?"#00d2ff":"transparent"};color:${!reg?"#000":"#8892b0"}">SIGN IN</button>
+        <button id="btnReg" style="flex:1;padding:9px;border-radius:9px;border:none;cursor:pointer;font-family:'Oxanium',monospace;font-weight:800;font-size:12px;background:${reg?"#00d2ff":"transparent"};color:${reg?"#000":"#8892b0"}">REGISTER</button>
       </div>
-      <div class="auth-tabs">
-        <button class="atab${S.authTab==="login"?" on":""}" data-authtab="login">Sign In</button>
-        <button class="atab${S.authTab==="register"?" on":""}" data-authtab="register">Register</button>
-      </div>
-      ${S.authErr ? `<div class="auth-err">${S.authErr}</div>` : ""}
-      ${S.authTab === "register" ? `<input class="ai" id="ai-name" placeholder="Full Name" value="${S.authName}" type="text">` : ""}
-      <input class="ai" id="ai-email" placeholder="Email" value="${S.authEmail}" type="email">
-      <input class="ai" id="ai-pass" placeholder="Password" value="${S.authPass}" type="password">
-      <button class="as" id="auth-submit" ${S.authLoading?"disabled":""}>
-        ${S.authLoading ? "..." : S.authTab === "login" ? "SIGN IN" : "CREATE ACCOUNT"}
+      ${S.aErr?`<div style="background:rgba(255,71,87,0.1);border:1px solid rgba(255,71,87,0.3);border-radius:9px;padding:10px;margin-bottom:12px;font-size:12px;color:#ff4757">⚠️ ${S.aErr}</div>`:""}
+      ${reg?'<input class="ai" id="inName" placeholder="Full Name"/>':""}<input class="ai" id="inEmail" placeholder="Email" type="email"/><input class="ai" id="inPass" placeholder="Password" type="password"/>
+      <button id="btnSubmit" style="width:100%;background:#00d2ff;color:#000;border:none;padding:14px;border-radius:12px;font-family:'Oxanium',monospace;font-weight:800;font-size:15px;cursor:pointer;opacity:${S.aLoading?0.6:1}">
+        ${S.aLoading?"LOADING...":(reg?"CREATE ACCOUNT →":"SIGN IN →")}
       </button>
     </div>
-  </div>`;
+  </div></div>`;
 }
 
-function renderHeader() {
-const lv = xpLevel();
-const ini = (S.name||”?”).charAt(0).toUpperCase();
+function bindAuth(){
+document.getElementById(“btnLogin”)?.addEventListener(“click”,()=>set({aMode:“login”,aErr:””}));
+document.getElementById(“btnReg”)?.addEventListener(“click”,()=>set({aMode:“reg”,aErr:””}));
+document.getElementById(“btnSubmit”)?.addEventListener(“click”,doAuth);
+document.getElementById(“inPass”)?.addEventListener(“keydown”,e=>{if(e.key===“Enter”)doAuth();});
+}
+
+async function doAuth(){
+const email=(document.getElementById(“inEmail”)?.value||””).trim().toLowerCase();
+const pass=document.getElementById(“inPass”)?.value||””;
+const name=document.getElementById(“inName”)?.value||””;
+if(!email||!pass){set({aErr:“Fill in all fields.”});return;}
+if(pass.length<6){set({aErr:“Password needs 6+ characters.”});return;}
+set({aLoading:true,aErr:””});
+try{
+let res,u;
+if(S.aMode===“login”){
+res=await signIn(email,pass);
+if(res.error){set({aLoading:false,aErr:res.error.message||“Login failed.”});return;}
+const p=await getProfile(res.user.id,res.access_token);
+u={id:res.user.id,email,tok:res.access_token,name:p?.name||email.split(”@”)[0],color:p?.avatar_color||”#00d2ff”};
+S.xp=p?.xp||0; S.done=p?.completed_scenarios||[];
+}else{
+if(!name){set({aLoading:false,aErr:“Enter your name.”});return;}
+res=await signUp(email,pass,name);
+if(res.error){set({aLoading:false,aErr:res.error.message||“Sign up failed.”});return;}
+const cols=[”#ff4757”,”#ffa502”,”#2ed573”,”#1e90ff”,”#a29bfe”,”#fd79a8”];
+const color=cols[Math.floor(Math.random()*cols.length)];
+const tok=res.session?.access_token;
+if(!tok){set({aLoading:false,aErr:“Check your email to confirm, then sign in.”,aMode:“login”});return;}
+u={id:res.user.id,email,tok,name,color};
+await saveProfile(u.id,u.tok,{name,avatar_color:color,xp:0,completed_scenarios:[]});
+S.xp=0; S.done=[];
+}
+localStorage.setItem(“ma”,JSON.stringify(u));
+set({page:“app”,user:u,aLoading:false,tab:“home”});
+}catch(e){set({aLoading:false,aErr:“Network error. Try again.”});}
+}
+
+function doLogout(){
+localStorage.removeItem(“ma”);
+set({page:“auth”,user:null,xp:0,done:[],tab:“home”});
+}
+
+// ── APP SHELL ─────────────────────────────────────────────────────────────────
+function appHTML(){
+const u=S.user,lv=Math.max(1,Math.floor(S.xp/200)+1),pct=Math.min((S.xp%200)/200*100,100);
+const ini=(u.name||”?”)[0].toUpperCase();
+const TABS=[{id:“home”,i:“🏠”,l:“Home”},{id:“scenarios”,i:“🚑”,l:“Cases”},{id:“terminology”,i:“📚”,l:“Terms”},
+{id:“vitals”,i:“💓”,l:“Vitals”},{id:“protocols”,i:“📋”,l:“Protocols”},{id:“pharmacology”,i:“💊”,l:“Drugs”},
+{id:“intubation”,i:“🫁”,l:“Airway”},{id:“tips”,i:“💡”,l:“Tips”},{id:“exams”,i:“📝”,l:“Exam”}];
 return `
 
   <div class="hdr">
-    <div class="logo">
-      <div style="font-size:26px">🚑</div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:26px">🚑</span>
       <div>
-        <div class="lname">MedicAce</div>
-        <div class="lsub">Paramedic Training</div>
+        <div style="font-family:'Oxanium',monospace;font-size:17px;font-weight:800;color:#00d2ff">MedicAce</div>
+        <div style="font-size:10px;color:#8892b0;text-transform:uppercase;letter-spacing:2px">Paramedic Training</div>
       </div>
     </div>
-    <div class="xpbar">
-      <div style="display:flex;align-items:center;gap:7px">
-        <span class="lvlbadge">LV ${lv}</span>
-        <span style="font-size:10px;color:var(--ac);font-family:'Oxanium',monospace">${S.xp} XP</span>
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+        <div style="display:flex;align-items:center;gap:7px">
+          <span style="background:linear-gradient(135deg,#00d2ff,#0066ff);color:#000;font-family:'Oxanium',monospace;font-weight:800;font-size:11px;padding:3px 9px;border-radius:99px">LV ${lv}</span>
+          <span style="font-size:10px;color:#00d2ff;font-family:'Oxanium',monospace">${S.xp} XP</span>
+        </div>
+        <div style="width:110px;height:7px;background:#1a2235;border-radius:99px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#00d2ff,#0066ff);border-radius:99px;transition:width 0.8s"></div></div>
       </div>
-      <div class="xptrack"><div class="xpfill" style="width:${xpPct()}%"></div></div>
+      <div id="avBtn" style="width:36px;height:36px;border-radius:50%;background:${u.color||"#00d2ff"};display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:14px;color:#fff;cursor:pointer;border:2px solid rgba(255,255,255,0.15)">${ini}</div>
     </div>
-    <div class="avatar" style="background:${S.avatarColor}" id="avatar-btn">${ini}</div>
+  </div>
+  <div class="nav">
+    ${TABS.map(t=>`<div class="nc${S.tab===t.id?" on":""}" data-tab="${t.id}">
+      <span style="font-size:20px;margin-bottom:4px;display:block">${t.i}</span>
+      <div style="font-family:'Oxanium',monospace;font-size:9px;font-weight:700;color:${S.tab===t.id?"#e8eaf6":"#8892b0"}">${t.l}</div>
+    </div>`).join("")}
+  </div>
+  <div class="panel">${pageHTML()}</div>
+  <div style="text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05)">
+    <div style="font-family:'Oxanium',monospace;font-size:10px;color:#8892b0;letter-spacing:3px">MEDICACE · HCT EMS</div>
+    <div style="font-family:'Oxanium',monospace;font-size:15px;font-weight:800;background:linear-gradient(90deg,#00d2ff,#a29bfe,#fd79a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:3px;margin-top:4px">OMAR AL ALI</div>
   </div>`;
 }
 
-function renderNav() {
-const items = [
-{id:“home”,icon:“🏠”,label:“Home”},
-{id:“scenarios”,icon:“🚨”,label:“Cases”},
-{id:“terminology”,icon:“📚”,label:“Terms”},
-{id:“vitals”,icon:“💓”,label:“Vitals”},
-{id:“protocols”,icon:“📋”,label:“Protocols”},
-{id:“pharmacology”,icon:“💊”,label:“Drugs”},
-{id:“intubation”,icon:“🫁”,label:“Airway”},
-{id:“tips”,icon:“💡”,label:“Tips”},
-{id:“exams”,icon:“📝”,label:“Exam”},
-];
-return `<div class="nav">${items.map(it => `
-<div class=“nc${S.page===it.id?” on”:””}” data-page=”${it.id}”>
-<span class="ni">${it.icon}</span>
-<span class="nl">${it.label}</span>
-<div class=“nd” style=“background:${S.page===it.id?“var(–ac)”:“transparent”}”></div>
-</div>`).join("")}</div>`;
+function pageHTML(){
+if(S.tab===“home”)return homeHTML();
+if(S.tab===“scenarios”)return scenHTML();
+if(S.tab===“terminology”)return termHTML();
+if(S.tab===“vitals”)return vitHTML();
+if(S.tab===“protocols”)return prHTML();
+if(S.tab===“pharmacology”)return drHTML();
+if(S.tab===“intubation”)return itHTML();
+if(S.tab===“tips”)return tipHTML();
+if(S.tab===“exams”)return exHTML();
+return homeHTML();
 }
 
-function renderPage() {
-switch(S.page) {
-case “home”: return renderHome();
-case “scenarios”: return renderScenarios();
-case “terminology”: return renderTerminology();
-case “vitals”: return renderVitals();
-case “protocols”: return renderProtocols();
-case “pharmacology”: return renderPharmacology();
-case “intubation”: return renderIntubation();
-case “tips”: return renderTips();
-case “exams”: return renderExams();
-default: return renderHome();
-}
-}
-
-function renderHome() {
-const lv = xpLevel();
+// ── HOME ──────────────────────────────────────────────────────────────────────
+function homeHTML(){
+const u=S.user,lv=Math.max(1,Math.floor(S.xp/200)+1);
+const BADGES=[{l:“🚑 First Responder”,c:S.xp>=50},{l:“💊 Med Student”,c:S.xp>=200},{l:“🎯 Scenario Ace”,c:S.done.length>=3},{l:“🫁 Airway Master”,c:S.xp>=400},{l:“🔥 On Fire”,c:S.xp>=600},{l:“🏆 Paramedic Pro”,c:S.xp>=1000}];
 return `
 
-  <div class="panel">
-    <div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">
-      <div class="avatar" style="width:50px;height:50px;font-size:20px;background:${S.avatarColor}">${(S.name||"?").charAt(0).toUpperCase()}</div>
-      <div>
-        <div style="font-family:'Oxanium',monospace;font-weight:800;font-size:16px">Welcome back, ${S.name||"Medic"}!</div>
-        <div class="muted">Level ${lv} Paramedic · ${S.xp} XP</div>
-      </div>
+  <div style="background:linear-gradient(135deg,#111827,#0d1525);border:1px solid rgba(0,210,255,0.2);border-radius:14px;padding:22px;text-align:center;margin-bottom:18px">
+    <div style="font-size:13px;color:#00d2ff;font-family:'Oxanium',monospace;margin-bottom:6px">👋 Welcome back, ${u.name.split(" ")[0]}!</div>
+    <div style="font-family:'Oxanium',monospace;font-size:20px;font-weight:800;margin-bottom:6px">Train Like Your <span style="color:#00d2ff">Patient Life</span> Depends On It</div>
+    <div style="color:#8892b0;font-size:12px;margin-bottom:14px">Scenarios · Terms · Drugs · Protocols · Intubation · Exam Prep</div>
+    <div style="display:flex;justify-content:center;gap:18px;flex-wrap:wrap">
+      ${[[SCENARIOS.length,"Scenarios"],[TERMS.length,"Terms"],[DRUGS.length,"Drugs"],[HEM_QUESTIONS.length,"Exam Qs"]].map(([v,l])=>`<div><div style="font-family:'Oxanium',monospace;font-size:18px;font-weight:800;color:#00d2ff">${v}</div><div style="font-size:9px;color:#8892b0;text-transform:uppercase">${l}</div></div>`).join("")}
     </div>
-    <div class="g2">
-      ${[
-        {icon:"🚨",title:"Scenarios",sub:"Patient cases",page:"scenarios"},
-        {icon:"📚",title:"Terminology",sub:"Medical terms",page:"terminology"},
-        {icon:"💓",title:"Vitals",sub:"Normal ranges",page:"vitals"},
-        {icon:"📋",title:"Protocols",sub:"Treatment guides",page:"protocols"},
-        {icon:"💊",title:"Drugs",sub:"Pharmacology",page:"pharmacology"},
-        {icon:"🫁",title:"Airway",sub:"RSI & intubation",page:"intubation"},
-        {icon:"💡",title:"Tips",sub:"Quick review",page:"tips"},
-        {icon:"📝",title:"Exam Prep",sub:"HEM 3106",page:"exams"},
-      ].map(c => `
-      <div class="card" data-page="${c.page}">
-        <div style="font-size:28px;margin-bottom:8px">${c.icon}</div>
-        <div style="font-family:'Oxanium',monospace;font-weight:700;font-size:13px">${c.title}</div>
-        <div class="muted">${c.sub}</div>
-      </div>`).join("")}
-    </div>
-    <div style="text-align:center;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.06)">
-      <div style="font-family:'Oxanium',monospace;font-size:10px;color:var(--mu);letter-spacing:3px">MEDICACE · HCT EMS TRAINING</div>
-    </div>
-  </div>`;
+  </div>
+  <div style="font-family:'Oxanium',monospace;font-size:10px;color:#8892b0;margin-bottom:7px;text-transform:uppercase;letter-spacing:1px">Your Badges</div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+    ${BADGES.map(b=>`<span style="padding:4px 10px;border-radius:99px;font-size:10px;font-weight:700;font-family:'Oxanium',monospace;border:1px solid ${b.c?"#00d2ff":"rgba(255,255,255,0.1)"};color:${b.c?"#00d2ff":"#8892b0"};opacity:${b.c?1:0.3}">${b.l}</span>`).join("")}
+  </div>
+  <div class="g2" style="margin-top:0">
+    <button class="btn" style="margin:0" data-tab="scenarios">🚑 Run a Scenario</button>
+    <button class="btn" style="margin:0;background:#a8e063;color:#000" data-tab="exams">📝 Exam Prep</button>
+  </div>
+  <button class="btn" style="background:transparent;border:1px solid rgba(255,71,87,0.4);color:#ff4757;margin-top:9px" id="btnOut">🚪 Sign Out</button>`;
 }
 
-function renderScenarios() {
-if (S.scIdx === null) {
-return `<div class="panel"> <div class="ptitle">🚨 Scenarios</div> <div class="muted" style="margin-bottom:14px">Tap a case to begin</div> ${SCENARIOS.map((sc, i) => `
-<div class="card" style="margin-bottom:10px;cursor:pointer" data-scstart="${i}">
-<div style="display:flex;justify-content:space-between;align-items:center">
+// ── SCENARIOS ─────────────────────────────────────────────────────────────────
+function scenHTML(){
+if(S.scDone){
+const sc=S.sc,pct=Math.round(S.scScore/sc.steps.length*100);
+return `<button class="bk" id="scBack">← Back</button> <div style="text-align:center;padding:24px 0;background:#1a2235;border-radius:11px"> <div style="font-size:52px">${pct>=80?"🏆":pct>=60?"🎯":"📚"}</div> <div style="font-family:'Oxanium',monospace;font-size:20px;font-weight:800;margin-top:10px">${pct>=80?"Outstanding!":pct>=60?"Good Work!":"Keep Studying!"}</div> <div class="mu" style="margin-top:5px">${S.scScore}/${sc.steps.length} correct</div> <div style="height:8px;background:#111827;border-radius:99px;margin:12px 20px;overflow:hidden"><div style="height:100%;width:${pct}%;background:linear-gradient(90deg,#2ed573,#00b894);border-radius:99px"></div></div> <div style="font-family:'Oxanium',monospace;color:#ffa502;font-size:15px">+${Math.round(sc.xp*(S.scScore/sc.steps.length))} XP</div> <button class="btn" style="max-width:260px;margin:14px auto 0" id="scBack">Try Another →</button> </div>`;
+}
+if(S.sc){
+const sc=S.sc,q=sc.steps[S.scStep],LT=[“A”,“B”,“C”,“D”];
+return `<button class="bk" id="scBack">← Back</button> <div style="background:#1a2235;border-radius:11px;padding:15px;margin-bottom:14px"> <div style="display:flex;align-items:center;gap:11px;margin-bottom:9px"> <span style="font-size:32px">${sc.emoji}</span> <div><div style="font-family:'Oxanium',monospace;font-weight:800;color:#00d2ff">${sc.title}</div><div class="mu">${sc.age}yo ${sc.gender}</div></div> </div> <div style="background:rgba(255,71,87,0.1);border-left:3px solid #ff4757;padding:7px 10px;border-radius:0 7px 7px 0;font-size:12px;margin-bottom:9px"><strong>CC:</strong> ${sc.chief}</div> <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:8px"> ${Object.entries(sc.vitals).map(([k,v])=>`<div class="vc"><div style="font-size:8px;color:#8892b0;text-transform:uppercase">${k}</div><div style="font-family:'Oxanium',monospace;font-size:11px;font-weight:700;color:#00d2ff;margin-top:2px">${v}</div></div>`).join("")} </div> <div style="font-size:11px;color:#8892b0;background:rgba(162,155,254,0.08);border-left:3px solid #a29bfe;padding:7px 10px;border-radius:0 7px 7px 0"><strong>Hx:</strong> ${sc.history}</div> </div> <div style="background:#1a2235;border-radius:11px;padding:16px"> <div style="font-size:9px;color:#00d2ff;font-family:'Oxanium',monospace;margin-bottom:4px">Q ${S.scStep+1}/${sc.steps.length}</div> <div class="pb"><div class="pf" style="width:${(S.scStep/sc.steps.length)*100}%"></div></div> <div style="font-size:14px;font-weight:700;margin-bottom:12px;line-height:1.5">${q.q}</div> ${q.options.map((o,i)=>{let c="ob sc-opt";if(S.scAns!==null){if(i===q.correct)c+=" ok";else if(i===S.scAns&&i!==q.correct)c+=" er";}return `<button class=”${c}” data-i=”${i}” ${S.scAns!==null?“disabled”:””}><span class="ol">${LT[i]}</span>${o}</button>`;}).join("")} ${S.scAns!==null?`<div class="expl">💡 ${q.explain}</div><button class="btn" id="scNext">${S.scStep+1>=sc.steps.length?“See Results →”:“Next →”}</button>`:""} </div>`;
+}
+const DC={Easy:”#2ed573”,Medium:”#ffa502”,Hard:”#ff4757”};
+return `<div class="pt">🚑 Scenarios</div><p class="mu" style="margin-bottom:14px">Real emergencies. Real decisions.</p>
+
+  <div class="g2">${SCENARIOS.map(sc=>`<div class="card sc-start" data-id="${sc.id}" style="${S.done.includes(sc.id)?"border-color:#2ed573":""}">
+    <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-size:24px">${sc.emoji}</span><span style="font-size:9px;padding:2px 8px;border-radius:99px;font-weight:700;background:${DC[sc.difficulty]}22;color:${DC[sc.difficulty]}">${sc.difficulty}</span></div>
+    <div style="font-family:'Oxanium',monospace;font-size:12px;font-weight:700;margin-bottom:2px">${sc.title}</div>
+    <div class="mu">${sc.age}yo ${sc.gender} · ${sc.steps.length}Q</div>
+    <div style="font-size:11px;color:#ffa502;font-weight:700;font-family:'Oxanium',monospace;margin-top:5px">⭐ ${sc.xp} XP ${S.done.includes(sc.id)?"✅":""}</div>
+  </div>`).join("")}</div>`;
+}
+
+// ── TERMINOLOGY ───────────────────────────────────────────────────────────────
+function termHTML(){
+const cats=[“All”,…[…new Set(TERMS.map(t=>t.category))].sort()];
+const list=S.tFilter&&S.tFilter!==“All”?TERMS.filter(t=>t.category===S.tFilter):TERMS;
+const term=list[S.tIdx%list.length];
+const LT=[“A”,“B”,“C”,“D”];
+return `<div class="pt">📚 Terminology</div>
+
+  <div style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap">
+    <button class="tab${S.tMode==="flash"?" on":""}" data-tm="flash">Flashcards</button>
+    <button class="tab${S.tMode==="quiz"?" on":""}" data-tm="quiz">Quiz</button>
+    <select id="tCat" style="background:#1a2235;border:1px solid rgba(255,255,255,0.1);color:#8892b0;padding:5px 9px;border-radius:99px;font-size:10px;font-family:'Oxanium',monospace">
+      ${cats.map(c=>`<option value="${c}"${(S.tFilter||"All")===c?" selected":""}>${c}</option>`).join("")}
+    </select>
+  </div>
+  ${S.tMode==="flash"?`
+    <div id="tCard" style="background:${S.tFlip?"rgba(0,210,255,0.08)":"#1a2235"};border:2px solid ${S.tFlip?"#00d2ff":"rgba(255,255,255,0.06)"};border-radius:14px;padding:26px;text-align:center;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer">
+      <div style="font-size:36px;margin-bottom:8px">${term.emoji}</div>
+      <div style="font-family:'Oxanium',monospace;font-size:20px;font-weight:800">${term.term}</div>
+      ${S.tFlip?`<div style="font-size:13px;color:#e8eaf6;line-height:1.6;margin-top:8px">${term.def}</div>`:`<div class="mu" style="margin-top:8px">👆 Tap to reveal</div>`}
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:11px">
+      <button class="tab" id="tPrev">← Prev</button>
+      <span class="mu">${(S.tIdx%list.length)+1} / ${list.length}</span>
+      <button class="tab" id="tNext">Next →</button>
+    </div>`:""}
+  ${S.tMode==="quiz"&&S.tQ?`
+    <div style="background:#1a2235;border-radius:11px;padding:18px;text-align:center;margin-bottom:12px">
+      <div style="font-size:36px;margin-bottom:8px">${S.tQ.emoji}</div>
+      <div style="font-family:'Oxanium',monospace;font-size:20px;font-weight:800">${S.tQ.term}</div>
+    </div>
+    <div class="mu" style="margin-bottom:10px">What does this term mean?</div>
+    ${S.tOpts.map((o,i)=>{let c="ob tOpt";if(S.tAns!==null){if(o===S.tQ.def)c+=" ok";else if(o===S.tAns)c+=" er";}return `<button class="${c}" data-tv="${encodeURIComponent(o)}" ${S.tAns!==null?"disabled":""}><span class="ol">${LT[i]}</span>${o}</button>`;}).join("")}
+    ${S.tAns!==null?`<div class="mu" style="text-align:center;margin-top:8px">Score: ${S.tScore}/${S.tTotal}</div><button class="btn" id="tNext2">Next →</button>`:""}
+  `:""}
+  ${S.tMode==="quiz"&&!S.tQ?`<button class="btn" id="tQStart">Start Quiz</button>`:""}`;
+}
+
+// ── VITALS ────────────────────────────────────────────────────────────────────
+function vitHTML(){
+return `<div class="pt">💓 Vital Signs</div><p class="mu" style="margin-bottom:14px">Normal adult ranges</p> ${VITALS.map(v=>`<div style="background:#1a2235;border-radius:11px;padding:12px 14px;border:1px solid rgba(255,255,255,0.06);border-left:3px solid ${v.color};margin-bottom:9px;display:flex;gap:10px;align-items:center">
+<span style="font-size:22px">${v.icon}</span>
 <div>
-<div style="font-family:'Oxanium',monospace;font-weight:700;font-size:13px;margin-bottom:3px">${sc.title}</div>
-<div class="muted">${sc.description||””}</div>
+<div style="font-family:'Oxanium',monospace;font-weight:700;font-size:13px;color:${v.color}">${v.name}</div>
+<div style="font-size:11px;margin-top:3px"><span style="color:#2ed573">✅ ${v.normal}</span> · <span style="color:#74b9ff">↓ ${v.low}</span> · <span style="color:#ff4757">↑ ${v.high}</span></div>
 </div>
-<div style="font-size:22px">${sc.icon||“🚑”}</div>
-</div>
-</div>`).join("")} </div>`;
+
+  </div>`).join("")}`;
 }
 
-const sc = SCENARIOS[S.scIdx];
-const step = sc.steps[S.scStep];
-const isLast = S.scStep === sc.steps.length - 1;
-
-return `<div class="panel"> <button class="bk" id="sc-back">← Back</button> <div class="ptitle">${sc.title}</div> <div class="pb"><div class="pf" style="width:${((S.scStep+1)/sc.steps.length)*100}%"></div></div> <div class="muted" style="margin-bottom:12px">Step ${S.scStep+1} of ${sc.steps.length}</div> <div class="card" style="margin-bottom:14px;background:var(--s2)"> <div style="font-size:13px;line-height:1.7">${step.question}</div> </div> ${step.options.map((o, i) => { let cls = "ob"; if (S.scAnswered) { if (i === step.correct) cls += " ok"; else if (i === S.scSelectedOpt) cls += " er"; } return `<button class=”${cls}” ${S.scAnswered?“disabled”:””} data-scopt=”${i}”>
-<span class="ol">${[“A”,“B”,“C”,“D”][i]}</span>${o}
-</button>`; }).join("")} ${S.scAnswered ? `
-<div class="expl"><strong>${S.scCorrect?“✅ Correct!”:“❌ Incorrect”}</strong> ${step.explanation||””}</div>
-${!isLast ? `<button class="btn" id="sc-next">Next Step →</button>` : `<button class="btn" id="sc-done">Complete Case (+30 XP)</button>`}
-` : “”}
-
-  </div>`;
-}
-
-function renderTerminology() {
-const tabs = [“flash”,“quiz”,“list”];
-const tabLabels = [“Flashcards”,“Quiz”,“All Terms”];
-let content = “”;
-
-if (S.termTab === “flash”) {
-const t = TERMS[S.termIdx];
-content = `<div style="perspective:1000px;margin:16px 0;cursor:pointer" id="flash-card"> <div style="background:var(--s2);border-radius:14px;padding:30px 20px;text-align:center;min-height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid rgba(0,210,255,0.15);"> <div style="font-family:'Oxanium',monospace;font-size:20px;font-weight:800;color:var(--ac);margin-bottom:12px">${t.term}</div> ${S.termFlipped ?`<div style="color:var(--tx);font-size:13px;line-height:1.6">${t.def}</div>`:`<div class="muted">Tap to reveal</div>`} </div> </div> <div style="display:flex;gap:10px;margin-top:8px"> <button class="btn" style="background:var(--s2);color:var(--tx)" id="term-prev">← Prev</button> <button class="btn" style="background:var(--s2);color:var(--tx)" id="term-flip">Flip</button> <button class="btn" id="term-next">Next →</button> </div> <div class="muted" style="text-align:center;margin-top:8px">${S.termIdx+1} / ${TERMS.length}</div>`;
-} else if (S.termTab === “quiz”) {
-if (!S.termQ) {
-content = `<button class="btn" id="term-quiz-start">Start Quiz</button>`;
-} else {
-const q = S.termQ;
-content = `<div class="card" style="margin-bottom:14px;background:var(--s2)"> <div style="font-family:'Oxanium',monospace;font-size:15px;font-weight:700;text-align:center;color:var(--ac)">${q.term}</div> <div class="muted" style="text-align:center;margin-top:6px">Choose the correct definition</div> </div> ${(S.termOpts||[]).map((o,i) => { let cls = "ob"; if (S.termAns !== null) { if (o === q.def) cls += " ok"; else if (o === S.termAns) cls += " er"; } return`<button class=”${cls}” ${S.termAns!==null?“disabled”:””} data-termopt=”${i}” data-termval=”${o.replace(/”/g,”"”)}”>${o}</button>`; }).join("")} <div class="muted" style="text-align:center;margin-top:10px">Score: ${S.termScore}/${S.termTotal}</div> ${S.termAns !== null ? `<button class="btn" id="term-next-q">Next Question (+5 XP)</button>` : ""}`;
-}
-} else {
-content = TERMS.map(t => ` <div class="sc"> <div style="font-family:'Oxanium',monospace;font-weight:700;color:var(--ac)">${t.term}</div> <div style="font-size:12px;color:var(--mu);margin-top:4px">${t.def}</div> </div>`).join(””);
-}
-
-return `<div class="panel"> <div class="ptitle">📚 Terminology</div> <div style="display:flex;gap:8px;margin-bottom:16px"> ${tabs.map((t,i) => `<button class=“tab${S.termTab===t?” on”:””}” data-termtab=”${t}”>${tabLabels[i]}</button>`).join(””)}
-</div>
-${content}
-
-  </div>`;
-}
-
-function renderVitals() {
-return `<div class="panel"> <div class="ptitle">💓 Vital Signs</div> <div class="muted" style="margin-bottom:14px">Normal adult reference ranges</div> ${VITALS.map(v => `
-<div class="card" style="margin-bottom:10px">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-<div style="font-family:'Oxanium',monospace;font-weight:700">${v.name}</div>
-<div style="font-family:'Oxanium',monospace;font-size:13px;color:var(--ac)">${v.normal}</div>
-</div>
-<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
-<div class="vc"><div class="vl">Low</div><div class="vv" style="color:var(--er)">${v.low}</div></div>
-<div class="vc"><div class="vl">Normal</div><div class="vv">${v.normal}</div></div>
-<div class="vc"><div class="vl">High</div><div class="vv" style="color:var(--wa)">${v.high}</div></div>
-</div>
-${v.note ? `<div class="nt">${v.note}</div>` : “”}
-</div>`).join(””)}
-
-  </div>`;
-}
-
-function renderProtocols() {
-return `<div class="panel"> <div class="ptitle">📋 Protocols</div> <div class="muted" style="margin-bottom:14px">Tap to expand</div> ${PROTOCOLS.map((p, i) => `
-<div class=“sc${S.protoOpen===i?” op”:””}” data-protoopen=”${i}”>
+// ── PROTOCOLS ─────────────────────────────────────────────────────────────────
+function prHTML(){
+return `<div class="pt">📋 Protocols</div><p class="mu" style="margin-bottom:14px">Tap to expand</p> ${PROTOCOLS.map((p,i)=>`<div class=“sc${S.prOpen===i?” op”:””}” data-pr=”${i}” style=“border-left-color:${S.prOpen===i?p.color:“transparent”}”>
 <div style="display:flex;justify-content:space-between;align-items:center">
-<div style="font-family:'Oxanium',monospace;font-weight:700">${p.name}</div>
-<span>${S.protoOpen===i?“▲”:“▼”}</span>
+<div style="display:flex;align-items:center;gap:9px"><span style="font-size:22px">${p.icon}</span><span style="font-family:'Oxanium',monospace;font-weight:700;font-size:12px">${p.title}</span></div>
+<span style="color:#8892b0">${S.prOpen===i?“▲”:“▼”}</span>
+</div>
+<div class="sb">${p.steps.map((s,j)=>`<div style="display:flex;gap:9px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.04);align-items:flex-start"><span style="background:${p.color};color:#000;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;flex-shrink:0;margin-top:2px">${j+1}</span><span style="font-size:12px;line-height:1.5">${s}</span></div>`).join(””)}
+<div style="background:rgba(255,165,2,0.1);border-left:3px solid #ffa502;padding:7px 11px;border-radius:0 6px 6px 0;font-size:11px;color:#ffa502;margin-top:9px">⚡ ${p.tip}</div></div>
+
+  </div>`).join("")}`;
+}
+
+// ── PHARMACOLOGY ──────────────────────────────────────────────────────────────
+function drHTML(){
+return `<div class="pt">💊 Pharmacology</div><p class="mu" style="margin-bottom:14px">Tap a drug for full details</p> ${DRUGS.map((d,i)=>`<div class=“sc${S.drOpen===i?” op”:””}” data-dr=”${i}” style=“border-left-color:${S.drOpen===i?d.color:“transparent”}”>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<div style="display:flex;align-items:center;gap:9px"><span style="font-size:22px">${d.emoji}</span><div><div style="font-family:'Oxanium',monospace;font-weight:800;font-size:13px;color:${d.color}">${d.name}</div><div class="mu">${d.dose}</div></div></div>
+<span style="color:#8892b0">${S.drOpen===i?“▲”:“▼”}</span>
 </div>
 <div class="sb">
-<div class="muted" style="margin-bottom:8px">${p.desc||””}</div>
-${(p.steps||[]).map((s,j) => ` <div style="display:flex;gap:10px;margin-bottom:8px;align-items:flex-start"> <div style="min-width:22px;height:22px;border-radius:50%;background:var(--ac);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-size:10px;font-weight:800">${j+1}</div> <div style="font-size:13px;line-height:1.5">${s}</div> </div>`).join(””)}
+${[[“Indication”,d.indication],[“Mechanism”,d.mechanism],[“Contraindications”,d.contraindication]].map(([k,v])=>`<div style="margin-bottom:10px"><div style="font-size:9px;color:#8892b0;text-transform:uppercase;margin-bottom:3px">${k}</div><div style="font-size:12px;line-height:1.5;color:${k==="Contraindications"?"#ff4757":"#e8eaf6"}">${v}</div></div>`).join(””)}
 </div>
-</div>`).join(””)}
 
-  </div>`;
+  </div>`).join("")}`;
 }
 
-function renderPharmacology() {
-return `<div class="panel"> <div class="ptitle">💊 Pharmacology</div> <div class="muted" style="margin-bottom:14px">Tap a drug for details</div> ${DRUGS.map((d, i) => `
-<div class=“sc${S.drugOpen===i?” op”:””}” data-drugopen=”${i}”>
-<div style="display:flex;justify-content:space-between;align-items:center">
-<div>
-<div style="font-family:'Oxanium',monospace;font-weight:700;color:var(--ac)">${d.name}</div>
-<div class="muted">${d.class||””}</div>
-</div>
-<span>${S.drugOpen===i?“▲”:“▼”}</span>
-</div>
-<div class="sb">
-<div class="g2" style="gap:8px;margin-bottom:10px">
-<div class="vc"><div class="vl">Dose</div><div class="vv">${d.dose||”—”}</div></div>
-<div class="vc"><div class="vl">Route</div><div class="vv">${d.route||”—”}</div></div>
-<div class="vc"><div class="vl">Onset</div><div class="vv">${d.onset||”—”}</div></div>
-<div class="vc"><div class="vl">Duration</div><div class="vv">${d.duration||”—”}</div></div>
-</div>
-<div style="font-size:12px;line-height:1.6">${d.action||””}</div>
-${d.contraindications ? `<div class="nt">⚠️ ${d.contraindications}</div>` : “”}
-</div>
-</div>`).join(””)}
+// ── INTUBATION ────────────────────────────────────────────────────────────────
+const ITSTEPS=[
+{n:1,title:“SOAPME Prep”,icon:“🛠️”,color:”#ffa502”,body:“S=Suction. O=O2 100% NRB x3min. A=Airway kit (ETT, syringe, stylet, tape, BOUGIE). P=Pharmacology (draw & label). M=Monitor (SpO2, EtCO2, ECG). E=Equipment check.”},
+{n:2,title:“Pre-Oxygenate”,icon:“💨”,color:”#2ed573”,body:“100% O2 tight NRB mask x3 min. Apneic: BVM 2-person. Target SpO2 >93% before induction.”},
+{n:3,title:“Sedation”,icon:“😴”,color:”#6c5ce7”,body:“KETAMINE 1-2mg/kg IV — unstable, trauma, bronchospasm. ETOMIDATE 0.3mg/kg IV — haemodynamically neutral. PROPOFOL 1.5-2mg/kg IV — stable patients only, causes hypotension.”},
+{n:4,title:“Paralytic”,icon:“⚗️”,color:”#e84393”,body:“SUCCINYLCHOLINE 1.5mg/kg IV — onset 45s, 10min. CONTRAINDICATED: hyperkalemia, burns >24h, crush injury >72h. ROCURONIUM 1.2mg/kg IV — when sux contraindicated. Reversed by sugammadex 16mg/kg.”},
+{n:5,title:“Laryngoscopy”,icon:“🔦”,color:”#ff4757”,body:“Sniffing position: ear to sternal notch. MAC: tip in vallecula. Miller: tip under epiglottis. ETT 2-3cm past cords. Male ~23cm, female ~21cm. Grade 3-4 view: use BOUGIE first.”},
+{n:6,title:“Confirm Tube”,icon:“✅”,color:”#2ed573”,body:“PRIMARY: Waveform capnography — CO2 wave = trachea. Flat = esophageal — PULL NOW. SECONDARY: bilateral breath sounds, chest rise, misting, SpO2 rising.”},
+{n:7,title:“Post-Intubation”,icon:“📋”,color:”#1e90ff”,body:“Secure tube. Sedation+analgesia: propofol/midazolam + fentanyl. Vent: TV 6-8mL/kg IBW, RR 12-16, FiO2 100%, PEEP 5. EtCO2 target 35-45. Have vasopressors ready.”},
+];
 
-  </div>`;
+function itHTML(){
+return `<div class="pt">🫁 RSI & Intubation</div><p class="mu" style="margin-bottom:14px">Tap each step to expand</p>
+
+  <div style="background:rgba(0,210,255,0.08);border:1px solid rgba(0,210,255,0.2);border-radius:9px;padding:9px 13px;margin-bottom:14px;font-size:11px;color:#00d2ff">⚡ RSI = simultaneous sedative + paralytic for safe controlled intubation</div>
+  ${ITSTEPS.map(s=>`<div class="sc${S.itOpen===s.n?" op":""}" data-it="${s.n}" style="border-left-color:${S.itOpen===s.n?s.color:"transparent"}">
+    <div style="display:flex;align-items:center;gap:9px">
+      <div style="width:26px;height:26px;border-radius:50%;background:${s.color}22;border:1.5px solid ${s.color};display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:11px;color:${s.color};flex-shrink:0">${s.n}</div>
+      <span style="font-size:18px">${s.icon}</span>
+      <span style="font-family:'Oxanium',monospace;font-size:13px;font-weight:700;flex:1">${s.title}</span>
+      <span style="color:#8892b0;font-size:12px">${S.itOpen===s.n?"▲":"▼"}</span>
+    </div>
+    <div class="sb"><div style="font-size:12px;line-height:1.7;color:#8892b0;padding-left:37px">${s.body}</div></div>
+  </div>`).join("")}
+  <div style="background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.2);border-radius:9px;padding:9px 13px;margin-top:10px;font-size:11px;color:#ff4757">🚨 Failed airway plan: BVM → LMA → Surgical airway. Always.</div>`;
 }
 
-function renderIntubation() {
-const steps = INTUBATION_STEPS || INTUB || [];
-return `<div class="panel"> <div class="ptitle">🫁 RSI & Intubation</div> <div class="muted" style="margin-bottom:16px">Rapid Sequence Intubation steps</div> ${steps.map((s, i) => `
-<div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start">
-<div style=“min-width:28px;height:28px;border-radius:50%;background:${i<S.tcaStep+1?“var(–ac)”:“var(–s2)”};color:${i<S.tcaStep+1?”#000”:“var(–mu)”};display:flex;align-items:center;justify-content:center;font-family:‘Oxanium’,monospace;font-weight:800;font-size:12px;flex-shrink:0”>${i+1}</div>
-<div class="card" style="flex:1;cursor:default">
-<div style="font-family:'Oxanium',monospace;font-weight:700;font-size:13px;margin-bottom:4px">${s.title||s.step||s}</div>
-${s.detail ? `<div style="font-size:12px;color:var(--mu);line-height:1.6">${s.detail}</div>` : “”}
-${s.drug ? `<div class="nt">💊 ${s.drug}</div>` : “”}
-</div>
-</div>`).join(””)}
+// ── TIPS ──────────────────────────────────────────────────────────────────────
+const TIPS2=[
+{t:“AMS - The 4 S’s”,i:“🧠”,c:”#a29bfe”,b:“Sugar (BGL first), Stroke (FAST), Seizures (check meds), Sepsis (infection signs). If not 4Ss → NOT: Narcan, Oxygen, Trauma.\n⭐ BGL first — hypoglycemia is most reversible.”},
+{t:“Sick Child Signs”,i:“👶”,c:”#2ed573”,b:“Eye contact — tracking you? Tone — limp/lethargic = red flag. Work of breathing + skin color.\n⭐ A child that does not notice you and lets you assess = VERY sick.”},
+{t:“CHF vs Pneumonia”,i:“🫁”,c:”#74b9ff”,b:“CHF: bilateral wet crackles, hypertension, JVD, leg edema, pink frothy sputum, acute onset.\nPneumonia: fever, chills, productive cough, gradual.\n⭐ CHF = cardiac history. Pneumonia = infection history.”},
+{t:“Hs and Ts”,i:“💔”,c:”#ff4757”,b:“Hs in pairs: Hypoxia+Hypovolemia, H-ion+HyperK/HypoK, Hypothermia alone.\nTs: Tension PTX, Tamponade (trauma causes both), Toxins, Thrombosis (PE/MI).\n⭐ Trauma causes 2 of the Ts.”},
+{t:“Types of Shock”,i:“📉”,c:”#fd79a8”,b:“Cardiogenic (MI), Obstructive (Tension PTX/PE/Tamponade), Distributive (Neurogenic/Septic/Anaphylactic), Hypovolemic.\n⭐ Distributive = massive vasodilation = low diastolic BP.”},
+{t:“Drug Mechanism Trick”,i:“💊”,c:”#6c5ce7”,b:“Learn MECHANISM first — everything else follows.\nEpinephrine: Alpha1→vasoconstriction, Beta1→HR+contractility, Beta2→bronchodilation.\nDerive: indications, contraindications, side effects from mechanism alone.\n⭐ Mechanism + dose = all you need.”},
+];
 
-  </div>`;
+function tipHTML(){
+return `<div class="pt">💡 Quick Tips</div><p class="mu" style="margin-bottom:14px">Tap to expand</p> ${TIPS2.map((tip,i)=>`<div class=“sc${S.tipOpen===i?” op”:””}” data-tip=”${i}” style=“border-left-color:${S.tipOpen===i?tip.c:“transparent”}”>
+<div style="display:flex;align-items:center;gap:10px">
+<span style="font-size:22px">${tip.i}</span>
+<span style="font-family:'Oxanium',monospace;font-weight:700;font-size:13px;flex:1">${tip.t}</span>
+<span style="color:#8892b0">${S.tipOpen===i?“▲”:“▼”}</span>
+</div>
+<div class="sb"><div style="font-size:13px;line-height:1.8;white-space:pre-line">${tip.b}</div></div>
+
+  </div>`).join("")}`;
 }
 
-function renderTips() {
-const tips = QUICK_TIPS || TIPS || [];
-return `<div class="panel"> <div class="ptitle">💡 Quick Tips</div> <div class="muted" style="margin-bottom:14px">Tap to expand</div> ${tips.map((t, i) => `
-<div class=“sc${S.tipOpen===i?” op”:””}” data-tipopen=”${i}”>
-<div style="display:flex;justify-content:space-between;align-items:center">
-<div style="font-family:'Oxanium',monospace;font-weight:700;font-size:13px">${t.title||t.tip}</div>
-<span>${S.tipOpen===i?“▲”:“▼”}</span>
-</div>
-<div class="sb">
-<div style="font-size:13px;line-height:1.7">${t.content||t.detail||””}</div>
-${t.note ? `<div class="nt">📌 ${t.note}</div>` : “”}
-</div>
-</div>`).join(””)}
+// ── EXAMS ─────────────────────────────────────────────────────────────────────
+const TCA=[
+{ph:“SCENE”,c:”#e8304a”,t:“Scene Safety”,b:“PPE on. Mechanism noted. Visible catastrophic bleed → Tourniquet FIRST. Call: ‘Hello, can you hear me?’”},
+{ph:“CONFIRM”,c:”#f07d2a”,t:“Confirm Arrest”,b:“No chest movement + no breathing + no carotid pulse (max 10s) = confirmed arrest.”},
+{ph:“AIRWAY”,c:”#f5c842”,t:“Clear & iGel”,b:“Open airway. Vomit → suction. Insert iGel (size by weight/colour). BVM + O2. Do NOT start CPR yet.”},
+{ph:“BREATHING”,c:”#f5c842”,t:“Check Ventilation”,b:“2 BVM breaths. Both sides rising? One side only → suspect tension PTX. Auscultate. Percuss.”},
+{ph:“TENSION PTX”,c:”#f07d2a”,t:“Needle Decompression”,b:“2nd ICS, MCL. Needle in → air rush. Open wound → 3-sided dressing instead.”},
+{ph:“HAEMORRHAGE”,c:”#e8304a”,t:“Control Bleeding”,b:“Tourniquet if not applied. Pelvis: compress ONCE only. Unstable → pelvic binder at greater trochanters.”},
+{ph:“CPR”,c:”#3a8ef6”,t:“CPR + Monitor”,b:“30:2 compressions. Pads on. Rhythm check every 2 min. IV access — don’t stop CPR for it.”},
+{ph:“DRUGS”,c:”#9b6cf7”,t:“Adrenaline”,b:“PEA/Asystole: 1mg IV ASAP. VF/pVT: 1mg after 2nd shock. Flush 20mL NS. Repeat every 3-5 min.\nAmiodarone (VF/pVT only): 300mg after 3rd shock, 150mg after 5th.”},
+{ph:“4H/4T”,c:”#22d4e8”,t:“Reversible Causes”,b:“Pupils, BGL, temp, IV fluids for hypovolaemia. Tension PTX already treated.”},
+{ph:“POST-ROSC”,c:”#2ecc8a”,t:“ROSC Care”,b:“Signs of life → stop CPR. A: leave iGel unless rejected. B: ventilate if not breathing. C: BP, ECG, fluids. D: GCS, pupils, BGL. E: re-check bleeding → TRANSPORT.”},
+];
 
-  </div>`;
+const NOTES=[
+{topic:“💊 Pain Management”,c:”#ffa502”,pts:[“Multimodal = 2+ drugs with DIFFERENT mechanisms”,“KETAMINE: NMDA blocker, 1mg/kg IV, preserves airway”,“PROPOFOL: NO analgesia, causes hypotension”,“ETOMIDATE: haemodynamically stable, NO analgesia”,“MIDAZOLAM: anxiolysis + amnesia (benzodiazepine)”]},
+{topic:“🧪 Toxidromes”,c:”#ff4757”,pts:[“STIMULANT: HR/BP/temp↑, dilated pupils → Midazolam”,“OPIOID: RR/GCS↓, PINPOINT pupils → airway first, then Naloxone”,“CHOLINERGIC (DUMBELS): wet patient → Atropine”,“ANTICHOLINERGIC: dry/mad hatter → supportive only”,“NEVER beta-blockers in stimulant toxicity”,“Re-narcotisation: naloxone wears off → repeat dose”]},
+{topic:“🌙 Nightclub Scenario”,c:”#6c5ce7”,pts:[“Pt 1 (Opioid): BVM first → naloxone → re-narcotises → repeat”,“Pt 2 (Stimulant): Midazolam, NO beta-blockers → VT → more midazolam”,“Pt 3 (Benzo): Recovery position + suction → STAYS STABLE”,“KEY EXAM POINT: Pts 1 & 2 deteriorate. Pt 3 stable.”]},
+];
+
+function exHTML(){
+if(S.exTab===“tca”){
+return `<div class="pt">🚨 Traumatic Cardiac Arrest</div> <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:18px"> ${[{l:"H",lb:"Hemorrhage",s:"Tourniquet/Binder",c:"#e8304a"},{l:"O",lb:"Oxygenation",s:"Airway/iGel/BVM",c:"#f07d2a"},{l:"T",lb:"Tension PTX",s:"Needle Decomp",c:"#f5c842"}].map(h=>`<div style="background:#1a2235;border:1px solid ${h.c}44;border-radius:11px;padding:12px 8px;text-align:center"><div style="font-family:'Oxanium',monospace;font-size:32px;font-weight:800;color:${h.c}">${h.l}</div><div style="font-size:11px;font-weight:700;margin-bottom:2px">${h.lb}</div><div class="mu" style="font-size:9px">${h.s}</div></div>`).join("")} </div> <button class="tab on" id="exQuiz" style="margin-right:8px;margin-bottom:14px">← Back to Exam</button> ${TCA.map((s,i)=>`<div class=“sc${S.tcaOpen===i?” op”:””}” data-tca=”${i}” style=“border-left-color:${S.tcaOpen===i?s.c:“transparent”}”>
+<div style="display:flex;align-items:center;gap:8px">
+<div style="width:24px;height:24px;border-radius:50%;background:${s.c}22;border:1.5px solid ${s.c};display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:10px;color:${s.c};flex-shrink:0">${i+1}</div>
+<span style="font-size:8px;background:${s.c}18;border:1px solid ${s.c}44;border-radius:4px;padding:2px 7px;color:${s.c};font-family:'Oxanium',monospace;letter-spacing:1px">${s.ph}</span>
+<span style="font-family:'Oxanium',monospace;font-size:12px;font-weight:700;flex:1">${s.t}</span>
+<span style="color:#8892b0">${S.tcaOpen===i?“▲”:“▼”}</span>
+</div>
+<div class="sb"><div style="font-size:12px;line-height:1.7;white-space:pre-line;color:#8892b0;padding-left:34px">${s.b}</div></div>
+</div>`).join("")} <div style="background:#1a2235;border:1px solid rgba(46,204,138,0.25);border-radius:11px;padding:14px;margin-top:14px"> <div style="font-family:'Oxanium',monospace;font-size:11px;color:#2ecc8a;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px">✅ Exam Tips</div> ${["Confirm arrest first — pulse + breathing simultaneously","Visible bleed → Tourniquet FIRST, then confirm arrest","iGel BEFORE chest compressions","iGel stays in post-ROSC unless patient rejects it","Blood from ears = skull base fracture — don't treat that blood","Follow the checklist = 90+"].map(tip=>`<div style="display:flex;gap:8px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px"><span style="color:#2ecc8a;flex-shrink:0">✓</span>${tip}</div>`).join("")} </div>`;
 }
 
-function renderExams() {
-const tabs = [[“quiz”,“Quiz”],[“study”,“Study Cards”],[“tca”,“TCA Module”]];
-let content = “”;
-
-if (S.examTab === “quiz”) {
-if (S.examDone) {
-const pct = Math.round((S.examScore / HEM_QUESTIONS.length) * 100);
-content = ` <div style="text-align:center;padding:20px 0"> <div style="font-size:48px;margin-bottom:12px">${pct>=80?"🏆":pct>=60?"👍":"📚"}</div> <div style="font-family:'Oxanium',monospace;font-size:28px;font-weight:800;color:var(--ac)">${pct}%</div> <div class="muted">${S.examScore} / ${HEM_QUESTIONS.length} correct</div> <button class="btn" style="margin-top:16px" id="exam-restart">Try Again</button> </div>`;
-} else {
-const q = HEM_QUESTIONS[S.examIdx];
-content = `<div class="pb" style="margin-bottom:12px"><div class="pf" style="width:${(S.examIdx/HEM_QUESTIONS.length)*100}%"></div></div> <div class="muted" style="margin-bottom:10px">Q${S.examIdx+1} of ${HEM_QUESTIONS.length} · Score: ${S.examScore}</div> <div class="card" style="margin-bottom:14px;background:var(--s2)"> <div style="font-size:13px;line-height:1.7">${q.question}</div> </div> ${q.options.map((o, i) => { let cls = "ob"; if (S.examAnswered) { if (i === q.correct) cls += " ok"; else if (i === S.examSelectedOpt) cls += " er"; } return`<button class=”${cls}” ${S.examAnswered?“disabled”:””} data-examopt=”${i}”>
-<span class="ol">${[“A”,“B”,“C”,“D”][i]}</span>${o}
-</button>`; }).join("")} ${S.examAnswered ? `
-<div class="expl"><strong>${S.examCorrect?“✅ Correct!”:“❌ Wrong”}</strong> ${q.explanation||””}</div>
-<button class="btn" id="exam-next">${S.examIdx < HEM_QUESTIONS.length-1 ? “Next →” : “Finish (+20 XP)”}</button>
-` : ""}`;
-}
-} else if (S.examTab === “study”) {
-const cards = HEM_STUDY || [];
-content = cards.map(c => ` <div class="card" style="margin-bottom:10px"> <div style="font-family:'Oxanium',monospace;font-weight:700;font-size:13px;color:var(--ac);margin-bottom:6px">${c.topic}</div> <div style="font-size:12px;line-height:1.7">${c.content}</div> </div>`).join(””);
-} else {
-content = `<div class="card" style="background:var(--s2);margin-bottom:14px"> <div style="font-family:'Oxanium',monospace;font-weight:800;font-size:15px;color:var(--ac);margin-bottom:6px">🚨 Traumatic Cardiac Arrest</div> <div class="muted">H.O.T. Approach — 10-Step Protocol</div> </div> ${(TCA_STEPS||[]).map((s, i) =>`
-<div style="display:flex;gap:11px;margin-bottom:10px;align-items:flex-start">
-<div style="min-width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#0066ff);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Oxanium',monospace;font-weight:800;font-size:11px;flex-shrink:0">${i+1}</div>
-<div class="card" style="flex:1;cursor:default">
-<div style="font-family:'Oxanium',monospace;font-weight:700;font-size:12px;margin-bottom:3px">${s.step||s.title||s}</div>
-${s.detail ? `<div style="font-size:11px;color:var(--mu);line-height:1.6">${s.detail}</div>` : “”}
-</div>
+if(S.exTab===“notes”){
+return `<div class="pt">📖 Study Notes</div> <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap"> <button class="tab" id="exQuiz">Quiz</button> <button class="tab on">Notes</button> <button class="tab" id="exTCA">TCA</button> </div> ${NOTES.map(n=>`<div style="background:#1a2235;border-radius:12px;padding:14px;margin-bottom:10px;border-left:3px solid ${n.c}">
+<div style="font-family:'Oxanium',monospace;font-size:13px;font-weight:800;color:${n.c};margin-bottom:9px">${n.topic}</div>
+${n.pts.map(p=>`<div style="font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.04);line-height:1.5"><span style="color:${n.c};margin-right:7px">›</span>${p}</div>`).join(””)}
 </div>`).join("")}`;
 }
 
-return `<div class="panel"> <div class="ptitle">📝 Exam Prep — HEM 3106</div> <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap"> ${tabs.map(([t,l]) => `<button class=“tab${S.examTab===t?” on”:””}” data-examtab=”${t}”>${l}</button>`).join(””)}
-</div>
-${content}
+// Quiz
+if(S.exDone){
+const pct=Math.round(S.exScore/HEM_QUESTIONS.length*100);
+return `<div class="pt">📝 Exam Results</div> <div style="text-align:center;padding:20px 0"> <div style="font-size:48px">${pct>=80?"🏆":pct>=65?"🎯":"📚"}</div> <div style="font-family:'Oxanium',monospace;font-size:40px;font-weight:800;color:${pct>=80?"#2ed573":pct>=65?"#00d2ff":pct>=50?"#ffa502":"#ff4757"};margin-top:8px">${pct}%</div> <div class="mu">${S.exScore}/${HEM_QUESTIONS.length} correct</div> <button class="btn" style="max-width:260px;margin:14px auto 0" id="exRetry">🔁 Retake</button> </div>`;
+}
 
+const q=HEM_QUESTIONS[S.exIdx];
+const LT=[“A”,“B”,“C”,“D”];
+const tc={“Pain Management”:”#ffa502”,“Toxidromes”:”#ff4757”,“Nightclub Scenario”:”#6c5ce7”};
+const answered=S.exAns!==null;
+return `<div class="pt">📝 HEM 3106 Exam Prep</div>
+
+  <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+    <button class="tab on">Quiz</button>
+    <button class="tab" id="exNotes">Study Notes</button>
+    <button class="tab" id="exTCA">TCA</button>
+  </div>
+  <div style="background:#1a2235;border-radius:11px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;gap:12px">
+    <div style="flex:1;height:5px;background:#111827;border-radius:99px;overflow:hidden"><div style="height:100%;width:${((S.exIdx+1)/HEM_QUESTIONS.length)*100}%;background:#00d2ff;border-radius:99px"></div></div>
+    <span class="mu" style="flex-shrink:0">${S.exIdx+1}/${HEM_QUESTIONS.length} · ${S.exScore} correct</span>
+  </div>
+  <div style="background:#1a2235;border-radius:12px;padding:16px;margin-bottom:12px">
+    <div style="display:inline-block;background:${tc[q.topic]||"#888"}22;color:${tc[q.topic]||"#888"};border-radius:99px;padding:3px 11px;font-size:10px;font-family:'Oxanium',monospace;font-weight:700;margin-bottom:10px">${q.topic}</div>
+    <div style="font-size:14px;font-weight:700;line-height:1.55;margin-bottom:16px">${q.question}</div>
+    ${q.options.map((o,i)=>{let c="ob ex-opt";if(answered){if(i===q.correct)c+=" ok";else if(i===S.exAns&&i!==q.correct)c+=" er";}return `<button class="${c}" data-ei="${i}" ${answered?"disabled":""}><span class="ol">${LT[i]}</span>${o}</button>`;}).join("")}
+    ${answered?`<div class="expl">💡 ${q.explanation||""}</div>`:""}
+  </div>
+  <div style="display:flex;justify-content:space-between;gap:9px">
+    <button class="bk" style="margin:0" id="exPrev" ${S.exIdx===0?"disabled":""}>← Back</button>
+    <button class="btn" style="margin:0;max-width:180px;opacity:${answered?1:0.3}" ${answered?"":"disabled"} id="exNext">${S.exIdx+1>=HEM_QUESTIONS.length?"Finish →":"Next →"}</button>
   </div>`;
 }
 
-function renderFooter() {
-return `
+// ── BIND EVENTS ───────────────────────────────────────────────────────────────
+function bindApp(){
+document.querySelectorAll(”[data-tab]”).forEach(el=>el.addEventListener(“click”,()=>set({tab:el.dataset.tab,sc:null,scDone:false,prOpen:null,drOpen:null,itOpen:null,tipOpen:null})));
+document.getElementById(“avBtn”)?.addEventListener(“click”,()=>{if(confirm(“Sign out?”))doLogout();});
+document.getElementById(“btnOut”)?.addEventListener(“click”,doLogout);
 
-  <div style="text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid rgba(255,255,255,0.05)">
-    <div style="font-family:'Oxanium',monospace;font-size:10px;color:var(--mu);letter-spacing:3px">MEDICACE · HCT EMS · ${new Date().getFullYear()}</div>
-  </div>`;
-}
-
-function bindEvents() {
-document.querySelectorAll(”[data-authtab]”).forEach(el =>
-el.addEventListener(“click”, () => set({authTab: el.dataset.authtab, authErr: “”})));
-
-[“ai-email”,“ai-pass”,“ai-name”].forEach(id => {
-const el = document.getElementById(id);
-if (el) el.addEventListener(“input”, e => {
-if (id===“ai-email”) S.authEmail = e.target.value;
-if (id===“ai-pass”) S.authPass = e.target.value;
-if (id===“ai-name”) S.authName = e.target.value;
-});
-});
-
-const authBtn = document.getElementById(“auth-submit”);
-if (authBtn) authBtn.addEventListener(“click”, handleAuth);
-
-document.querySelectorAll(”[data-page]”).forEach(el =>
-el.addEventListener(“click”, () => set({page: el.dataset.page})));
-
-const ava = document.getElementById(“avatar-btn”);
-if (ava) ava.addEventListener(“click”, handleLogout);
-
-document.querySelectorAll(”[data-scstart]”).forEach(el =>
-el.addEventListener(“click”, () => set({scIdx: +el.dataset.scstart, scStep: 0, scAnswered: false, scSelectedOpt: null})));
-
-const scBack = document.getElementById(“sc-back”);
-if (scBack) scBack.addEventListener(“click”, () => set({scIdx: null}));
-
-document.querySelectorAll(”[data-scopt]”).forEach(el =>
-el.addEventListener(“click”, () => {
-if (S.scAnswered) return;
-const i = +el.dataset.scopt;
-const correct = SCENARIOS[S.scIdx].steps[S.scStep].correct;
-const isOk = i === correct;
-if (isOk) addXP(10);
-set({scAnswered: true, scCorrect: isOk, scSelectedOpt: i});
+// Scenarios
+document.querySelectorAll(”.sc-start”).forEach(el=>el.addEventListener(“click”,()=>{
+const sc=SCENARIOS.find(s=>s.id===parseInt(el.dataset.id));
+set({sc,scStep:0,scAns:null,scScore:0,scDone:false});
 }));
-
-const scNext = document.getElementById(“sc-next”);
-if (scNext) scNext.addEventListener(“click”, () =>
-set({scStep: S.scStep+1, scAnswered: false, scSelectedOpt: null}));
-
-const scDone = document.getElementById(“sc-done”);
-if (scDone) scDone.addEventListener(“click”, () => {
-addXP(30);
-set({scIdx: null});
+document.getElementById(“scBack”)?.addEventListener(“click”,()=>set({sc:null,scDone:false}));
+document.querySelectorAll(”.sc-opt”).forEach(btn=>btn.addEventListener(“click”,()=>{
+if(S.scAns!==null)return;
+const i=parseInt(btn.dataset.i);
+if(i===S.sc.steps[S.scStep].correct)S.scScore++;
+set({scAns:i});
+}));
+document.getElementById(“scNext”)?.addEventListener(“click”,()=>{
+if(S.scStep+1>=S.sc.steps.length){
+addXP(Math.round(S.sc.xp*(S.scScore/S.sc.steps.length)));
+const done=S.done.includes(S.sc.id)?S.done:[…S.done,S.sc.id];
+S.done=done;
+set({scDone:true});
+}else set({scStep:S.scStep+1,scAns:null});
 });
 
-document.querySelectorAll(”[data-termtab]”).forEach(el =>
-el.addEventListener(“click”, () => set({termTab: el.dataset.termtab})));
+// Terminology
+document.querySelectorAll(”[data-tm]”).forEach(el=>el.addEventListener(“click”,()=>{
+const m=el.dataset.tm;
+if(m===“quiz”)mkTermQ();
+set({tMode:m,tFlip:false,tIdx:0,tAns:null});
+}));
+document.getElementById(“tCat”)?.addEventListener(“change”,e=>{S.tFilter=e.target.value;S.tIdx=0;S.tFlip=false;if(S.tMode===“quiz”)mkTermQ();draw();});
+document.getElementById(“tCard”)?.addEventListener(“click”,()=>set({tFlip:!S.tFlip}));
+document.getElementById(“tPrev”)?.addEventListener(“click”,()=>{const l=S.tFilter&&S.tFilter!==“All”?TERMS.filter(t=>t.category===S.tFilter):TERMS;set({tIdx:(S.tIdx-1+l.length)%l.length,tFlip:false});});
+document.getElementById(“tNext”)?.addEventListener(“click”,()=>{const l=S.tFilter&&S.tFilter!==“All”?TERMS.filter(t=>t.category===S.tFilter):TERMS;set({tIdx:(S.tIdx+1)%l.length,tFlip:false});});
+document.getElementById(“tQStart”)?.addEventListener(“click”,()=>{mkTermQ();draw();});
+document.querySelectorAll(”.tOpt”).forEach(btn=>btn.addEventListener(“click”,()=>{
+if(S.tAns!==null)return;
+const v=decodeURIComponent(btn.dataset.tv);
+const ok=v===S.tQ.def;
+if(ok)addXP(5);
+S.tScore+=ok?1:0; S.tTotal++;
+set({tAns:v});
+}));
+document.getElementById(“tNext2”)?.addEventListener(“click”,()=>{mkTermQ();set({tAns:null});});
 
-const fc = document.getElementById(“flash-card”);
-if (fc) fc.addEventListener(“click”, () => set({termFlipped: !S.termFlipped}));
+// Protocols
+document.querySelectorAll(”[data-pr]”).forEach(el=>el.addEventListener(“click”,()=>{const i=parseInt(el.dataset.pr);set({prOpen:S.prOpen===i?null:i});}));
+// Drugs
+document.querySelectorAll(”[data-dr]”).forEach(el=>el.addEventListener(“click”,()=>{const i=parseInt(el.dataset.dr);set({drOpen:S.drOpen===i?null:i});}));
+// Intubation
+document.querySelectorAll(”[data-it]”).forEach(el=>el.addEventListener(“click”,()=>{const n=parseInt(el.dataset.it);set({itOpen:S.itOpen===n?null:n});}));
+// Tips
+document.querySelectorAll(”[data-tip]”).forEach(el=>el.addEventListener(“click”,()=>{const i=parseInt(el.dataset.tip);set({tipOpen:S.tipOpen===i?null:i});}));
 
-const termFlip = document.getElementById(“term-flip”);
-if (termFlip) termFlip.addEventListener(“click”, () => set({termFlipped: !S.termFlipped}));
-
-const termPrev = document.getElementById(“term-prev”);
-if (termPrev) termPrev.addEventListener(“click”, () =>
-set({termIdx: (S.termIdx - 1 + TERMS.length) % TERMS.length, termFlipped: false}));
-
-const termNext = document.getElementById(“term-next”);
-if (termNext) termNext.addEventListener(“click”, () =>
-set({termIdx: (S.termIdx + 1) % TERMS.length, termFlipped: false}));
-
-const tqs = document.getElementById(“term-quiz-start”);
-if (tqs) tqs.addEventListener(“click”, () => {
-const q = TERMS[Math.floor(Math.random() * TERMS.length)];
-const wrong = TERMS.filter(t => t.term !== q.term).sort(() => 0.5-Math.random()).slice(0,3);
-S.termQ = q;
-S.termOpts = […wrong.map(t=>t.def), q.def].sort(()=>0.5-Math.random());
-S.termAns = null;
-S.termSelectedOpt = null;
-render();
+// Exam
+document.getElementById(“exNotes”)?.addEventListener(“click”,()=>set({exTab:“notes”}));
+document.getElementById(“exTCA”)?.addEventListener(“click”,()=>set({exTab:“tca”,tcaOpen:null}));
+document.getElementById(“exQuiz”)?.addEventListener(“click”,()=>set({exTab:“quiz”}));
+document.querySelectorAll(”[data-tca]”).forEach(el=>el.addEventListener(“click”,()=>{const i=parseInt(el.dataset.tca);set({tcaOpen:S.tcaOpen===i?null:i});}));
+document.querySelectorAll(”.ex-opt”).forEach(btn=>btn.addEventListener(“click”,()=>{
+if(S.exAns!==null)return;
+const i=parseInt(btn.dataset.ei);
+const ok=i===HEM_QUESTIONS[S.exIdx].correct;
+if(ok)addXP(5);
+set({exAns:i,exScore:ok?S.exScore+1:S.exScore});
+}));
+document.getElementById(“exNext”)?.addEventListener(“click”,()=>{
+if(S.exIdx+1>=HEM_QUESTIONS.length){addXP(20);set({exDone:true});}
+else set({exIdx:S.exIdx+1,exAns:null});
 });
-
-document.querySelectorAll(”[data-termopt]”).forEach(el =>
-el.addEventListener(“click”, () => {
-if (S.termAns !== null) return;
-const ans = el.dataset.termval;
-const isOk = ans === S.termQ.def;
-if (isOk) { S.termScore++; addXP(5); }
-S.termTotal++;
-S.termAns = ans;
-render();
-}));
-
-const tnq = document.getElementById(“term-next-q”);
-if (tnq) tnq.addEventListener(“click”, () => {
-const q = TERMS[Math.floor(Math.random() * TERMS.length)];
-const wrong = TERMS.filter(t => t.term !== q.term).sort(() => 0.5-Math.random()).slice(0,3);
-S.termQ = q;
-S.termOpts = […wrong.map(t=>t.def), q.def].sort(()=>0.5-Math.random());
-S.termAns = null;
-render();
-});
-
-document.querySelectorAll(”[data-protoopen]”).forEach(el =>
-el.addEventListener(“click”, () => {
-const i = +el.dataset.protoopen;
-set({protoOpen: S.protoOpen === i ? null : i});
-}));
-
-document.querySelectorAll(”[data-drugopen]”).forEach(el =>
-el.addEventListener(“click”, () => {
-const i = +el.dataset.drugopen;
-set({drugOpen: S.drugOpen === i ? null : i});
-}));
-
-document.querySelectorAll(”[data-tipopen]”).forEach(el =>
-el.addEventListener(“click”, () => {
-const i = +el.dataset.tipopen;
-set({tipOpen: S.tipOpen === i ? null : i});
-}));
-
-document.querySelectorAll(”[data-examtab]”).forEach(el =>
-el.addEventListener(“click”, () => set({examTab: el.dataset.examtab})));
-
-document.querySelectorAll(”[data-examopt]”).forEach(el =>
-el.addEventListener(“click”, () => {
-if (S.examAnswered) return;
-const i = +el.dataset.examopt;
-const q = HEM_QUESTIONS[S.examIdx];
-const isOk = i === q.correct;
-if (isOk) { S.examScore++; addXP(5); }
-set({examAnswered: true, examCorrect: isOk, examSelectedOpt: i});
-}));
-
-const examNext = document.getElementById(“exam-next”);
-if (examNext) examNext.addEventListener(“click”, () => {
-const nextIdx = S.examIdx + 1;
-if (nextIdx >= HEM_QUESTIONS.length) {
-addXP(20);
-set({examDone: true, examAnswered: false});
-} else {
-set({examIdx: nextIdx, examAnswered: false, examSelectedOpt: null});
-}
-});
-
-const examRestart = document.getElementById(“exam-restart”);
-if (examRestart) examRestart.addEventListener(“click”, () =>
-set({examIdx: 0, examScore: 0, examDone: false, examAnswered: false, examSelectedOpt: null}));
+document.getElementById(“exPrev”)?.addEventListener(“click”,()=>{if(S.exIdx>0)set({exIdx:S.exIdx-1,exAns:null});});
+document.getElementById(“exRetry”)?.addEventListener(“click”,()=>set({exIdx:0,exAns:null,exScore:0,exDone:false}));
 }
 
-async function handleAuth() {
-S.authLoading = true; S.authErr = “”; render();
-try {
-if (S.authTab === “login”) {
-const d = await signIn(S.authEmail, S.authPass);
-if (d.error) { set({authErr: d.error.message||“Login failed”, authLoading: false}); return; }
-const profile = await loadProfile(d.user.id);
-const sess = {id: d.user.id, email: d.user.email, accessToken: d.access_token,
-name: profile?.name || d.user.email.split(”@”)[0],
-avatarColor: profile?.avatar_color || COLORS[Math.floor(Math.random()*COLORS.length)]
-};
-localStorage.setItem(“ma_sess”, JSON.stringify(sess));
-set({loggedIn:true, userId:sess.id, token:sess.accessToken, name:sess.name,
-email:sess.email, avatarColor:sess.avatarColor,
-xp: profile?.xp||0, badges: profile?.badges||[], authLoading:false});
-} else {
-const d = await signUp(S.authEmail, S.authPass, S.authName);
-if (d.error) { set({authErr: d.error.message||“Sign up failed”, authLoading: false}); return; }
-const color = COLORS[Math.floor(Math.random()*COLORS.length)];
-await upsertProfile(d.user.id, {name:S.authName, avatar_color:color, xp:0, badges:[]});
-const sess = {id:d.user.id, email:d.user.email, accessToken:d.access_token,
-name:S.authName||d.user.email.split(”@”)[0], avatarColor:color};
-localStorage.setItem(“ma_sess”, JSON.stringify(sess));
-set({loggedIn:true, userId:sess.id, token:sess.accessToken, name:sess.name,
-email:sess.email, avatarColor:color, xp:0, badges:[], authLoading:false});
-}
-} catch(e) {
-set({authErr: “Network error. Try again.”, authLoading: false});
-}
+function mkTermQ(){
+const list=S.tFilter&&S.tFilter!==“All”?TERMS.filter(t=>t.category===S.tFilter):TERMS;
+if(list.length<4)return;
+const q=list[Math.floor(Math.random()*list.length)];
+const wrong=TERMS.filter(t=>t.term!==q.term).sort(()=>Math.random()-0.5).slice(0,3);
+const opts=[…wrong.map(t=>t.def),q.def].sort(()=>Math.random()-0.5);
+S.tQ=q; S.tOpts=opts; S.tAns=null;
 }
 
-function handleLogout() {
-if (!confirm(“Sign out?”)) return;
-localStorage.removeItem(“ma_sess”);
-set({loggedIn:false, userId:null, token:null, name:””, email:””, xp:0, badges:[]});
-}
-
-(async function init() {
-try {
-const raw = localStorage.getItem(“ma_sess”);
-if (raw) {
-const sess = JSON.parse(raw);
-const profile = await loadProfile(sess.id);
-set({loggedIn:true, userId:sess.id, token:sess.accessToken,
-name:sess.name, email:sess.email, avatarColor:sess.avatarColor||”#00d2ff”,
-xp:profile?.xp||0, badges:profile?.badges||[]});
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(async()=>{
+draw();
+try{
+const raw=localStorage.getItem(“ma”);
+if(raw){
+const sess=JSON.parse(raw);
+const p=await getProfile(sess.id,sess.tok);
+S.user=sess; S.xp=p?.xp||0; S.done=p?.completed_scenarios||[];
+set({page:“app”});
 return;
 }
-} catch(e) {}
-render();
+}catch(_){}
+draw();
 })();
 </script>
 
